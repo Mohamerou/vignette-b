@@ -14,7 +14,7 @@
 		<div class="row row-cols-1 row-cols-md-2 g-4">
 		  <div class="col">
 		    <div class="card">
-		      <img src="{{ asset('storage/'.$usager->idCard) }}" class="card-img-top-examine" alt="Carte d'identité">
+		      <img src="{{ Storage::disk('s3')->url($usager->idCard) }}" class="card-img-top-examine" alt="Carte d'identité">
 		      <div class="card-body text-center">
 		        <h5 class="card-text">DEMANDEUR</h5>
 		        <h4 class="card-title">{{ $usager->lastname }}</h4>
@@ -25,7 +25,7 @@
 		  </div>
 		  <div class="col">
 		    <div class="card">
-		      <img src="{{ asset('storage/'.$engin->documentJustificatif) }}" class="card-img-top-examine" alt="Piece justificatrice de l'appartenance de l'engin">
+		      <img src="{{ Storage::disk('s3')->url($engin->documentJustificatif)) }}" class="card-img-top-examine" alt="Piece justificatrice de l'appartenance de l'engin">
 		      <div class="card-body text-center">
 		        <h5 class="card-text">ENGIN</h5>
 		        <h4 class="card-title">{{ $engin->marque }}</h4>
