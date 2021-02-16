@@ -58,7 +58,8 @@ class VerificationController extends Controller
         $user->code     = $code;
         $user->save();
 
-        $oldTempVerificationCode       = TempVerificationCode:: where('userId', $userId)->first();
+        $oldTempVerificationCode       = TempVerificationCode::where('userId', $userId)
+                                                               ->first();
 
         $oldTempVerificationCode->delete();
 
