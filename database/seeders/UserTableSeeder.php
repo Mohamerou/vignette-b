@@ -31,7 +31,7 @@ class UserTableSeeder extends Seeder
         ]);
 
 
-        $admin = User::create([
+        $bkoadmin = User::create([
         	'lastname' 	         => 'Admin',
         	'firstname'          => 'Admin',
         	'gender' 	         => '1',
