@@ -60,7 +60,7 @@ class VerificationController extends Controller
         $TempVerificationCode          = new TempVerificationCode;
         $TempVerificationCode->userId  = $user->code;
         $TempVerificationCode->code    = $code;
-        $TempVerificationCode->phone   = $telephone;
+        $TempVerificationCode->phone   = $phone;
         $TempVerificationCode->save();
 
         $sentCode       = Nexmo::message()->send([
