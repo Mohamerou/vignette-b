@@ -22,7 +22,8 @@
         "nexmo/laravel": "^2.4",
         "simplesoftwareio/simple-qrcode": "~4",
         "snapappointments/bootstrap-select": "^1.13",
-        "vonage/client": "^2.4"
+        "vonage/client": "^2.4",
+        "ext-imagick": "*"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
