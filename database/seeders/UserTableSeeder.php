@@ -37,6 +37,7 @@ class UserTableSeeder extends Seeder
         	'gender' 	         => '1',
         	'avatar' 	         => 'male.png',
         	'address' 	         => 'Sotuba ACI',
+            'isverified'         => 1,
             'administration'     => 'bko',
         	'phone' 	         => '71044846',
         	'password' 	         => Hash::make('password')

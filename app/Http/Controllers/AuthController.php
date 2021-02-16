@@ -66,8 +66,8 @@ class AuthController extends Controller
         if (Auth::attempt(['phone' => $request->phone, 'password' => $request->password])) {
 
             $user = User::where('phone', $request->phone)->first();
-            if ($user->isVerified != 1) {
-                return redirect('/resend-code/'.$request->phone);
+            if ($user->isverified != 1) {
+                return redirect()->route('resend_code')->with('phone',$request->phone);
             }
 
             return Redirect::to("home");
