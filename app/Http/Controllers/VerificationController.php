@@ -54,14 +54,19 @@ class VerificationController extends Controller
     {
     	$code           = rand(100000, 999999);
         $user           = User::where('phone', $phone)->first();
+        $userId         = $user->id;
         $user->code     = $code;
         $user->save();
 
-        $TempVerificationCode          = new TempVerificationCode;
-        $TempVerificationCode->userId  = $user->code;
-        $TempVerificationCode->code    = $code;
-        $TempVerificationCode->phone   = $phone;
-        $TempVerificationCode->save();
+        $oldTempVerificationCode       = TempVerificationCode:: where('userId', $userId)->first();
+
+        $oldTempVerificationCode->delete();
+
+        $newTempVerificationCode          = new TempVerificationCode;
+        $newTempVerificationCode->userId  = $userId;
+        $newTempVerificationCode->code    = $code;
+        $newTempVerificationCode->phone   = $phone;
+        $newTempVerificationCode->save();
 
         $sentCode       = Nexmo::message()->send([
                         'to'   => '+223'.$phone,
