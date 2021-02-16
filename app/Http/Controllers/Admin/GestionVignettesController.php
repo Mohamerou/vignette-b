@@ -85,7 +85,7 @@ class GestionVignettesController extends Controller
             $vignette->userId               = $userId;
             $vignette->enginId              = $enginId;
             $vignette->unique_token         = $unique_token;
-            $vignette->qr                   = $vignette_qr_access_path;
+            $vignette->qr                   = $vignette_qr_storage_path;
             $vignette->qr_download_path     = $vignette_qr_download_path;
             $vignette->expired_at           = Carbon::parse($expired_at)->format('Y-m-d H:i:s');
 
