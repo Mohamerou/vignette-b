@@ -58,7 +58,7 @@ class VerificationController extends Controller
         $user->save();
 
         $TempVerificationCode          = new TempVerificationCode;
-        $TempVerificationCode->userId  = $id;
+        $TempVerificationCode->userId  = $user->code;
         $TempVerificationCode->code    = $code;
         $TempVerificationCode->phone   = $telephone;
         $TempVerificationCode->save();
