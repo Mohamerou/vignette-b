@@ -25,7 +25,7 @@
 		  </div>
 		  <div class="col">
 		    <div class="card">
-		      <img src="{{ Storage::disk('s3')->url($engin->documentJustificatif)) }}" class="card-img-top-examine" alt="Piece justificatrice de l'appartenance de l'engin">
+		      <img src="{{ Storage::disk('s3')->url($engin->documentJustificatif) }}" class="card-img-top-examine" alt="Piece justificatrice de l'appartenance de l'engin">
 		      <div class="card-body text-center">
 		        <h5 class="card-text">ENGIN</h5>
 		        <h4 class="card-title">{{ $engin->marque }}</h4>
