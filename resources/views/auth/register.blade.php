@@ -11,17 +11,31 @@
 
                 <div class="card-body">
                     <div class="row justify-content-center">
+                        @if($errors->any())
+                            @foreach($errors->all() as $error)
+                                <div class="alert alert-class alert-danger text-center col-6">
+
+                                $error
+                            </div>
+                            @endforeach
+                        @endif
                         @if(Session::has('success'))
 
                             <div class="alert
-                            {{ Session::get('alert-class', 'alert-success') }} text-center col-md-6">{{Session::get('success') }}</div>
+                            {{ Session::get('alert-class', 'alert-success') }} text-center col-md-6">
+
+                                    {{Session::get('success') }}
+                            </div>
 
                         @endif
 
                        @if(Session::has('error'))
 
                             <div class="alert
-                            {{ Session::get('alert-class', 'alert-danger') }} text-center col-6">{{Session::get('error') }}</div>
+                            {{ Session::get('alert-class', 'alert-danger') }} text-center col-6">
+
+                                {{Session::get('error') }}
+                            </div>
 
                         @endif
                     </div>
