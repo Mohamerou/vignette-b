@@ -22,7 +22,7 @@
                         @if(Session::has('success'))
 
                             <div class="alert
-                            {{ Session::get('alert-class', 'alert-success') }} text-center col-md-6">
+                            {{ Session::get('alert-class', 'alert-success') }} text-center col-md-8">
 
                                     {{Session::get('success') }}
                             </div>
@@ -32,7 +32,7 @@
                        @if(Session::has('error'))
 
                             <div class="alert
-                            {{ Session::get('alert-class', 'alert-danger') }} text-center col-6">
+                            {{ Session::get('alert-class', 'alert-danger') }} text-center col-8">
 
                                 {{Session::get('error') }}
                             </div>
