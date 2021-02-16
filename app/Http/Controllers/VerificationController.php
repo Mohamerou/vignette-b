@@ -50,8 +50,26 @@ class VerificationController extends Controller
 
    
 
-    public function resendCode()
+    public function resend_code($phone)
     {
-    	
+    	$code           = rand(100000, 999999);
+        $user           = User::where('phone', $phone)->first();
+        $user->code     = $code;
+        $user->save();
+
+        $TempVerificationCode          = new TempVerificationCode;
+        $TempVerificationCode->userId  = $id;
+        $TempVerificationCode->code    = $code;
+        $TempVerificationCode->phone   = $telephone;
+        $TempVerificationCode->save();
+
+        $sentCode       = Nexmo::message()->send([
+                        'to'   => '+223'.$phone,
+                        'from' => '+22389699245',
+                        'text' => 'ikV, code de vérification: '.$code.' \n',
+                    ]);
+
+
+        return redirect()->route('verify',$phone);
     }
 }

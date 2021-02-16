@@ -9,16 +9,12 @@
                     <div class="card-header"></div>
 
                     <div class="card-body">
-                        
-                        
-                            <div class="text-center">
-                              <h4 class="alert-heading">Bienvenue!</h4>
-                              <div><a href="{{ route('user.selectEnginType')}}" class="btn btn-outline-primary">Acheter une vignette</a></div>
-                              <hr>
-                              <p class="mb-0">C'est facile, c'est ikaVignetti.</p>
-                            </div>
-                        
-
+                      <div class="text-center">
+                        <h4 class="alert-heading">Bienvenue!</h4>
+                        <div><a href="{{ route('user.selectEnginType')}}" class="btn btn-outline-primary">Acheter une vignette</a></div>
+                        <hr>
+                        <p class="mb-0">C'est facile, c'est ikaVignetti.</p>
+                      </div>
                     </div>
                 </div>
             </div>
@@ -43,16 +39,12 @@
                     <div class="card-header"></div>
 
                     <div class="card-body">
-                        
-                        
-                            <div class="text-center">
-                              <h4 class="alert-heading">Bienvenue!</h4>
-                              <div><a href="#" class="btn btn-outline-primary">Gestion des vignettes</a></div>
-                              <hr>
-                              <p class="mb-0">C'est facile, c'est ikaVignetti.</p>
-                            </div>
-                        
-
+                      <div class="text-center">
+                        <h4 class="alert-heading">Bienvenue!</h4>
+                        <div><a href="#" class="btn btn-outline-primary">Gestion des vignettes</a></div>
+                        <hr>
+                        <p class="mb-0">C'est facile, c'est ikaVignetti.</p>
+                      </div>
                     </div>
                 </div>
             </div>

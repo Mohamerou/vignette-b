@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card">
-                <div class="card-header">{{ __('Code de confirmation') }}</div>
+                <h4 class="card-header">{{ __('Code de confirmation') }}</h4>
 
                 <div class="card-body">
                     @if(Session::has('error'))
@@ -19,7 +19,7 @@
                             {{ __('Un nouveau code de confirmation a été envoyé à votre numero.') }}
                         </div>
                     @endif
-                    <form method="POST" action="{{route('post-verify')}}">
+                    <form class="text-center" method="POST" action="{{route('post-verify')}}">
                     	@csrf
 					  <div class="mb-3">
 					    <input type="text" class="form-control" id="code" name="code" aria-describedby="codeHelp">
@@ -28,6 +28,7 @@
 					  </div>
 					  <button type="submit" class="btn btn-primary">{{__('Verifier')}}</button>
 					</form>
+                    <div id="codeHelp" class="form-text">{{__("Vous n'avez pas reçu le code?")}} <a href="{{ route('resend_code', $phone) }}">Réenvoyer</a></div>
                 </div>
             </div>
         </div>

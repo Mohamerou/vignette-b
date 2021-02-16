@@ -64,6 +64,12 @@ class AuthController extends Controller
         ]);
  
         if (Auth::attempt(['phone' => $request->phone, 'password' => $request->password])) {
+
+            $user = User::where('phone', $request->phone)->first();
+            if ($user->isVerified != 1) {
+                return redirect('/resend-code/'.$request->phone);
+            }
+
             return Redirect::to("home");
         }
         return back()->with('error', 'Oups! Vos identifiants semblent invalides.')
