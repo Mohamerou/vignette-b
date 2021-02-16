@@ -36,7 +36,7 @@ Route::post('/post-verify', [App\Http\Controllers\VerificationController::class,
 
 
 //User actions
-	Route::get('/mesengins', [App\http\controllers\User\EnginsController::class, 'index'])->name('engins.index');
+	Route::get('/mesengins', [App\Http\Controllers\User\EnginsController::class, 'index'])->name('engins.index');
 
 	Route::get('/nouvelle/vignette', [App\Http\Controllers\User\EnginsController::class, 'selectEnginType'])->name('user.selectEnginType');
 	Route::get('/nouvelle/vignette/{type}', [App\Http\Controllers\User\EnginsController::class, 'create'])->name('user.createEngin');
@@ -47,16 +47,16 @@ Route::post('/post-verify', [App\Http\Controllers\VerificationController::class,
 
 	Route::get('/notifications/{notification}', [App\Http\Controllers\User\VignettesController::class,'notificationShow'])->name('notification.show');
 
-	Route::post('qrvignette/{qr_path}', [App\http\controllers\User\VignettesController::class, 'downloadQr'])->name('downloadQr');
+	Route::post('qrvignette/{qr_path}', [App\Http\Controllers\User\VignettesController::class, 'downloadQr'])->name('downloadQr');
 
-	Route::post('/declaration/{user}/{vignette}/{engin}', [App\http\controllers\User\VignettesController::class,  'declaration_de_perte'])->name('declaration_de_perte');
+	Route::post('/declaration/{user}/{vignette}/{engin}', [App\Http\Controllers\User\VignettesController::class,  'declaration_de_perte'])->name('declaration_de_perte');
 
-	Route::post('/annuler_declaration/{user}/{vignette}/{engin}', [App\http\controllers\User\VignettesController::class,  'annuler_declaration'])->name('annuler_declaration');
+	Route::post('/annuler_declaration/{user}/{vignette}/{engin}', [App\Http\Controllers\User\VignettesController::class,  'annuler_declaration'])->name('annuler_declaration');
 
-	Route::post('/renouveller_vignette/{user}/{vignette}/{engin}', [App\http\controllers\User\VignettesController::class, 'renouveller_vignette'])->name('renouveller_vignette');
+	Route::post('/renouveller_vignette/{user}/{vignette}/{engin}', [App\Http\Controllers\User\VignettesController::class, 'renouveller_vignette'])->name('renouveller_vignette');
 	//Admin Routes
-	Route::get('/examiner/{usagerId}/{enginId}/{notificationId}/{demandeTrackId}', [App\http\controllers\Admin\GestionVignettesController::class, 'examinerDemande'])->name('examinerDemande');
-	Route::post('/ikvUE-validation/{enginId}/{notificationId}/{usager}/{demandeTrackId}', [App\http\controllers\Admin\GestionVignettesController::class, 'demandeValidation'])->name('validerDemande');
+	Route::get('/examiner/{usagerId}/{enginId}/{notificationId}/{demandeTrackId}', [App\Http\Controllers\Admin\GestionVignettesController::class, 'examinerDemande'])->name('examinerDemande');
+	Route::post('/ikvUE-validation/{enginId}/{notificationId}/{usager}/{demandeTrackId}', [App\Http\Controllers\Admin\GestionVignettesController::class, 'demandeValidation'])->name('validerDemande');
 
 
 
