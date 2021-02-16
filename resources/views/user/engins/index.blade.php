@@ -61,7 +61,7 @@
                   			@if($up_todate_vignette->enginId == $up_todate_engin->id)
 							  	<div class="col">
 							    	<div class="card mb-3 text-center" style="width: 16rem;">
-							      		<img src="{{ asset('https://ikavignetti-assets.s3.us-east-2.amazonaws.com/'.$up_todate_vignette->qr) }}" alt="vignette QR Code" class="card-img-top">
+							      		<img src="{{ asset('https://ikavignetti-assets.s3.us-east-2.amazonaws.com'.$up_todate_vignette->qr) }}" alt="vignette QR Code" class="card-img-top">
 							      		<div class="card-body">
 							      			<h5 class="card-title">{{ $up_todate_engin->marque }}</h5>
 							      			<h5 class="card-title">{{ $up_todate_engin->modele }}</h5>
@@ -102,8 +102,8 @@
                   		@foreach($out_dated_engins as $outdated_engin)
                   			@if($outdated_vignette->enginId == $outdated_engin->id)
 							  	<div class="col">
-							    	<div class="card col-2 mb-3 text-center" style="width: 16rem;">
-							      		<img src="{{ asset('https://ikavignetti-assets.s3.us-east-2.amazonaws.com/'.$up_todate_vignette->qr) }}" alt="vignette QR Code" class="card-img-top">
+							    	<div class="card mb-3 text-center" style="width: 16rem;">
+							      		<img src="{{ asset('https://ikavignetti-assets.s3.us-east-2.amazonaws.com'.$up_todate_vignette->qr) }}" alt="vignette QR Code" class="card-img-top">
 							      		<div class="card-body">
 						        			<h5 class="card-title">Card title</h5>
 							        		<p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
