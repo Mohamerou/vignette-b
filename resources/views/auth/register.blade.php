@@ -72,11 +72,11 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="firstname" class="col-md-4 col-form-label text-md-right">{{ __('Genre') }}</label>
+                            <label for="firstname" class="col-md-4 col-form-label text-md-right">{{ __('Vous êtes?') }}</label>
 
                             <div class="col-md-6">
                                 <select class="form-control" name="gender" required value={{ old('genre')}}>
-                                    <option value=""></option>
+                                    <option value="">Genre</option>
                                     <option value="1">Homme</option>
                                     <option value="0">Femme</option>
                                 </select>
