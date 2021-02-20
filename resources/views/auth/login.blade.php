@@ -34,7 +34,7 @@
                         @endif
                     </div>
             <div class="card">
-                <div class="card-header">{{ __('Connexion') }}</div>
+                <div class="card-header"><h4>{{ __('Connexion') }}</h4></div>
 
                 <div class="card-body">
                     <form method="POST" action="{{ route('postLogin') }}">
@@ -87,7 +87,7 @@
 
                                 @if (Route::has('password.request'))
                                     <a class="btn btn-link" href="{{ route('password.request') }}">
-                                        {{ __('Forgot Your Password?') }}
+                                        {{ __('Mot de passe oublié?') }}
                                     </a>
                                 @endif
                             </div>

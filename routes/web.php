@@ -27,6 +27,8 @@ Route::get('/inscription', [App\Http\Controllers\AuthController::class, 'registe
 Route::post('/inscription', [App\Http\Controllers\AuthController::class, 'postRegister'])->name('postInscription');
 Route::get('/logout', [App\Http\Controllers\AuthController::class, 'logout'])->name('deconnexion');
 
+Route::get('/password/resetter/{query}', [App\Http\Controllers\PasswordResetController::class, 'resetter'])->name('resetter');
+
 Route::get('/verify/{phone}', [App\Http\Controllers\VerificationController::class, 'registrationShow'])->name('verify');
 Route::post('/post-verify', [App\Http\Controllers\VerificationController::class, 'registration'])->name('post-verify');
 Route::get('/resend-code/{phone}', [App\Http\Controllers\VerificationController::class, 'resend_code'])->name('resend_code');
