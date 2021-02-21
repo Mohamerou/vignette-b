@@ -100,7 +100,8 @@ class VignettesController extends Controller
     {
     
         $userId                     = Auth()->user()->id;
-        $vignette                   = Vignettes::find($vignetteId)->first();
+        $vignette                   = Vignettes::find($vignetteId);
+        $engin                      = Engins::find($enginId);
         $vignette_unique_token      = $vignette->unique_token;
 
         $Declaration    = Declarations::create([
@@ -108,6 +109,7 @@ class VignettesController extends Controller
             'vignetteId'        => $vignetteId,
             'enginId'           => $enginId,
             'userId'            => $userId,
+            'chassie'           => $engin->chassie,
         ]);
 
         if ($Declaration) {

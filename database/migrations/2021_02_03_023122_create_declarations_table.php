@@ -19,6 +19,7 @@ class CreateDeclarationsTable extends Migration
             $table->foreignId('vignetteId')->constraint('vignettes');
             $table->foreignId('enginId')->constraint('engins');
             $table->foreignId('userId')->constraint('users');
+            $table->string('chassie')->unique();
             $table->timestamps();
         });
     }
