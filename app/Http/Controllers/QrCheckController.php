@@ -15,42 +15,58 @@ class QrCheckController extends Controller
     //
     public function CheckQr($unique_token)
     {
-    	$declaration = Declarations::where('vignette_token',$unique_token)->first();
-    	
-    	if(!empty($declaration))
-    	{
-            $response       = array();
-    		$proprietaire 	= User::find($declaration->userId);
-    		$engin 			= Engins::find($declaration->enginId);
-    		
-            $response[]     = [
-                                'proprietaire'  =>  $proprietaire,
-                                'engin'         =>  $engin,
-                                'declarer'      =>  true,
-                                'exipired_at'   =>  $expires_at,
-                            ];
-            
-
-            return $response;
-    	}
-    	else
-    	{
-    		$vignette 		= Vignettes::where('unique_token', $unique_token)->first();
-            $expires_at     = $vignette->expired_at;
-    		$proprietaire	= User::find($vignette->userId);
-    		$engin 			= Engins::find($vignette->enginId);
+        $vignette    = Vignettes::where('unique_token', $unique_token)->first();
 
 
-            $response[]     = [
-                                'proprietaire'  =>  $proprietaire,
-                                'engin'         =>  $engin,
-                                'declarer'      =>  false,
-                                'exipired_at'   =>  $expires_at,
-                            ];
-            
+        if(!empty($vignette)
+        {
 
-            return $response;
-    	}
+        	$declaration = Declarations::where('vignette_token',$unique_token)->first();
+        	
+        	if(!empty($declaration))
+        	{
+                $response       = array();
+        		$proprietaire 	= User::find($declaration->userId);
+        		$engin 			= Engins::find($declaration->enginId);
+        		
+                $response[]     = [
+                                    'proprietaire'  =>  $proprietaire,
+                                    'engin'         =>  $engin,
+                                    'declarer'      =>  true,
+                                    'exipired_at'   =>  $expires_at,
+                                ];
+                
+
+                return $response;
+        	}
+        	else
+        	{
+        		$vignette 		= Vignettes::where('unique_token', $unique_token)->first();
+                $expires_at     = $vignette->expired_at;
+        		$proprietaire	= User::find($vignette->userId);
+        		$engin 			= Engins::find($vignette->enginId);
+
+
+                $response[]     = [
+                                    'proprietaire'  =>  $proprietaire,
+                                    'engin'         =>  $engin,
+                                    'declarer'      =>  false,
+                                    'exipired_at'   =>  $expires_at,
+                                ];
+                
+
+                return $response;
+        	}
+        }
+        else 
+        {
+           $response[]     = [
+                                    'no_matching_vignette'   =>  true,
+                                ];
+                
+
+                return $response; 
+        }
     }
 
 
