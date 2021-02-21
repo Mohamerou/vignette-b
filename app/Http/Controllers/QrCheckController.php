@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Declarations;
-use App\Models\vignettes;
+use App\Models\Vignettes;
 use App\Models\User;
 use App\Models\Engins;
 
