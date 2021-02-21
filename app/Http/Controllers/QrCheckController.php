@@ -18,7 +18,7 @@ class QrCheckController extends Controller
         $vignette    = Vignettes::where('unique_token', $unique_token)->first();
 
 
-        if(!empty($vignette)
+        if(!empty($vignette))
         {
 
         	$declaration = Declarations::where('vignette_token',$unique_token)->first();
