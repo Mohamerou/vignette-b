@@ -57,10 +57,10 @@
 				<hr>
 				<div class="row row-cols-1 row-cols-md-3 g-4">
 					@foreach($up_to_date_vignettes  as $up_todate_vignette)
-                  		@foreach($up_to_date_engins as $up_todate_engin)
+                   		@foreach($up_to_date_engins as $up_todate_engin)
                   			@if($up_todate_vignette->enginId == $up_todate_engin->id)
 							  	<div class="col">
-							    	<div class="card mb-3 text-center" style="width: 16rem;">
+							    	<div class="card mb-5 text-center" style="width: 16rem;">
 							      		<img src="{{ asset('https://ikavignetti-assets.s3.us-east-2.amazonaws.com'.$up_todate_vignette->qr) }}" alt="vignette QR Code" class="card-img-top">
 							      		<div class="card-body">
 							      			<h5 class="card-title">{{ $up_todate_engin->marque }}</h5>
@@ -102,7 +102,7 @@
                   		@foreach($out_dated_engins as $outdated_engin)
                   			@if($outdated_vignette->enginId == $outdated_engin->id)
 							  	<div class="col">
-							    	<div class="card mb-3 text-center" style="width: 16rem;">
+							    	<div class="card mb-5 text-center" style="width: 16rem;">
 							      		<img src="{{ asset('https://ikavignetti-assets.s3.us-east-2.amazonaws.com'.$up_todate_vignette->qr) }}" alt="vignette QR Code" class="card-img-top">
 							      		<div class="card-body">
 						        			<h5 class="card-title">Card title</h5>
@@ -138,7 +138,7 @@
 			<section class="py-5 text-center container">
 				<hr>
 	    		<h4 class="fw-light text-right">VIGNETTES EN ATTENTE DE CONFIRMATION</h4>
-            	<table class="table table-stripped table-hover mt-3">
+            	<table class="table table-stripped table-hover mt-5">
 				  <thead>
 				    <tr>
 				      <th scope="col">MARQUE</th>
