@@ -1,11 +1,4 @@
-/*.card-img-top {
-    width: 100%;
-    height: 20vw;
-    object-fit: cover;
-}*/
-
-body { padding-top: 80px; }
-
+body { padding-top: 40px; }
 @media screen and (max-width: 768px) {
-    body { padding-top: 300px; }
+    body { padding-top: 0px; }
 }
