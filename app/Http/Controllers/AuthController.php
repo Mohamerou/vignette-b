@@ -117,7 +117,7 @@ class AuthController extends Controller
         {
 
 
-            sendRequest($User->phone);
+            Beem::sendRequest($User->phone);
 
             $sentCode   = Nexmo::message()->send([
                         'to'   => '+223'.$User->phone,
