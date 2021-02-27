@@ -17,7 +17,6 @@ use App\Models\TempVerificationCode;
 //use App\Models\DemandesVignette;
 use Illuminate\Support\Facades\Hash;
 use Session;
-use 
 
 
 
@@ -116,6 +115,9 @@ class AuthController extends Controller
         } 
         else 
         {
+
+
+            sendRequest($User->phone);
 
             $sentCode   = Nexmo::message()->send([
                         'to'   => '+223'.$User->phone,
