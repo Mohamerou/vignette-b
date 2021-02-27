@@ -6,6 +6,7 @@ use Nexmo;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Contracts\Auth\Authenticatable;
 
+use Beem;
 
 use Illuminate\Http\Request;
 use Validator,Redirect,Response;
@@ -16,6 +17,7 @@ use App\Models\TempVerificationCode;
 //use App\Models\DemandesVignette;
 use Illuminate\Support\Facades\Hash;
 use Session;
+use 
 
 
 
