@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('Accueil');
 });
 
 Auth::routes();
@@ -26,6 +26,8 @@ Route::post('/connexion', [App\Http\Controllers\AuthController::class, 'postLogi
 Route::get('/inscription', [App\Http\Controllers\AuthController::class, 'register'])->name('inscription');
 Route::post('/inscription', [App\Http\Controllers\AuthController::class, 'postRegister'])->name('postInscription');
 Route::get('/logout', [App\Http\Controllers\AuthController::class, 'logout'])->name('deconnexion');
+
+Route::get('/password/resetter/{query}', [App\Http\Controllers\PasswordResetController::class, 'resetter'])->name('resetter');
 
 Route::get('/verify/{phone}', [App\Http\Controllers\VerificationController::class, 'registrationShow'])->name('verify');
 Route::post('/post-verify', [App\Http\Controllers\VerificationController::class, 'registration'])->name('post-verify');
