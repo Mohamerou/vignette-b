@@ -134,8 +134,9 @@ class VignettesController extends Controller
 
 
         $engin->signaler_perdue = 0;
+        $engin->save();
         
-        if($engin->save())
+        if($engin)
         {
             // Withdraw declaration
             $declaration->delete();

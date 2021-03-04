@@ -6,8 +6,6 @@ use Nexmo;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Contracts\Auth\Authenticatable;
 
-use Beem;
-
 use Illuminate\Http\Request;
 use Validator,Redirect,Response;
 Use App\Models\User;
@@ -100,6 +98,7 @@ class AuthController extends Controller
             return back()->with('error', 'Un compte avec le même numéro existe déjà !')
                          ->withInput();
         }
+
         $User       = $this->create($data);
 
         $id         = $User->id;
@@ -115,23 +114,7 @@ class AuthController extends Controller
         } 
         else 
         {
-
-
-            Beem::sendRequest($User->phone);
-
-            $sentCode   = Nexmo::message()->send([
-                        'to'   => '+223'.$User->phone,
-                        'from' => '+22389699245',
-                        'text' => 'ikV, code de vérification: '.$code.' \n',
-                    ]);
-
-            $TempVerificationCode          = new TempVerificationCode;
-            $TempVerificationCode->userId  = $id;
-            $TempVerificationCode->code    = $code;
-            $TempVerificationCode->phone   = $telephone;
-            $TempVerificationCode->save();
-
-            return redirect()->route('verify',$telephone);
+            $this->sendOPT($User->phone, $User->code);
         }
        
         
@@ -184,6 +167,7 @@ class AuthController extends Controller
 
         $user->roles()->attach($role);
         $user->save();
+
             
         return $user;
     }
@@ -195,9 +179,59 @@ private function storeIdCard($user)
 {
     if (request()->has('idCard')) {
         $user->update([
-            'idCard' => request()->idCard->store('uploads/userIdCard', 's3'),
+            'idCard' => request()->idCard->store('uploads/userIdCard', 'public'),
         ]);
     }
+}
+
+public function sendOPT($phone, $code)
+{
+    $api_key= getenv('BEEM_KEY');
+    $secret_key = getenv('BEEM_SECRET');
+    
+    // The data to send to the API
+    $postData = array(
+        'appId' => '76',
+        'msisdn' => '223'.$phone,
+    );
+    //.... Api url
+    $Url ='https://apiotp.beem.africa/v1/request';
+
+    // Setup cURL
+    $ch = curl_init($Url);
+    error_reporting(E_ALL);
+    ini_set('display_errors', 1);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+    curl_setopt_array($ch, array(
+        CURLOPT_POST => TRUE,
+        CURLOPT_RETURNTRANSFER => TRUE,
+        CURLOPT_HTTPHEADER => array(
+            'Authorization:Basic ' . base64_encode("$api_key:$secret_key"),
+            'Content-Type: application/json'
+
+        ),
+        CURLOPT_POSTFIELDS => json_encode($postData)
+    ));
+
+    // Send the request
+    $response = curl_exec($ch);
+
+    // Check for errors
+    if($response === FALSE){
+            echo $response;
+
+        die(curl_error($ch));
+    }
+    dd($response);    
+
+    $TempVerificationCode          = new TempVerificationCode;
+    $TempVerificationCode->userId  = $id;
+    $TempVerificationCode->code    = $code;
+    $TempVerificationCode->phone   = $telephone;
+    $TempVerificationCode->save();
+
+    return redirect()->route('verify',$telephone);
 }
 
 
