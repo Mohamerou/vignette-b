@@ -179,7 +179,7 @@ private function storeIdCard($user)
 {
     if (request()->has('idCard')) {
         $user->update([
-            'idCard' => request()->idCard->store('uploads/userIdCard', 'public'),
+            'idCard' => request()->idCard->store('uploads/userIdCard', 's3'),
         ]);
     }
 }
