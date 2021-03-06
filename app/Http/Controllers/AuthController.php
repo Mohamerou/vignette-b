@@ -189,8 +189,11 @@ public function sendOPT($phone, $code)
     $api_key= getenv('BEEM_KEY');
     $secret_key = getenv('BEEM_SECRET');
 
-    
+
     // // The data to send to the API
+
+    // The data to send to the API
+
     // $postData = array(
     //     'appId' => '76',
     //     'msisdn' => '223'.$phone,
@@ -233,6 +236,15 @@ public function sendOPT($phone, $code)
                                     'text' => "ikaVignetti, code de vérification: ".$code."",
                                     ]);
 
+    $user       = User::where('phone', $phone)->first();
+    $userId     = $user->id;
+
+
+    $code = Nexmo::message()->send([
+                                    'to'   => '+223'.$phone,
+                                    'from' => '+22389699245',
+                                    'text' => "ikaVignetti, code de confirmation ".$code,
+                                    ]);
     $user       = User::where('phone', $phone)->first();
     $userId     = $user->id;
 
