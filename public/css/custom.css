@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /******************************************
     File Name: custom.css
 /****************************************** */
@@ -1360,3 +1361,9 @@ nav.main-menu .navbar-toggle {border: solid #fff 2px;}
 
 
 
+=======
+body { padding-top: 40px; }
+@media screen and (max-width: 768px) {
+    body { padding-top: 0px; }
+}
+>>>>>>> d6960d8017c0d2b42fe3594fd98c5a03859573c1
