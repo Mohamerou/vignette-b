@@ -190,45 +190,53 @@ public function sendOPT($phone, $code)
     $secret_key = getenv('BEEM_SECRET');
     
     // The data to send to the API
-    $postData = array(
-        'appId' => '76',
-        'msisdn' => '223'.$phone,
-    );
-    //.... Api url
-    $Url ='https://apiotp.beem.africa/v1/request';
+    // $postData = array(
+    //     'appId' => '76',
+    //     'msisdn' => '223'.$phone,
+    // );
+    // //.... Api url
+    // $Url ='https://apiotp.beem.africa/v1/request';
 
-    // Setup cURL
-    $ch = curl_init($Url);
-    error_reporting(E_ALL);
-    ini_set('display_errors', 1);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-    curl_setopt_array($ch, array(
-        CURLOPT_POST => TRUE,
-        CURLOPT_RETURNTRANSFER => TRUE,
-        CURLOPT_HTTPHEADER => array(
-            'Authorization:Basic ' . base64_encode("$api_key:$secret_key"),
-            'Content-Type: application/json'
+    // // Setup cURL
+    // $ch = curl_init($Url);
+    // error_reporting(E_ALL);
+    // ini_set('display_errors', 1);
+    // curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+    // curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+    // curl_setopt_array($ch, array(
+    //     CURLOPT_POST => TRUE,
+    //     CURLOPT_RETURNTRANSFER => TRUE,
+    //     CURLOPT_HTTPHEADER => array(
+    //         'Authorization:Basic ' . base64_encode("$api_key:$secret_key"),
+    //         'Content-Type: application/json'
 
-        ),
-        CURLOPT_POSTFIELDS => json_encode($postData)
-    ));
+    //     ),
+    //     CURLOPT_POSTFIELDS => json_encode($postData)
+    // ));
 
-    // Send the request
-    $response = curl_exec($ch);
+    // // Send the request
+    // $response = curl_exec($ch);
 
-    // Check for errors
-    if($response === FALSE){
-            echo $response;
+    // // Check for errors
+    // if($response === FALSE){
+    //         echo $response;
 
-        die(curl_error($ch));
-    }
-    dd($response);    
+    //     die(curl_error($ch));
+    // }
+    // dd($response);    
 
+    $code = Nexmo::message()->send([
+                                    'to'   => '+223'.$phone,
+                                    'from' => '+22389699245',
+                                    'text' => "ikaVignetti, code de confirmation ".$code,
+                                    ]);
+    $user       = User::where('phone', $phone)->first();
+    $userId     = $user->id;
+    
     $TempVerificationCode          = new TempVerificationCode;
-    $TempVerificationCode->userId  = $id;
+    $TempVerificationCode->userId  = $userId;
     $TempVerificationCode->code    = $code;
-    $TempVerificationCode->phone   = $telephone;
+    $TempVerificationCode->phone   = $phone;
     $TempVerificationCode->save();
 
     return redirect()->route('verify',$telephone);

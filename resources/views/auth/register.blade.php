@@ -5,7 +5,7 @@
 
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-md-8 mt-lg-5">
             <div class="card text-center">
                 <div class="card-header"><h4>{{ __('Inscription') }}</h4></div>
 
