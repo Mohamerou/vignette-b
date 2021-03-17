@@ -15,6 +15,7 @@ use App\Models\TempVerificationCode;
 //use App\Models\DemandesVignette;
 use Illuminate\Support\Facades\Hash;
 use Session;
+use Illuminate\Support\Facades\Crypt;
 
 
 
@@ -62,11 +63,11 @@ class AuthController extends Controller
             'password' => 'required|min:8',
         ]);
  
-        if (Auth::attempt(['phone' => $request->phone, 'password' => $request->password])) {
+        if (Auth::attempt(['phone' => Crypt::decryptString($request->phone), 'password' => Crypt::decryptString($request->password)])) {
 
-            $user = User::where('phone', $request->phone)->first();
+            $user = User::where('phone', Crypt::decryptString($request->phone))->first();
             if ($user->isverified != 1) {
-                return redirect()->route('resend_code',$request->phone);
+                return redirect()->route('resend_code',Crypt::decryptString($request->phone));
             }
 
             return Redirect::to("home");
@@ -102,8 +103,8 @@ class AuthController extends Controller
         $User       = $this->create($data);
 
         $id         = $User->id;
-        $code       = $User->code;
-        $telephone  = $User->phone;
+        $code       = Crypt::decryptString($User->code);
+        $telephone  = Crypt::decryptString($User->phone);
         $this->storeIdCard($User);
 
        
@@ -114,7 +115,7 @@ class AuthController extends Controller
         } 
         else 
         {
-            $this->sendOPT($User->phone, $User->code);
+            return $this->sendOPT($User->phone, $User->code);
         }
        
         
@@ -153,14 +154,14 @@ class AuthController extends Controller
 
         $code  = rand(100000, 999999);
         $user =  User::create([
-            'lastname' 	=> $data['lastname'],
-            'firstname' => $data['firstname'],
+            'lastname' 	=> Crypt::encryptString($data['lastname']),
+            'firstname' => Crypt::encryptString($data['firstname']),
             'gender' 	=> $data['gender'],
-            'address'   => $data['address'],
-            'avatar' 	=> $avatar,
-            'phone' 	=> $data['phone'],
-            'code'      => $code,
-            'password' 	=> Hash::make($data['password'])
+            'address'   => Crypt::encryptString($data['address']),
+            'avatar' 	=> Crypt::encryptString($avatar),
+            'phone' 	=> Crypt::encryptString($data['phone']),
+            'code'      => Crypt::encryptString($code),
+            'password' 	=> Hash::make($data['password']),
         ]);
 
         $role = Role::select('id')->where('name', 'user')->first();
@@ -179,7 +180,7 @@ private function storeIdCard($user)
 {
     if (request()->has('idCard')) {
         $user->update([
-            'idCard' => request()->idCard->store('uploads/userIdCard', 's3'),
+            'idCard' => Crypt::encryptString(request()->idCard->store('uploads/userIdCard', 's3')),
         ]);
     }
 }
@@ -227,14 +228,7 @@ public function sendOPT($phone, $code)
 
     //     die(curl_error($ch));
     // }
-    // dd($response);    
-
-
-    $code = Nexmo::message()->send([
-                                    'to'   => '+223'.$phone,
-                                    'from' => '+22389699245',
-                                    'text' => "ikaVignetti, code de vérification: ".$code."",
-                                    ]);
+    // dd($response);
 
     $user       = User::where('phone', $phone)->first();
     $userId     = $user->id;
@@ -245,13 +239,12 @@ public function sendOPT($phone, $code)
                                     'from' => '+22389699245',
                                     'text' => "ikaVignetti, code de confirmation ".$code,
                                     ]);
-    $user       = User::where('phone', $phone)->first();
-    $userId     = $user->id;
 
+    # OTP TRACK BACKUP
     $TempVerificationCode          = new TempVerificationCode;
-    $TempVerificationCode->userId  = $userId;
-    $TempVerificationCode->code    = $code;
-    $TempVerificationCode->phone   = $phone;
+    $TempVerificationCode->userId  = Crypt::encryptString($userId);
+    $TempVerificationCode->code    = Crypt::encryptString($code);
+    $TempVerificationCode->phone   = Crypt::encryptString($phone);
     $TempVerificationCode->save();
 
     return redirect()->route('verify',$telephone);

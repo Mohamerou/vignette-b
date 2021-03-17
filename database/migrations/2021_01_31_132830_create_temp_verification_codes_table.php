@@ -16,8 +16,9 @@ class CreateTempVerificationCodesTable extends Migration
         Schema::create('temp_verification_codes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('userId')->constrained('users');
-            $table->string('phone');
-            $table->string('code');
+            $table->string('phone', 255)->change();
+            $table->string('code', 255)->change();
+            $table->boolean('expired')->default(false);
             $table->timestamps();
         });
     }
