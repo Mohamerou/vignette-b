@@ -1,7 +1,6 @@
 @extends('layouts.app')
-
 @section('content')
-<div class="container">
+<div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="row justify-content-center">
@@ -33,7 +32,7 @@
 
                         @endif
                     </div>
-            <div class="card">
+            <div class="card mt-5">
                 <div class="card-header"><h4>{{ __('Connexion') }}</h4></div>
 
                 <div class="card-body">

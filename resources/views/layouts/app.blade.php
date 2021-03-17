@@ -21,9 +21,9 @@
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
 </head>
 <body>
-    <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light fixed-top bg-white shadow-sm">
-            <div class="container">
+    <div id="app" class="">
+        <nav class="navbar navbar-expand-md navbar-light fixed-top bg-white shadow-sm"  style="margin: auto;">
+            <div class="container" style="" >
                 <a class="navbar-brand" href="{{ url('/') }}">
                     <img src="{{ asset('/brand/ika-logo.png') }}" class="navbar-brand-img" alt="Logo ikaVignetti">
                 </a>

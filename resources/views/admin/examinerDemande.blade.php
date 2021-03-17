@@ -10,10 +10,10 @@
 	    </div>
 	 </section>
 
-	<div class="container">
+	<div class="container mt-5">
 		<div class="row row-cols-1 row-cols-md-2 g-4">
 		  <div class="col">
-		    <div class="card">
+		    <div class="card mt-5">
 		    	<h4 class="alert-heading text-center py-1">DEMANDEUR</h4>
 		      <img src="{{ ('https://ikavignetti-assets.s3.us-east-2.amazonaws.com/'.$usager->idCard) }}" class="card-img-top-examine" alt="Carte d'identité">
 		      <div class="card-body text-center">
