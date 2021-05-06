@@ -41,7 +41,7 @@
 	<section class="py-1 text-center container bg-light">
 	    <div class="row py-lg-5">
 	      <div class="col-lg-6 col-md-8 mx-auto">
-	        <h1 class="fw-light">VOTRE VERDICTE</h1>
+	        <h1 class="fw-light">VOTRE DECISION</h1>
 	        <p class="col-md-6">
 	        	<form method="POST" action="{{ route('validerDemande', [$engin->id, $notificationId, $userId, $demandeTrackId] ) }}">
 	        		@csrf

@@ -36,7 +36,7 @@
                   <div class="service-time one" style="background:#2895f1;">
                      <span class="info-icon"><img src="images/vignette.jpg" aria-hidden="true"></span>
                      <h3>Une vignette a portée de main</h3>
-                     <p>Finie les soucis de perte de vignette;<br><br><br><br></p>
+                     <p>Finie les contrefacons de vignette;<br><br><br><br></p>
                   </div>
                </div>
             </div>
