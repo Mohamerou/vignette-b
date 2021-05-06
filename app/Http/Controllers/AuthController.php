@@ -15,7 +15,6 @@ use App\Models\TempVerificationCode;
 //use App\Models\DemandesVignette;
 use Illuminate\Support\Facades\Hash;
 use Session;
-use Illuminate\Support\Facades\Crypt;
 
 
 
@@ -59,20 +58,23 @@ class AuthController extends Controller
         
         //$credentials = $request->only($request->phone, $request->password);
         request()->validate([
-            'phone' => 'required|regex:/^[0-9]{8}$/|digits:8',
-            'password' => 'required|min:8',
+            'phone'     => 'required|regex:/^[0-9]{8}$/|digits:8',
+            'password'  => 'required|min:8',
         ]);
  
-        if (Auth::attempt(['phone' => Crypt::decryptString($request->phone), 'password' => Crypt::decryptString($request->password)])) {
+        $phone      = $request->phone;
+        $password   = $request->password;
 
-            $user = User::where('phone', Crypt::decryptString($request->phone))->first();
+        if (Auth::attempt(['phone' => $phone, 'password' => $password])) {
+
+            $user = User::where('phone', $request->phone)->first();
             if ($user->isverified != 1) {
-                return redirect()->route('resend_code',Crypt::decryptString($request->phone));
+                return redirect()->route('resend_code',['phone' => $phone]);
             }
 
             return Redirect::to("home");
         }
-        return back()->with('error', 'Oups! Vos identifiants semblent invalides.')
+        return back()->with('error', 'Identifiants invalides!')
                      ->withInput();
                     
     }
@@ -96,27 +98,26 @@ class AuthController extends Controller
         $IfUserExist    = User::where('phone', $request->phone)->first();
         if ($IfUserExist) {
             # code...
-            return back()->with('error', 'Un compte avec le même numéro existe déjà !')
+            return redirect()->route('inscription')->with('error', 'Ce numéro est pris. Vérifier le votre et réessayer.')
                          ->withInput();
         }
 
         $User       = $this->create($data);
 
         $id         = $User->id;
-        $code       = Crypt::decryptString($User->code);
-        $telephone  = Crypt::decryptString($User->phone);
+        $code       = $User->code;
+        $telephone  = $User->phone;
         $this->storeIdCard($User);
-
        
         if(!$User){
 
-            return back()->with("error"," :( !!! Vérifier votre connexion internet puis réessayer.")
-                        ->withInput();
+            return redirect()->route('inscription')->with('error', ':( !!! Vérifier votre connexion internet puis réessayer.')
+                         ->withInput();
         } 
-        else 
-        {
+
+            
             return $this->sendOPT($User->phone, $User->code);
-        }
+    
        
         
     }
@@ -154,13 +155,13 @@ class AuthController extends Controller
 
         $code  = rand(100000, 999999);
         $user =  User::create([
-            'lastname' 	=> Crypt::encryptString($data['lastname']),
-            'firstname' => Crypt::encryptString($data['firstname']),
+            'lastname' 	=> $data['lastname'],
+            'firstname' => $data['firstname'],
             'gender' 	=> $data['gender'],
-            'address'   => Crypt::encryptString($data['address']),
-            'avatar' 	=> Crypt::encryptString($avatar),
-            'phone' 	=> Crypt::encryptString($data['phone']),
-            'code'      => Crypt::encryptString($code),
+            'address'   => $data['address'],
+            'avatar' 	=> $avatar,
+            'phone' 	=> $data['phone'],
+            'code'      => $code,
             'password' 	=> Hash::make($data['password']),
         ]);
 
@@ -180,7 +181,7 @@ private function storeIdCard($user)
 {
     if (request()->has('idCard')) {
         $user->update([
-            'idCard' => Crypt::encryptString(request()->idCard->store('uploads/userIdCard', 's3')),
+            'idCard' => request()->idCard->store('uploads/userIdCard', 's3'),
         ]);
     }
 }
@@ -190,64 +191,70 @@ public function sendOPT($phone, $code)
     $api_key= getenv('BEEM_KEY');
     $secret_key = getenv('BEEM_SECRET');
 
-
-    // // The data to send to the API
-
-    // The data to send to the API
-
-    // $postData = array(
-    //     'appId' => '76',
-    //     'msisdn' => '223'.$phone,
-    // );
-    // //.... Api url
-    // $Url ='https://apiotp.beem.africa/v1/request';
-
-    // // Setup cURL
-    // $ch = curl_init($Url);
-    // error_reporting(E_ALL);
-    // ini_set('display_errors', 1);
-    // curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-    // curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-    // curl_setopt_array($ch, array(
-    //     CURLOPT_POST => TRUE,
-    //     CURLOPT_RETURNTRANSFER => TRUE,
-    //     CURLOPT_HTTPHEADER => array(
-    //         'Authorization:Basic ' . base64_encode("$api_key:$secret_key"),
-    //         'Content-Type: application/json'
-
-    //     ),
-    //     CURLOPT_POSTFIELDS => json_encode($postData)
-    // ));
-
-    // // Send the request
-    // $response = curl_exec($ch);
-
-    // // Check for errors
-    // if($response === FALSE){
-    //         echo $response;
-
-    //     die(curl_error($ch));
-    // }
-    // dd($response);
+    $phone   = $phone;
+    $code    = $code;
 
     $user       = User::where('phone', $phone)->first();
     $userId     = $user->id;
 
+    //.... replace <api_key> and <secret_key> with the valid keys obtained from the platform, under profile>authentication information
+// $api_key    =$api_key;
+// $secret_key = $secret_key;
+// // The data to send to the API
+// $postData   = array(
+//     'source_addr' => 'ikaVignetti',
+//     'encoding'=>0,
+//     'schedule_time' => '',
+//     'message' => 'Code de confirmation '.$code,
+//     'recipients' => [array('recipient_id' => '76','dest_addr'=>'223'.$phone)]
+// );
+// //.... Api url
+// $Url ='https://apisms.beem.africa/v1/send';
 
-    $code = Nexmo::message()->send([
+// // Setup cURL
+// $ch = curl_init($Url);
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
+// curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+// curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+// curl_setopt_array($ch, array(
+//     CURLOPT_POST => TRUE,
+//     CURLOPT_RETURNTRANSFER => TRUE,
+//     CURLOPT_HTTPHEADER => array(
+//         'Authorization:Basic ' . base64_encode("$api_key:$secret_key"),
+//         'Content-Type: application/json'
+//     ),
+//     CURLOPT_POSTFIELDS => json_encode($postData)
+// ));
+
+// // Send the request
+// $response = curl_exec($ch);
+// //dd($response);
+// // Check for errors
+// if($response === FALSE){
+//         echo $response;
+
+//     die(curl_error($ch));
+// }
+// var_dump($response);
+
+
+    $OTP = Nexmo::message()->send([
                                     'to'   => '+223'.$phone,
-                                    'from' => '+22389699245',
-                                    'text' => "ikaVignetti, code de confirmation ".$code,
+                                    'from' => '+22368141213',
+                                    'text' => "ikaVignetti, code de confirmation ".$code.". ",
                                     ]);
 
+   
+    
     # OTP TRACK BACKUP
     $TempVerificationCode          = new TempVerificationCode;
-    $TempVerificationCode->userId  = Crypt::encryptString($userId);
-    $TempVerificationCode->code    = Crypt::encryptString($code);
-    $TempVerificationCode->phone   = Crypt::encryptString($phone);
+    $TempVerificationCode->userId  = $userId;
+    $TempVerificationCode->code    = $code;
+    $TempVerificationCode->phone   = $phone;
     $TempVerificationCode->save();
 
-    return redirect()->route('verify',$telephone);
+    return redirect()->route('verify',$phone);
 }
 
 

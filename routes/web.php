@@ -65,3 +65,9 @@ Route::get('/resend-code/{phone}', [App\Http\Controllers\VerificationController:
 
 // Vignette verification routes
    Route::get('/check/{unique_id}', [App\Http\Controllers\QrCheckController::class, 'CheckQr'])->name('checkQr');
+
+   Route::get('/ChassieCheckShow', function(){
+   		return view('ChassieCheckShow');
+   });
+
+   Route::post('/checkChassie', [App\Http\Controllers\QrCheckController::class, 'ChassieCheck'])->name('ChassieCheck');

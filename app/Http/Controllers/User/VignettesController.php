@@ -74,12 +74,12 @@ class VignettesController extends Controller
     }
 
 
-    public function notificationShow($notificationToMarkAsRead)
+    public function notificationShow($notificationToBeMarkAsRead)
     {
         
         
         $user 			= auth()->user();
-        $notification 	= Auth()->user()->notifications->where('id',$notificationToMarkAsRead)                                           ->first();
+        $notification 	= Auth()->user()->notifications->where('id',$notificationToBeMarkAsRead)                                           ->first();
         $notification->markAsRead();
         return view('user.notificationShow')->with('toBeReadNotification', $notification);   
                 
@@ -87,11 +87,21 @@ class VignettesController extends Controller
     }
 
 
-    Public function downloadQr($qr_path)
+    Public function downloadQr($vignette_id)
     {
 
-        //return response()->download($qr_path, $name, $headers);
-        return response()->download(storage_path("app/public/{$qr_path}"));
+        $vignette_data  = Vignettes::where('id', $vignette_id)->first();
+
+        $get_qr         = $vignette_data->qr;
+        //dd($get_qr);
+        $file_name      = "Vignette_Qr.png";
+
+        $headers        = [
+              'Content-Type'        => 'application/png',            
+              'Content-Disposition' => 'attachment; filename="'. $file_name .'"',
+        ];
+
+        return \Response::make(\Storage::disk('s3')->get($get_qr), 200, $headers);
     }
 
 
@@ -102,15 +112,19 @@ class VignettesController extends Controller
         $userId                     = Auth()->user()->id;
         $vignette                   = Vignettes::find($vignetteId);
         $engin                      = Engins::find($enginId);
+        
         $vignette_unique_token      = $vignette->unique_token;
+        $chassie                    = $engin->chassie;
+         
 
         $Declaration    = Declarations::create([
             'vignette_token'    => $vignette_unique_token,
             'vignetteId'        => $vignetteId,
             'enginId'           => $enginId,
             'userId'            => $userId,
-            'chassie'           => $engin->chassie,
+            'chassie'           => $chassie,
         ]);
+
 
         if ($Declaration) {
 
@@ -143,7 +157,7 @@ class VignettesController extends Controller
             return redirect()->route('engins.index')->with('annuler', 'Déclaration annulée avec succès!');
         }
 
-        return back()->with('annuler', "Déclaration annulée avec succeè!");
+        return back()->with('annuler', "Déclaration annulée avec succès!");
 
 
 

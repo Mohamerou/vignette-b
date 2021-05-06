@@ -79,7 +79,8 @@
 			                                    <button type="submit" class="btn btn-danger btn-lg btn-block py-2 my-2">DECLARER UN VOL D'ENGIN</button>
 			                                  </form>
 			                                @endif
-								        	<form method="POST" action="{{ route('downloadQr', [$up_todate_vignette->qr_download_path]) }}">
+								        	<form method="POST" action="{{ route('downloadQr', [$up_todate_vignette->id]) }}">
+								        		@csrf
 								        		<button class="btn btn-primary btn-lg btn-block py-2 my-2">Telecharger QR</button>
 								        	</form>
 								      	</div>
@@ -120,7 +121,8 @@
 			                                    <button type="submit" class="btn btn-danger btn-lg btn-block py-2 my-2">DECLARER UN VOL D'ENGIN</button>
 			                                  </form>
 			                                @endif
-								        	<form method="GET" action="{{ route('downloadQr', [$outdated_vignette->qr_download_path]) }}">
+								        	<form method="GET" action="{{ route('downloadQr', [$outdated_vignette->id]) }}">
+								        		@csrf
 								        		<button class="btn btn-primary btn-lg btn-block py-2 my-2">Telecharger QR</button>
 								        	</form>
 								      	</div>

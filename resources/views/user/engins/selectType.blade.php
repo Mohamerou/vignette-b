@@ -2,6 +2,13 @@
 
 @section('content')
 	<div class="container">
+	        @if(Session::has('unknown'))
+
+	            <div class="alert
+	            {{ Session::get('alert-class', 'alert-danger') }} text-center col-md-6">{{Session::get('unknown') }}</div>
+
+	        @endif
+	        
 		<div class="row row-cols-1 row-cols-md-3 g-4">
 		  <div class="col py-2">
 		    <div class="card h-100 text-center">

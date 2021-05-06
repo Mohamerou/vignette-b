@@ -3,39 +3,39 @@
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="row justify-content-center">
-                        @if($errors->any())
-                            @foreach($errors->all() as $error)
-                                <div class="alert alert-class alert-danger text-center col-8">
-
-                                $error
-                            </div>
-                            @endforeach
-                        @endif
-                        @if(Session::has('success'))
-
-                            <div class="alert
-                            {{ Session::get('alert-class', 'alert-success') }} text-center col-md-8">
-
-                                    {{Session::get('success') }}
-                            </div>
-
-                        @endif
-
-                       @if(Session::has('error'))
-
-                            <div class="alert
-                            {{ Session::get('alert-class', 'alert-danger') }} text-center col-8">
-
-                                {{Session::get('error') }}
-                            </div>
-
-                        @endif
-                    </div>
             <div class="card mt-5">
                 <div class="card-header"><h4>{{ __('Connexion') }}</h4></div>
 
                 <div class="card-body">
+                    <div class="row justify-content-center">
+                                @if($errors->any())
+                                    @foreach($errors->all() as $error)
+                                        <div class="alert alert-class alert-danger text-center col-8">
+
+                                        $error
+                                    </div>
+                                    @endforeach
+                                @endif
+                                @if(Session::has('success'))
+
+                                    <div class="alert
+                                    {{ Session::get('alert-class', 'alert-success') }} text-center col-md-8">
+
+                                            {{Session::get('success') }}
+                                    </div>
+
+                                @endif
+
+                               @if(Session::has('error'))
+
+                                    <div class="alert
+                                    {{ Session::get('alert-class', 'alert-danger') }} text-center col-8">
+
+                                        {{Session::get('error') }}
+                                    </div>
+
+                                @endif
+                            </div>
                     <form method="POST" action="{{ route('postLogin') }}">
                         @csrf
                         <div class="form-group row">

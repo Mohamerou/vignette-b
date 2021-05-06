@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\TempVerificationCode;
 use Nexmo;
+//use Illuminate\Support\Facades\Crypt;
 
 class VerificationController extends Controller
 {
@@ -25,7 +26,7 @@ class VerificationController extends Controller
         $compareCode    =  TempVerificationCode::where('phone', $userPhone)->first();
 
         if(!empty($compareCode)){
-            if($compareCode->code == $userInputCode)
+            if($compareCode->code === $userInputCode)
             {
                 $user               = User::where('phone', $userPhone)->first();
                 $user->isverified   = true;

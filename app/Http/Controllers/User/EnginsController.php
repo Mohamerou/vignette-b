@@ -191,8 +191,7 @@ class EnginsController extends Controller
                 break;
             
             default:
-                return view('user.engins.types.moto51-125')->with('marques', $marques)
-                                                           ->with('mairies', $mairies);
+                return view('user.engins.selectType')->with('unknown', 'Choix indisponible!');
                 break;
         }
     }

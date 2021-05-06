@@ -14,5 +14,6 @@ class Declarations extends Model
     	'vignetteId',
     	'enginId',
     	'userId',
+    	'chassie',
     ];
 }

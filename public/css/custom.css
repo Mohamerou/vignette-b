@@ -1,9 +1,8 @@
-<<<<<<< HEAD
-body { padding-top: 40px; }
+
+body { padding-top: 100px; }
 @media screen and (max-width: 768px) {
-    body { padding-top: 0px; }
+    body { padding-top: 90px; }
 }
-=======
 /******************************************
     File Name: custom.css
 /****************************************** */
@@ -1350,20 +1349,3 @@ nav.main-menu .navbar-toggle {border: solid #fff 2px;}
 .info-inner {float: left;margin-left: 30px;}
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
->>>>>>> e43db553086cd1cb73c98cf3eb80cf11bda89d2d

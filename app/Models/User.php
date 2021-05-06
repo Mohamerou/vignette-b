@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use betterapp\LaravelDbEncrypter\Traits\EncryptableDbAttribute;
 
 class User extends Authenticatable
 {
@@ -30,6 +31,21 @@ class User extends Authenticatable
         'idCard', 
         'code'
     ];
+
+    // protected $encryptable = [
+    //     'firstname',
+    //     'lastname',
+    //     'password',
+    //     'password_confirmation',
+    //     'gender', 
+    //     'address', 
+    //     'administration', 
+    //     'phone', 
+    //     'avatar',
+    //     'password', 
+    //     'idCard', 
+    //     'code'
+    // ];
 
     /**
      * The attributes that should be hidden for arrays.

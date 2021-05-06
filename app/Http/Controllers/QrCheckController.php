@@ -69,11 +69,11 @@ class QrCheckController extends Controller
         }
     }
 
-
-    public function CheckChassie($chassie)
+    public function ChassieCheck(Request $request)
     {
-        
-        $engin       = Engins::where('chassie', $chassie)->first();
+        $chassie    = $request->chassie;
+        $engin      = Engins::where('chassie', $chassie)->first();
+
 
         if (!empty($engin)) {
 
@@ -82,20 +82,23 @@ class QrCheckController extends Controller
             {
                 $response       = array();
                 $proprietaire   = User::find($declaration->userId);
-                $vignette       = Vignettes::where($declaration->vignette_token)->first();
+                $vignette       = Vignettes::where('unique_token', $declaration->vignette_token)->first();
                 $engin          = Engins::find($declaration->enginId);
 
+                $expired_at     = $vignette->expired_at;
 
                 $response[]     = [
                                     'declarer_voler'    =>  true,
                                     'proprietaire'      =>  $proprietaire,
                                     'engin'             =>  $engin,
                                     'vignette'          =>  $vignette,
-                                    'exipired_at'       =>  $expires_at,
+                                    'exipired_at'       =>  $expired_at,
                                 ];
                 
 
-                return $response;
+                return view('ChassieCheckShowInfo')->with('usager', $proprietaire)
+                                                   ->with('engin', $engin)
+                                                   ->with('vignette', $vignette);
             }
             else
             {
@@ -114,16 +117,10 @@ class QrCheckController extends Controller
                 return $response;
             }
         }
-        else
-        {
             $response[]     = [
                                     'no_matching_vignette'   =>  true,
                              ];
-                
-
-                return $response;
-        }
-
         
+                return $response;   
     }
 }
