@@ -8,7 +8,7 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "~7.3.0",
+        "php": "^7.3|^8.0",
         "betterapp/laravel-db-encrypter": "^1.0",
         "ferdous/laravel-otp-validate": "^1.2",
         "fideloper/proxy": "^4.4",
