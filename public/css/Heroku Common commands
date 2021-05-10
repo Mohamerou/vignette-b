@@ -1,0 +1,8 @@
+Heroku Common commands
+
+heroku apps:delete
+heroku buildpacks:add
+heroku git:remote -a 	
+heroku pg:crendetials:url
+heroku plugins:install heroku-repo
+heroku repo:purge_cache -app HEROKU_APP_NAME
