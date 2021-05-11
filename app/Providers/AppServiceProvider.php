@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use stripe\stripe;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -26,5 +27,7 @@ class AppServiceProvider extends ServiceProvider
         if($this->app->environment('production')) {
             \URL::forceScheme('https');
         }
+
+        stripe::setApiKey(env('STRIPE_KEY'));
     }
 }

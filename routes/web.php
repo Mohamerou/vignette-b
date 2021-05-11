@@ -71,3 +71,6 @@ Route::get('/resend-code/{phone}', [App\Http\Controllers\VerificationController:
    });
 
    Route::post('/checkChassie', [App\Http\Controllers\QrCheckController::class, 'ChassieCheck'])->name('ChassieCheck');
+
+   Route::get('/payement', [App\Http\Controllers\PaymentController::class, 'checkoutShow'])->name('payement');
+   Route::post('/payement', [App\Http\Controllers\PaymentController::class, 'checkout'])->name('payement');

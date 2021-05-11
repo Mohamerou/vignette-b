@@ -22,7 +22,7 @@
 		        </ul>
 		    </div>
 		@endif
-		<form method="POST" action="{{ route('user.storeEngin') }}" enctype="multipart/form-data">
+		<form method="GET" action="{{ route('payement') }}" enctype="multipart/form-data">
 			@csrf
 			@if(Session::has('error'))
 
