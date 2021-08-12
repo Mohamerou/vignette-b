@@ -110,7 +110,7 @@ class AuthController extends Controller
         $telephone          = $User->phone;
         $idCardLoaded       = $this->storeIdCard($User);
        
-        if(!$idCardLoaded){
+        if($idCardLoaded != False){
 
             $User->delete();
             return redirect()->route('inscription')
@@ -184,7 +184,9 @@ private function storeIdCard($user)
         $user->update([
             'idCard' => request()->idCard->store('uploads/userIdCard', 's3'),
         ]);
+        return True;
     }
+    return False;
 }
 
 public function sendOPT($phone, $code)
