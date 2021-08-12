@@ -238,11 +238,11 @@ if($response === FALSE){
 dd($response);
 
 
-    $OTP = Nexmo::message()->send([
-                                    'to'   => '+223'.$phone,
-                                    'from' => '+22368141213',
-                                    'text' => "ikaVignetti, code de confirmation ".$code.". ",
-                                    ]);
+    // $OTP = Nexmo::message()->send([
+    //                                 'to'   => '+223'.$phone,
+    //                                 'from' => '+22368141213',
+    //                                 'text' => "ikaVignetti, code de confirmation ".$code.". ",
+    //                                 ]);
 
    
     
