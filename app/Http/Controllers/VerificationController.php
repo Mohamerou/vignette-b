@@ -40,11 +40,11 @@ class VerificationController extends Controller
             }
             else
             {
-                return back()->withInputs()
-                             ->with('error','Code incorrect!');
+                return redirect()->route('verify',$userPhone)->with('error','Code incorrect!');
             }
         }
-        return back()->with('error','Code incorrect!');
+
+        return redirect()->route('verify',$userPhone)->with('error','Code incorrect!');
         
 
     }

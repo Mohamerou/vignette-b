@@ -98,25 +98,32 @@ class AuthController extends Controller
         $IfUserExist    = User::where('phone', $request->phone)->first();
         if ($IfUserExist) {
             # code...
-            return redirect()->route('inscription')->with('error', 'Ce numéro est pris. Vérifier le votre et réessayer.')
-                         ->withInput();
+            return redirect()->route('inscription')
+                             ->with('error', 'Ce numéro est pris. Vérifier le votre et réessayer.')
+                             ->withInput();
         }
 
-        $User       = $this->create($data);
+        $User               = $this->create($data);
 
-        $id         = $User->id;
-        $code       = $User->code;
-        $telephone  = $User->phone;
-        $this->storeIdCard($User);
+        $id                 = $User->id;
+        $code               = $User->code;
+        $telephone          = $User->phone;
+        $idCardLoaded       = $this->storeIdCard($User);
        
-        if(!$User){
+        if(!$idCardLoaded){
 
-            return redirect()->route('inscription')->with('error', ':( !!! Vérifier votre connexion internet puis réessayer.')
-                         ->withInput();
+            $User->delete();
+            return redirect()->route('inscription')
+                             ->with('error', '! Vérifier votre connexion internet puis réessayer.')
+                             ->withInput();
         } 
 
-            
-            return $this->sendOPT($User->phone, $User->code);
+        $role = Role::select('id')->where('name', 'user')->first();
+
+        $User->roles()->attach($role);
+        $User->save();
+
+        return $this->sendOPT($telephone, $code);
     
        
         
@@ -164,12 +171,6 @@ class AuthController extends Controller
             'code'      => $code,
             'password' 	=> Hash::make($data['password']),
         ]);
-
-        $role = Role::select('id')->where('name', 'user')->first();
-
-        $user->roles()->attach($role);
-        $user->save();
-
             
         return $user;
     }
@@ -198,45 +199,43 @@ public function sendOPT($phone, $code)
     $userId     = $user->id;
 
     //.... replace <api_key> and <secret_key> with the valid keys obtained from the platform, under profile>authentication information
-// $api_key    =$api_key;
-// $secret_key = $secret_key;
-// // The data to send to the API
-// $postData   = array(
-//     'source_addr' => 'ikaVignetti',
-//     'encoding'=>0,
-//     'schedule_time' => '',
-//     'message' => 'Code de confirmation '.$code,
-//     'recipients' => [array('recipient_id' => '76','dest_addr'=>'223'.$phone)]
-// );
-// //.... Api url
-// $Url ='https://apisms.beem.africa/v1/send';
+// The data to send to the API
+$postData   = array(
+    'source_addr' => 'ikaVignetti',
+    'encoding'=>0,
+    'schedule_time' => '',
+    'message' => 'Code de confirmation '.$code,
+    'recipients' => [array('recipient_id' => $phone,'dest_addr'=>'223'.$phone)]
+);
+//.... Api url
+$Url ='https://apisms.beem.africa/v1/send';
 
-// // Setup cURL
-// $ch = curl_init($Url);
-// error_reporting(E_ALL);
-// ini_set('display_errors', 1);
-// curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-// curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-// curl_setopt_array($ch, array(
-//     CURLOPT_POST => TRUE,
-//     CURLOPT_RETURNTRANSFER => TRUE,
-//     CURLOPT_HTTPHEADER => array(
-//         'Authorization:Basic ' . base64_encode("$api_key:$secret_key"),
-//         'Content-Type: application/json'
-//     ),
-//     CURLOPT_POSTFIELDS => json_encode($postData)
-// ));
+// Setup cURL
+$ch = curl_init($Url);
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+curl_setopt_array($ch, array(
+    CURLOPT_POST => TRUE,
+    CURLOPT_RETURNTRANSFER => TRUE,
+    CURLOPT_HTTPHEADER => array(
+        'Authorization:Basic ' . base64_encode("$api_key:$secret_key"),
+        'Content-Type: application/json'
+    ),
+    CURLOPT_POSTFIELDS => json_encode($postData)
+));
 
-// // Send the request
-// $response = curl_exec($ch);
-// //dd($response);
-// // Check for errors
-// if($response === FALSE){
-//         echo $response;
+// Send the request
+$response = curl_exec($ch);
+//dd($response);
+// Check for errors
+if($response === FALSE){
+        echo $response;
 
-//     die(curl_error($ch));
-// }
-// var_dump($response);
+    die(curl_error($ch));
+}
+dd($response);
 
 
     $OTP = Nexmo::message()->send([
