@@ -7,7 +7,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8 mt-lg-5">
             <div class="card text-center">
-                <div class="card-header mt-5"><h4>{{ __('Inscription') }}</h4></div>
+                <div class="card-header bg-white mt-5"><h4>{{ __('Inscription') }}</h4></div>
 
                 <div class="card-body">
                     <div class="row justify-content-center">
