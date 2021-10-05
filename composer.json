@@ -10,7 +10,7 @@
     "require": {
         "php": "^7.3||^8.0",
         "betterapp/laravel-db-encrypter": "^1.0",
-        "ferdous/laravel-otp-validate": "^1.2",
+        "ferdous/laravel-otp-validate": "^0.2.0",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",

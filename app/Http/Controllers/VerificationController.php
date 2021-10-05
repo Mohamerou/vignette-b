@@ -56,6 +56,11 @@ class VerificationController extends Controller
     {
     	$code           = rand(100000, 999999);
         $user           = User::where('phone', $phone)->first();
+
+        if ($user->isEmpty()) {
+            return redirect()->route('verify');
+        }
+        
         $userId         = $user->id;
         $user->code     = $code;
         $user->save();
@@ -63,7 +68,12 @@ class VerificationController extends Controller
         $oldTempVerificationCode       = TempVerificationCode::where('userId', $userId)
                                                                ->first();
 
-        $oldTempVerificationCode->delete();
+        if(!($oldTempVerificationCode->isEmpty()))
+        {
+            $oldTempVerificationCode->delete();
+        }
+
+        
 
         $newTempVerificationCode          = new TempVerificationCode;
         $newTempVerificationCode->userId  = $userId;
