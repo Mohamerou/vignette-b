@@ -89,6 +89,7 @@ class AuthController extends Controller
             'gender' 	             => 'required|bool',
             'address'                => 'required|string',
             'phone' 	             => 'required|regex:/^[0-9]{8}$/|digits:8',
+            
             'password' 	             => 'required|min:8',
             'password_confirmation'  => 'required|min:8',
         ]);
