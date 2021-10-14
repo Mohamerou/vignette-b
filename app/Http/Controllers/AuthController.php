@@ -89,7 +89,7 @@ class AuthController extends Controller
             'gender' 	             => 'required|bool',
             'address'                => 'required|string',
             'phone' 	             => 'required|regex:/^[0-9]{8}$/|digits:8',
-            
+
             'password' 	             => 'required|min:8',
             'password_confirmation'  => 'required|min:8',
         ]);
@@ -208,7 +208,7 @@ $postData   = array(
     'encoding'=>0,
     'schedule_time' => '',
     'message' => 'Code de confirmation '.$code,
-    'recipients' => [array('recipient_id' => $phone,'dest_addr'=>'255'.$phone)]
+    'recipients' => [array('recipient_id' => $phone,'dest_addr'=>'223'.$phone)]
 );
 //.... Api url
 $Url ='https://apisms.beem.africa/v1/send';
