@@ -15,7 +15,7 @@
                             @foreach($errors->all() as $error)
                                 <div class="alert alert-class alert-danger text-center col-6">
 
-                                $error
+                                {{$error}}<br>
                             </div>
                             @endforeach
                         @endif
