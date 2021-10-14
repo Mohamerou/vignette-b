@@ -203,11 +203,11 @@ public function sendOPT($phone, $code)
     //.... replace <api_key> and <secret_key> with the valid keys obtained from the platform, under profile>authentication information
 // The data to send to the API
 $postData   = array(
-    'source_addr' => 'ikaVignetti',
+    'source_addr' => 'INFO',
     'encoding'=>0,
     'schedule_time' => '',
     'message' => 'Code de confirmation '.$code,
-    'recipients' => [array('recipient_id' => $phone,'dest_addr'=>'223'.$phone)]
+    'recipients' => [array('recipient_id' => $phone,'dest_addr'=>'255'.$phone)]
 );
 //.... Api url
 $Url ='https://apisms.beem.africa/v1/send';
