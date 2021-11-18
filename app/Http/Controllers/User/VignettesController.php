@@ -101,7 +101,7 @@ class VignettesController extends Controller
               'Content-Disposition' => 'attachment; filename="'. $file_name .'"',
         ];
 
-        return \Response::make(\Storage::disk('public')->get($get_qr), 200, $headers);
+        return \Response::make(\Storage::disk('s3')->get($get_qr), 200, $headers);
     }
 
 
