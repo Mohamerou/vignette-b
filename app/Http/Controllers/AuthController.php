@@ -198,7 +198,9 @@ public function sendOPT($phone, $code)
     $user       = User::where('phone', $phone)->first();
     $userId     = $user->id;
 
-    //.... replace <api_key> and <secret_key> with the valid keys obtained from the platform, under profile>authentication information
+
+
+//.... replace <api_key> and <secret_key> with the valid keys obtained from the platform, under profile>authentication information
 // The data to send to the API
 // $postData   = array(
 //     'source_addr' => 'INFO',
