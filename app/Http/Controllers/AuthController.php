@@ -192,60 +192,57 @@ private function storeIdCard($user)
 
 public function sendOPT($phone, $code)
 {
-    $api_key= getenv('BEEM_KEY');
-    $secret_key = getenv('BEEM_SECRET');
-
-    $phone   = $phone;
-    $code    = $code;
+    // $api_key= getenv('BEEM_KEY');
+    // $secret_key = getenv('BEEM_SECRET');
 
     $user       = User::where('phone', $phone)->first();
     $userId     = $user->id;
 
     //.... replace <api_key> and <secret_key> with the valid keys obtained from the platform, under profile>authentication information
 // The data to send to the API
-$postData   = array(
-    'source_addr' => 'INFO',
-    'encoding'=>0,
-    'schedule_time' => '',
-    'message' => 'Code de confirmation '.$code,
-    'recipients' => [array('recipient_id' => $phone,'dest_addr'=>'223'.$phone)]
-);
-//.... Api url
-$Url ='https://apisms.beem.africa/v1/send';
+// $postData   = array(
+//     'source_addr' => 'INFO',
+//     'encoding'=>0,
+//     'schedule_time' => '',
+//     'message' => 'Code de confirmation '.$code,
+//     'recipients' => [array('recipient_id' => $phone,'dest_addr'=>'223'.$phone)]
+// );
+// //.... Api url
+// $Url ='https://apisms.beem.africa/v1/send';
 
-// Setup cURL
-$ch = curl_init($Url);
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-curl_setopt_array($ch, array(
-    CURLOPT_POST => TRUE,
-    CURLOPT_RETURNTRANSFER => TRUE,
-    CURLOPT_HTTPHEADER => array(
-        'Authorization:Basic ' . base64_encode("$api_key:$secret_key"),
-        'Content-Type: application/json'
-    ),
-    CURLOPT_POSTFIELDS => json_encode($postData)
-));
+// // Setup cURL
+// $ch = curl_init($Url);
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
+// curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+// curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+// curl_setopt_array($ch, array(
+//     CURLOPT_POST => TRUE,
+//     CURLOPT_RETURNTRANSFER => TRUE,
+//     CURLOPT_HTTPHEADER => array(
+//         'Authorization:Basic ' . base64_encode("$api_key:$secret_key"),
+//         'Content-Type: application/json'
+//     ),
+//     CURLOPT_POSTFIELDS => json_encode($postData)
+// ));
 
-// Send the request
-$response = curl_exec($ch);
+// // Send the request
+// $response = curl_exec($ch);
+// //dd($response);
+// // Check for errors
+// if($response === FALSE){
+//         echo $response;
+
+//     die(curl_error($ch));
+// }
 //dd($response);
-// Check for errors
-if($response === FALSE){
-        echo $response;
-
-    die(curl_error($ch));
-}
-dd($response);
 
 
-    // $OTP = Nexmo::message()->send([
-    //                                 'to'   => '+223'.$phone,
-    //                                 'from' => '+22368141213',
-    //                                 'text' => "ikaVignetti, code de confirmation ".$code.". ",
-    //                                 ]);
+    $OTP = Nexmo::message()->send([
+                                    'to'   => '+223'.$phone,
+                                    'from' => '+22369141418',
+                                    'text' => "ikaVignetti, code de confirmation ".$code.". ",
+                                    ]);
 
    
     
