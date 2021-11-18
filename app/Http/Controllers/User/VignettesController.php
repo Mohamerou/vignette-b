@@ -93,6 +93,10 @@ class VignettesController extends Controller
         $vignette_data  = Vignettes::where('id', $vignette_id)->first();
 
         $get_qr         = $vignette_data->qr;
+        
+
+        //dd($get_qr);
+        //dd($get_qr);
         //dd($get_qr);
         $file_name      = "Vignette_Qr.png";
 
