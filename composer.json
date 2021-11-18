@@ -23,6 +23,7 @@
         "league/flysystem-aws-s3-v3": "^1.0",
         "nexmo/client": "^2.4",
         "nexmo/laravel": "^2.4",
+        "orbitale/imagemagick-php": "^3.2",
         "simplesoftwareio/simple-qrcode": "~4",
         "snapappointments/bootstrap-select": "^1.13",
         "stripe/stripe-php": "^7.78",
