@@ -58,8 +58,10 @@ class GestionVignettesController extends Controller
         $usager                     = User::find($userId);
 
 
+
+
         if(empty($userNotification->read_at)){
-             // Vignette unique_token
+                // Vignette unique_token
             $unique_token   = md5(rand(1, 15) . microtime());
             $qr_code        = \QrCode::format('png')
                                        ->encoding('UTF-8')
@@ -73,7 +75,7 @@ class GestionVignettesController extends Controller
 
             $vignette_qr_access_path    = substr($vignette_qr_storage_path, 8);
 
-            \Storage::disk('s3')->put($vignette_qr_storage_path, $qr_code); //storage/app/public/img/qr-code/img-1557309130.png
+            \Storage::disk('public')->put($vignette_qr_storage_path, $qr_code); //storage/app/public/img/qr-code/img-1557309130.png
 
             
 
