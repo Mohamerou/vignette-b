@@ -75,7 +75,7 @@ class GestionVignettesController extends Controller
 
             $vignette_qr_access_path    = substr($vignette_qr_storage_path, 8);
 
-            \Storage::disk('public')->put($vignette_qr_storage_path, $qr_code); //storage/app/public/img/qr-code/img-1557309130.png
+            \Storage::disk('s3')->put($vignette_qr_storage_path, $qr_code); //storage/app/public/img/qr-code/img-1557309130.png
 
             
 
