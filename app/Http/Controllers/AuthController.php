@@ -15,6 +15,7 @@ use App\Models\TempVerificationCode;
 //use App\Models\DemandesVignette;
 use Illuminate\Support\Facades\Hash;
 use Session;
+use Carbon\Carbon;
 
 
 
@@ -26,6 +27,15 @@ class AuthController extends Controller
     {
 
         return view('auth.login');
+
+    }  
+ 
+
+    
+    public function admin_login()
+    {
+
+        return view('auth.admin_login');
 
     }  
  
@@ -59,11 +69,17 @@ class AuthController extends Controller
         //$credentials = $request->only($request->phone, $request->password);
         request()->validate([
             'phone'     => 'required|regex:/^[0-9]{8}$/|digits:8',
-            'password'  => 'required|min:8',
+            'password'  => 'required|string',
         ]);
  
         $phone      = $request->phone;
         $password   = $request->password;
+
+        $passowrdLength = strlen($password);
+
+        if($passowrdLength <= 7){
+            return redirect()->route('connexion')->with('error', 'Le mot de passe est trop court. 8 caractères minimum!');
+        }
 
         if (Auth::attempt(['phone' => $phone, 'password' => $password])) {
 
@@ -72,7 +88,19 @@ class AuthController extends Controller
                 return redirect()->route('resend_code',['phone' => $phone]);
             }
 
-            return Redirect::to("home");
+            if($user->hasRole('superadmin') || $user->hasRole('elu')){
+                return Redirect('admin-dashboard');
+            }
+
+            if($user->hasRole('reporteur') || $user->hasRole('superviseur')){
+                return Redirect('admin-dashboard');
+            }
+
+            if($user->hasRole('agent_vente') || $user->hasRole('agent_enroll')){
+                return Redirect('admin-dashboard');
+            }
+
+            return redirect('home');
         }
         return back()->with('error', 'Identifiants invalides!')
                      ->withInput();
@@ -89,7 +117,6 @@ class AuthController extends Controller
             'gender' 	             => 'required|bool',
             'address'                => 'required|string',
             'phone' 	             => 'required|regex:/^[0-9]{8}$/|digits:8',
-
             'password' 	             => 'required|min:8',
             'password_confirmation'  => 'required|min:8',
         ]);
@@ -147,6 +174,21 @@ class AuthController extends Controller
     }
 
 
+    public function adminDashboard()
+    {
+      if(Auth::check()){
+        $user = Auth::user();
+        
+        $notifications = $user->notifications;
+        $today = Carbon::now()->format('d-m-Y');
+        
+        return view('dash')->with('notifications', $notifications)
+                           ->with('today', $today);
+      }
+       return redirect()->route("get_admin_login")->withSuccess('Opps! You do not have access');
+    }
+
+
 
     // Create new User and save his/her data in the database
     public function create(array $data)
@@ -154,11 +196,11 @@ class AuthController extends Controller
 
     	if($data['gender'])
           {
-            $avatar = 'male.png';
+            $avatar = 'avatar.png';
           }
         else
           {
-            $avatar = 'female.png';
+            $avatar = 'avatar.png';
           }
 
         $code  = rand(100000, 999999);

@@ -1,7 +1,7 @@
       <header style="width: 95%; margin: auto;">
          <div class="header-top wow fadeIn" >
             <div class="container" >
-               <a class="navbar-brand" href="index.html"><img src="images/ika-logo.png" alt="image"></a>
+               <a class="navbar-brand" href="/"><img src="images/ika-logo.png" alt="image"></a>
                <div class="right-header">
                   <div class="header-info">
                  
@@ -32,7 +32,7 @@
                         <li><a  data-scroll href="{{ route('login') }}">Se connecter</a></li>
 
                         @if (Route::has('register'))
-                           <li><a data-scroll href="{{ route('register') }}">Créer un Compte</a></li>
+                           <!-- <li><a data-scroll href="{{ route('register') }}">Créer un Compte</a></li> -->
                         @endif
                     @endauth
                 
