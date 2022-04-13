@@ -177,13 +177,26 @@ class AuthController extends Controller
     public function adminDashboard()
     {
       if(Auth::check()){
+
+        $year = ['2021','2022','2023','2024','2025','2026'];
+
+        $user = [];
+        foreach ($year as $key => $value) {
+            $user[] = User::where(\DB::raw("DATE_FORMAT(created_at, '%Y')"),$value)->count();
+        }
+
+
         $user = Auth::user();
         
         $notifications = $user->notifications;
         $today = Carbon::now()->format('d-m-Y');
+        $month = Carbon::now()->format('m-Y');
         
         return view('dash')->with('notifications', $notifications)
-                           ->with('today', $today);
+                           ->with('today', $today)
+                           ->with('month', $month)
+                           ->with('year',json_encode($year,JSON_NUMERIC_CHECK))
+                           ->with('user',json_encode($user,JSON_NUMERIC_CHECK));
       }
        return redirect()->route("get_admin_login")->withSuccess('Opps! You do not have access');
     }
