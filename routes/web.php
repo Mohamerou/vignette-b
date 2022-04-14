@@ -57,23 +57,23 @@ Route::get('/resend-code/{phone}', [App\Http\Controllers\VerificationController:
 	Route::post('/annuler_declaration/{user}/{vignette}/{engin}', [App\Http\Controllers\User\VignettesController::class,  'annuler_declaration'])->middleware('auth')->name('annuler_declaration');
 
 	Route::post('/renouveller_vignette/{user}/{vignette}/{engin}', [App\Http\Controllers\User\VignettesController::class, 'renouveller_vignette'])->middleware('auth')->name('renouveller_vignette');
-	
-	
-	
-	
+
+
+
+
 	// 	Administration Routes
 	Route::get('/adminsh', [App\Http\Controllers\AuthController::class, 'admin_login'])->name("get_admin_login");
 	Route::get('/admin-dashboard', [App\Http\Controllers\AuthController::class, 'adminDashboard'])->middleware('auth')->name("get_admin_dash");
 	Route::get('/examiner/{usagerId}/{enginId}/{notificationId}/{demandeTrackId}', [App\Http\Controllers\Administration\GestionVignettesController::class, 'examinerDemande'])->middleware('auth')->name('examinerDemande');
 	Route::post('/ikvUE-validation/{enginId}/{notificationId}/{usager}/{demandeTrackId}', [App\Http\Controllers\Administration\GestionVignettesController::class, 'demandeValidation'])->middleware('auth')->name('validerDemande');
-	
+
 	Route::get('/nouveau-agent', [App\Http\Controllers\Administration\AgentController::class, 'createShow'])->middleware('auth')->name("agent.create");
 	Route::post('/nouveau-agent', [App\Http\Controllers\Administration\AgentController::class, 'postCreate'])->middleware('auth')->name("agent.postCreate");
-	
+
 
 	Route::get('/enrollHistory', [App\Http\Controllers\Administration\HistoryController::class, 'enrollHistory'])->middleware('auth')->name("enrollHistory");
-	
-	
+
+
 
 	// Guichet Routes
 	Route::get('guichet/nouveau', [App\Http\Controllers\Administration\GuichetController::class, 'createShow'])->middleware('auth')->name('guichet.create');
@@ -84,7 +84,7 @@ Route::get('/resend-code/{phone}', [App\Http\Controllers\VerificationController:
 	Route::post('enrollement-1', [App\Http\Controllers\Guichet\EnrollController::class, 'postStepOne'])->middleware('auth')->name('postStepOne');
 	Route::get('enrollement-2', [App\Http\Controllers\Guichet\EnrollController::class, 'stepTwo'])->middleware('auth')->name('enrollStepTwo');
 	Route::post('enrollement-2', [App\Http\Controllers\Guichet\EnrollController::class, 'postStepTwo'])->middleware('auth')->name('postStepTwo');
-	
+
 	Route::get('enrollList', [App\Http\Controllers\Guichet\EnrollController::class, 'enrollList'])->middleware('auth')->name('enrollList');
 
 
@@ -100,3 +100,4 @@ Route::get('/resend-code/{phone}', [App\Http\Controllers\VerificationController:
 
    Route::get('/payement', [App\Http\Controllers\PaymentController::class, 'checkoutShow'])->middleware('auth')->name('payement');
    Route::post('/payement', [App\Http\Controllers\PaymentController::class, 'checkout'])->middleware('auth')->name('payement');
+   Route::get('/elu', [App\Http\Controllers\eluController::class, 'eluIndex'])->name('elu');

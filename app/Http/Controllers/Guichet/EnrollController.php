@@ -28,7 +28,7 @@ class EnrollController extends Controller
 
     public function postStepOne(Request $request)
     {
-       
+
         // dd($request->idCard);
         request()->validate([
             'lastname' 	             => 'required|string',
@@ -37,7 +37,7 @@ class EnrollController extends Controller
             'phone' 	             => 'required|regex:/^[0-9]{8}$/|digits:8',
             'idCard'                 => 'required'
         ]);
-         
+
         //dd($key);
         $data           = $request->all();
         $IfUserExist    = User::where('phone', $request->phone)->first();
@@ -55,14 +55,14 @@ class EnrollController extends Controller
         $telephone          = $User->phone;
         // $idCardLoaded       = $this->storeIdCard($User);
         $idCardLoaded       = \Storage::disk('public')->putFile('idCard', $request->file('idCard'));
-       
+
         if($idCardLoaded == False){
 
             $User->delete();
             return redirect()->route('enrollStepOne')
                              ->with('error', 'Vérifier la connexion internet puis réessayer!.')
                              ->withInput();
-        } 
+        }
 
         $role = Role::select('id')->where('name', 'user')->first();
 
@@ -77,7 +77,7 @@ class EnrollController extends Controller
 
         //Agent Refs
         $agentRef = AgentRef::where('agentId', Auth::user()->id)->first();
-        
+
         // Enroll History backUp
         $history = new EnrollHistory();
         $history->townHallRef   =   $agentRef->townHallRef;
@@ -88,7 +88,8 @@ class EnrollController extends Controller
         $history->userId        =   $User->id;
         $history->save();
 
-        return $this->sendOPT($telephone, $code, $user_pass);
+         $this->sendOPT($telephone, $code, $user_pass);
+         return view('enrollement-2');
     }
 
 
@@ -115,7 +116,7 @@ class EnrollController extends Controller
 
     public function poststepTwo(Request $request)
     {
-          
+
         request()->validate([
             'lastname' 	             => 'required|string',
             'firstname'              => 'required|string',
@@ -125,7 +126,7 @@ class EnrollController extends Controller
             'password' 	             => 'required|min:8',
             'password_confirmation'  => 'required|min:8',
         ]);
-         
+
         //dd($key);
         $data           = $request->all();
         $IfUserExist    = User::where('phone', $request->phone)->first();
@@ -142,14 +143,14 @@ class EnrollController extends Controller
         $code               = $User->code;
         $telephone          = $User->phone;
         $idCardLoaded       = $this->storeIdCard($User);
-       
+
         if($idCardLoaded == False){
 
             $User->delete();
             return redirect()->route('inscription')
                              ->with('error', '! Vérifier votre connexion internet puis réessayer.')
                              ->withInput();
-        } 
+        }
 
         $role = Role::select('id')->where('name', 'user')->first();
 
@@ -162,9 +163,9 @@ class EnrollController extends Controller
         $User->save();
 
         return $this->sendOPT($telephone, $code, $user_pass);
-    
-       
-      
+
+
+
     }
 
 
@@ -189,8 +190,8 @@ class EnrollController extends Controller
                                                     Votre mot de passe par defaut: ".$user_pass."\n",
                                         ]);
 
-    
-        
+
+
         # OTP TRACK BACKUP
         $TempVerificationCode          = new TempVerificationCode;
         $TempVerificationCode->userId  = $userId;
@@ -204,7 +205,7 @@ class EnrollController extends Controller
     private function storeIdCard($user)
     {
 
-        
+
         if (request()->has('idCard')) {dd('hi');
             $user->update([
                 'idCard' => request()->idCard->store('uploads/userIdCard', 'public'),
@@ -228,7 +229,7 @@ class EnrollController extends Controller
             'code'      => $code,
             'password' 	=> Hash::make('password'),
         ]);
-            
+
         return $user;
     }
 
