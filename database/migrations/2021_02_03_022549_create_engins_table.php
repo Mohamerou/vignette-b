@@ -22,7 +22,7 @@ class CreateEnginsTable extends Migration
             $table->string('chassie')->unique()->nullable();
             $table->string('immatriculation')->unique()->nullable();
             $table->string('puissanceFiscale');
-            $table->integer('tarif');
+            $table->integer('tarif')->nullable();
             $table->string('documentJustificatif')->nullable();
             $table->foreignId('vignetteId')->unique()->nullable()
                                            ->constrained('vignettes');

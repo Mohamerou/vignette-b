@@ -70,6 +70,7 @@
                   <div class="form-group">
                     <label for="marque">Marque</label>
                     <input name="marque" type="text" class="form-control" id="marque" placeholder="Marque">
+                    <input name="user_id" type="hidden" value="{{ $user_id }}">
                   </div>
                   <div class="form-group">
                     <label for="modele">Modele</label>
@@ -98,9 +99,6 @@
                       <div class="custom-file">
                         <input name="documentJustificatif" type="file" class="custom-file-input" id="documentJustificatif">
                         <label  class="custom-file-label" for="documentJustificatif">Choisir un document</label>
-                      </div>
-                      <div class="input-group-append">
-                        <span class="input-group-text">Charger</span>
                       </div>
                     </div>
                   </div>

@@ -87,7 +87,7 @@
                                 </li>
                             @endcan
 
-                            @can('admin')
+                            @can('agent_vente')
                                 <li class="nav-item dropdown">
                                         <a id="navbarDropdown" class="nav-link dropdown-toggle btn btn-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                             Notifications <span class="badge bg-primary text-light">

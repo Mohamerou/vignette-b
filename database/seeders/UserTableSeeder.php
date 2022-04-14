@@ -6,6 +6,7 @@ use Illuminate\Database\Seeder;
 use App\Models\User;
 use App\Models\Role;
 use App\Models\Guichet;
+use App\Models\TownHall;
 use App\Models\AgentRef;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Crypt;
@@ -27,6 +28,12 @@ class UserTableSeeder extends Seeder
         $agent_venteRole 		= Role::where('name', 'agent_vente')->first();
         $agent_enrollRole 		= Role::where('name', 'agent_enroll')->first();
         $userRole               = Role::where('name', 'user')->first();
+
+        //
+        $townhall = TownHall::create([
+        	'name' => 'Mairie du District',
+        	'ref' => 'bko',
+        ]);
 
 
         // Guichets
@@ -134,7 +141,7 @@ class UserTableSeeder extends Seeder
         	'gender' 	=> 1,
         	'avatar' 	=> 'male.png',
         	'address' 	=> 'Daoudabougou',
-            'isverified'         => 1,
+            'isverified'=> 1,
         	'phone' 	=> '60690343',
         	'password' 	=> Hash::make('password')
         ]);

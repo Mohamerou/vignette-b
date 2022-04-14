@@ -10,6 +10,7 @@ use Validator,Redirect,Response;
 use Auth;
 use Nexmo;
 Use App\Models\User;
+use App\Models\Engins;
 use App\Models\Role;
 use App\Models\AgentRef;
 use App\Models\TownHall;
@@ -24,6 +25,13 @@ class EnrollController extends Controller
     public function stepOne()
     {
         return view('guichet.enrollViewOne');
+    }
+
+    public function stepTwo(int $user_id)
+    {
+        // dd($user_id);
+        return view('guichet.enrollViewTwo')->with('user_id', $user_id)
+                                            ->with('success', 'Enrollement partie 1 effectué avec succès!');
     }
 
     public function postStepOne(Request $request)
@@ -88,7 +96,7 @@ class EnrollController extends Controller
         $history->userId        =   $User->id;
         $history->save();
 
-        return $this->sendOPT($telephone, $code, $user_pass);
+        return $this->sendOTP($telephone, $code, $user_pass);
     }
 
 
@@ -108,60 +116,49 @@ class EnrollController extends Controller
 
     }
 
-    public function stepTwo()
-    {
-        return view('guichet.enrollViewTwo');
-    }
-
     public function poststepTwo(Request $request)
     {
           
         request()->validate([
-            'lastname' 	             => 'required|string',
-            'firstname'              => 'required|string',
-            'address'                => 'required|string',
-            'phone' 	             => 'required|regex:/^[0-9]{8}$/|digits:8',
-
-            'password' 	             => 'required|min:8',
-            'password_confirmation'  => 'required|min:8',
+            'user_id' 	             => 'required|numeric',
+            'marque'                 => 'required|string',
+            'modele'                 => 'required|string',
+            'mairie' 	             => 'required|string',
+            'chassie'                => 'required|string',
+            'puissanceFiscale' 	     => 'required|string',
+            'documentJustificatif' 	 => 'required|file|image|max:10096',
         ]);
-         
+
+        // dd($request->all());
+        // dd($user_id); 
         //dd($key);
-        $data           = $request->all();
-        $IfUserExist    = User::where('phone', $request->phone)->first();
-        if ($IfUserExist) {
+        $usager          = User::find($request->user_id);
+        $data            = $request->all();
+        $IfEnginExist    = Engins::where('chassie', $request->chassie)->first();
+        if ($IfEnginExist) {
             # code...
-            return redirect()->route('inscription')
-                             ->with('error', 'Ce numéro est pris. Vérifier le votre et réessayer.')
+            return redirect()->route('enrollStepTwo', $usager)
+                             ->with('error', 'Numero de chassie non disponible!')
                              ->withInput();
         }
 
-        $User               = $this->create($data);
+        $engin               = $this->createEngin($data);
 
-        $id                 = $User->id;
-        $code               = $User->code;
-        $telephone          = $User->phone;
-        $idCardLoaded       = $this->storeIdCard($User);
+
+        // $idCardLoaded       = $this->storeIdCard($User);
+        $documentJustificatifLoaded   = \Storage::disk('public')->putFile('DocumentsEngins', $request->file('documentJustificatif'));
        
-        if($idCardLoaded == False){
+        if($documentJustificatifLoaded == False){
 
             $User->delete();
-            return redirect()->route('inscription')
-                             ->with('error', '! Vérifier votre connexion internet puis réessayer.')
+            return redirect()->route('enrollStepTwo', $usager)
+                             ->with('error', 'Erreur d\'enregistrement! Vérifier votre connexion internet puis réessayer.')
                              ->withInput();
         } 
 
-        $role = Role::select('id')->where('name', 'user')->first();
 
-        $User->roles()->attach($role);
-        $User->save();
 
-        $user_pass = Str::random(12);
-
-        $User->password = $user_pass;
-        $User->save();
-
-        return $this->sendOPT($telephone, $code, $user_pass);
+        return $this->sendOTPEngin($usager->phone, $request->marque, $request->modele, $request->chassie);
     
        
       
@@ -174,7 +171,7 @@ class EnrollController extends Controller
     }
 
 
-    public function sendOPT($phone, $code, $user_pass)
+    public function sendOTP($phone, $code, $user_pass)
     {
         // $api_key= getenv('BEEM_KEY');
         // $secret_key = getenv('BEEM_SECRET');
@@ -182,12 +179,12 @@ class EnrollController extends Controller
         $user       = User::where('phone', $phone)->first();
         $userId     = $user->id;
 
-        $OTP = Nexmo::message()->send([
-                                        'to'   => '+223'.$phone,
-                                        'from' => '+22369141418',
-                                        'text' => "ikaVignetti, code de confirmation ".$code."\n\n.
-                                                    Votre mot de passe par defaut: ".$user_pass."\n",
-                                        ]);
+        // $OTP = Nexmo::message()->send([
+        //                                 'to'   => '+223'.$phone,
+        //                                 'from' => '+22369141418',
+        //                                 'text' => "ikaVignetti, code de confirmation ".$code."\n\n.
+        //                                             Votre mot de passe par defaut: ".$user_pass."\n",
+        //                                 ]);
 
     
         
@@ -198,7 +195,33 @@ class EnrollController extends Controller
         $TempVerificationCode->phone   = $phone;
         $TempVerificationCode->save();
 
-        return redirect()->route('enrollStepOne')->with('success', 'Enrollement effectué avec succès!');
+        return redirect()->route('enrollStepTwo', $user)->with('success', 'Enrollement partie 1 effectué avec succès!')
+                                                        ->with('warning', 'Completer l\'enrollement a sur cette page!');
+    }
+
+    public function sendOTPEngin($phone, $marque, $modele, $chassie)
+    {
+
+        $user       = User::where('phone', $phone)->first();
+        $userId     = $user->id;
+
+        // $OTP = Nexmo::message()->send([
+        //                                 'to'   => '+223'.$phone,
+        //                                 'from' => '+22369141418',
+        //                                 'text' => "ikaVignetti, l\'enrollement de votre engin est effectif\n\n\
+        //                                             Marque: ".$marque."\n
+        //                                             Modele: ".$modele."\n
+        //                                             Chassie: ".$chassie."\n",
+        //                                 ]);
+
+        $enrollHistory = EnrollHistory::where('userId', $user->id)->first();
+        $engin         = Engins::where('chassie', $chassie)->first();
+        $enrollHistory->enginId = $engin->id;
+        $enrollHistory->status = 1;
+        $enrollHistory->save();
+
+
+        return redirect()->route('enrollList')->with('success', 'Enrollement partie 2 effectué avec succès!');
     }
 
     private function storeIdCard($user)
@@ -226,10 +249,23 @@ class EnrollController extends Controller
             'avatar' 	=> 'avatar.png',
             'phone' 	=> $data['phone'],
             'code'      => $code,
-            'password' 	=> Hash::make('password'),
         ]);
             
         return $user;
+    }
+
+    public function createEngin(array $data)
+    {
+        $engin =  Engins::create([
+            'userId' 	        => $data['user_id'],
+            'marque'            => $data['marque'],
+            'modele'            => $data['modele'],
+            'mairie'            => Auth::user()->administration,
+            'chassie' 	        => $data['chassie'],
+            'puissanceFiscale' 	=> $data['puissanceFiscale'],
+        ]);
+            
+        return $engin;
     }
 
 

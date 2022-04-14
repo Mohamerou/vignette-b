@@ -78,16 +78,26 @@ Route::get('/resend-code/{phone}', [App\Http\Controllers\VerificationController:
 	// Guichet Routes
 	Route::get('guichet/nouveau', [App\Http\Controllers\Administration\GuichetController::class, 'createShow'])->middleware('auth')->name('guichet.create');
 	Route::post('guichet/nouveau', [App\Http\Controllers\Administration\GuichetController::class, 'postCreate'])->middleware('auth')->name('guichet.postCreate');
-	Route::get('	', [App\Http\Controllers\Administration\GuichetController::class, 'index'])->middleware('auth')->name('guichet.index');
+	Route::get('guichet/list', [App\Http\Controllers\Administration\GuichetController::class, 'index'])->middleware('auth')->name('guichet.index');
 
+
+	// Enroll routes
 	Route::get('enrollement-1', [App\Http\Controllers\Guichet\EnrollController::class, 'stepOne'])->middleware('auth')->name('enrollStepOne');
 	Route::post('enrollement-1', [App\Http\Controllers\Guichet\EnrollController::class, 'postStepOne'])->middleware('auth')->name('postStepOne');
-	Route::get('enrollement-2', [App\Http\Controllers\Guichet\EnrollController::class, 'stepTwo'])->middleware('auth')->name('enrollStepTwo');
+	Route::get('enrollement-2/{user_id}', [App\Http\Controllers\Guichet\EnrollController::class, 'stepTwo'])->middleware('auth')->name('enrollStepTwo');
 	Route::post('enrollement-2', [App\Http\Controllers\Guichet\EnrollController::class, 'postStepTwo'])->middleware('auth')->name('postStepTwo');
 	
 	Route::get('enrollList', [App\Http\Controllers\Guichet\EnrollController::class, 'enrollList'])->middleware('auth')->name('enrollList');
 
 
+
+	// Sales routes
+	Route::get('sales/index', [App\Http\Controllers\Guichet\SalesController::class, 'pendingSales'])->middleware('auth')->name('pendingSales');
+	Route::post('sales/checkout/', [App\Http\Controllers\Guichet\SalesController::class, 'stepOne'])->middleware('auth')->name('salesStepOne');
+	Route::post('sales/checkout/process', [App\Http\Controllers\Guichet\SalesController::class, 'stepTwo'])->middleware('auth')->name('salesStepTwo');
+	Route::any('sales/checkout/notify', [App\Http\Controllers\PaymentController::class, 'notify'])->name('salesCheckoutNotify');
+	Route::get('sales/checkout/return', [App\Http\Controllers\Guichet\PaymentController::class, 'return'])->name('salesCheckoutNotify');
+	
 
 // Vignette verification routes
    Route::get('/check/{unique_id}', [App\Http\Controllers\QrCheckController::class, 'CheckQr'])->middleware('auth')->name('checkQr');
