@@ -1,3 +1,26 @@
+
+  <!-- Template Main JS & CSSFile -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+ 
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
+  <script>
+    jQuery(document).ready(function($) {
+      //jQuery Functionality
+      $('#example').DataTable();
+      $(document).on('click', '#example tbody tr button', function() {       
+        $("#modaldata tbody tr").html("");
+        $("#modaldata tbody tr").html($(this).closest("tr").html());
+        $("#exampleModal").modal("show");
+      });
+    } );
+    </script>
+    <style>
+      #modaldata tbody tr > td:last-of-type{display:none;}
+    </style>
+
 @extends ('layouts.admin')
 
 @section('content')
@@ -8,7 +31,7 @@
 <div class="container-fluid">
 <div class="row mb-2">
 <div class="col-sm-6">
-<h1>Simple Tables</h1>
+<h1>Espace de vente</h1>
 </div>
 <div class="col-sm-6">
 <ol class="breadcrumb float-sm-right">
@@ -52,17 +75,17 @@
         @endif
     </div>
 <div class="container-fluid">
-<div class="row">
+<div class="row" style="justify-content: center;">
 
-<div class="col-md-6">
+<div class="col-md-10 " style="justify-item: center;">
 
-<div class="card">
+<div class="card px-4">
     <div class="card-header">
     <h3 class="card-title">Enrollement recent</h3>
     </div>
 
     <div class="card-body p-0">
-    <table class="table table-striped">
+    <table id="example" class="table table-striped table-hover table-bordered">
     <thead>
     <tr>
     <th>Nom</th>
@@ -99,4 +122,7 @@
 </section>
 
 </div>
-@endsection
+@endsection 
+
+
+
