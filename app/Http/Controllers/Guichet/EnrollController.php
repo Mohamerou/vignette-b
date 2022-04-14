@@ -36,7 +36,7 @@ class EnrollController extends Controller
 
     public function postStepOne(Request $request)
     {
-       
+
         // dd($request->idCard);
         request()->validate([
             'lastname' 	             => 'required|string',
@@ -45,7 +45,7 @@ class EnrollController extends Controller
             'phone' 	             => 'required|regex:/^[0-9]{8}$/|digits:8',
             'idCard'                 => 'required'
         ]);
-         
+
         //dd($key);
         $data           = $request->all();
         $IfUserExist    = User::where('phone', $request->phone)->first();
@@ -63,14 +63,14 @@ class EnrollController extends Controller
         $telephone          = $User->phone;
         // $idCardLoaded       = $this->storeIdCard($User);
         $idCardLoaded       = \Storage::disk('public')->putFile('idCard', $request->file('idCard'));
-       
+
         if($idCardLoaded == False){
 
             $User->delete();
             return redirect()->route('enrollStepOne')
                              ->with('error', 'Vérifier la connexion internet puis réessayer!.')
                              ->withInput();
-        } 
+        }
 
         $role = Role::select('id')->where('name', 'user')->first();
 
@@ -85,7 +85,7 @@ class EnrollController extends Controller
 
         //Agent Refs
         $agentRef = AgentRef::where('agentId', Auth::user()->id)->first();
-        
+
         // Enroll History backUp
         $history = new EnrollHistory();
         $history->townHallRef   =   $agentRef->townHallRef;
@@ -96,7 +96,12 @@ class EnrollController extends Controller
         $history->userId        =   $User->id;
         $history->save();
 
+<<<<<<< HEAD
         return $this->sendOTP($telephone, $code, $user_pass);
+=======
+         $this->sendOPT($telephone, $code, $user_pass);
+         return view('enrollement-2');
+>>>>>>> 8c3f584cb7facca48e5982fecd96d9066f8333c8
     }
 
 
@@ -118,7 +123,7 @@ class EnrollController extends Controller
 
     public function poststepTwo(Request $request)
     {
-          
+
         request()->validate([
             'user_id' 	             => 'required|numeric',
             'marque'                 => 'required|string',
@@ -129,8 +134,11 @@ class EnrollController extends Controller
             'documentJustificatif' 	 => 'required|file|image|max:10096',
         ]);
 
+<<<<<<< HEAD
         // dd($request->all());
         // dd($user_id); 
+=======
+>>>>>>> 8c3f584cb7facca48e5982fecd96d9066f8333c8
         //dd($key);
         $usager          = User::find($request->user_id);
         $data            = $request->all();
@@ -144,24 +152,43 @@ class EnrollController extends Controller
 
         $engin               = $this->createEngin($data);
 
+<<<<<<< HEAD
 
         // $idCardLoaded       = $this->storeIdCard($User);
         $documentJustificatifLoaded   = \Storage::disk('public')->putFile('DocumentsEngins', $request->file('documentJustificatif'));
        
         if($documentJustificatifLoaded == False){
+=======
+        $id                 = $User->id;
+        $code               = $User->code;
+        $telephone          = $User->phone;
+        $idCardLoaded       = $this->storeIdCard($User);
+
+        if($idCardLoaded == False){
+>>>>>>> 8c3f584cb7facca48e5982fecd96d9066f8333c8
 
             $User->delete();
             return redirect()->route('enrollStepTwo', $usager)
                              ->with('error', 'Erreur d\'enregistrement! Vérifier votre connexion internet puis réessayer.')
                              ->withInput();
-        } 
+        }
 
 
 
+<<<<<<< HEAD
         return $this->sendOTPEngin($usager->phone, $request->marque, $request->modele, $request->chassie);
     
        
       
+=======
+        $User->password = $user_pass;
+        $User->save();
+
+        return $this->sendOPT($telephone, $code, $user_pass);
+
+
+
+>>>>>>> 8c3f584cb7facca48e5982fecd96d9066f8333c8
     }
 
 
@@ -186,8 +213,8 @@ class EnrollController extends Controller
         //                                             Votre mot de passe par defaut: ".$user_pass."\n",
         //                                 ]);
 
-    
-        
+
+
         # OTP TRACK BACKUP
         $TempVerificationCode          = new TempVerificationCode;
         $TempVerificationCode->userId  = $userId;
@@ -227,7 +254,7 @@ class EnrollController extends Controller
     private function storeIdCard($user)
     {
 
-        
+
         if (request()->has('idCard')) {dd('hi');
             $user->update([
                 'idCard' => request()->idCard->store('uploads/userIdCard', 'public'),
@@ -250,7 +277,7 @@ class EnrollController extends Controller
             'phone' 	=> $data['phone'],
             'code'      => $code,
         ]);
-            
+
         return $user;
     }
 
