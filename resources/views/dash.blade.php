@@ -61,11 +61,11 @@
           <!-- small box -->
           <div class="small-box bg-warning">
             <div class="inner">
-              
+
               <h3>1369</h3>
               <h4>Engins enroller</h4>
               <h5>{{$month}}</h5>
-              
+
             </div>
             <div class="icon">
               <i class="ion ion-person-add"></i>
@@ -95,9 +95,9 @@
       <!-- Main row -->
       <div class="row">
         <!-- Left col -->
-        <section class="col-lg-7 connectedSortable">
+        <section class="col-md-12 connectedSortable">
           <!-- Custom tabs (Charts with tabs)-->
-          <div class="card">
+          <div class="card  " >
             <div class="card-header">
               <h3 class="card-title">
                 <i class="fas fa-chart-pie mr-1"></i>
@@ -118,18 +118,18 @@
               <div class="tab-content p-0">
                 <!-- Morris chart - Sales -->
                 <div class="chart tab-pane active" id="revenue-chart"
-                     style="position: relative; height: 300px;">
-                    <canvas id="canvas" height="300" style="height: 300px;"></canvas>
-                 </div>
-                <div class="chart tab-pane" id="sales-chart" style="position: relative; height: 300px;">
-                  <canvas id="sales-chart-canvas" height="300" style="height: 300px;"></canvas>
+                     style="position: relative;  ">
+                     <canvas id="myChart"></canvas></div>
+                </div>
+                <div class="chart tab-pane" id="sales-chart" style="position: relative; ">
+                  <canvas id="sales-chart-canvas"   ></canvas>
                 </div>
               </div>
             </div><!-- /.card-body -->
           </div>
           <!-- /.card -->
 
-        
+
 
 
         </section>
@@ -188,7 +188,9 @@
                     <canvas id="canvas" height="280" width="600"></canvas>
                 </div>
             </div>
-       
+
+            <div>
+
 
 
         </section>
@@ -199,40 +201,44 @@
   </section>
   <!-- /.content -->
 </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    var year = <?php echo $year; ?>;
-    var user = <?php echo $user; ?>;
-    var barChartData = {
-        labels: year,
-        datasets: [{
-            label: 'User',
-            backgroundColor: "pink",
-            data: user
-        }]
-    };
+  const labels = [
+    'Janvier',
+    'Février',
+    'Mars',
+    'Avril',
+    'Mai',
+    'ecembre',
+    'Juillet',
+    'Août',
+    'Septembre',
+    'Octobre',
+    'Novembre',
+    'Decembre',
+  ];
 
-    window.onload = function() {
-        var ctx = document.getElementById("canvas").getContext("2d");
-        window.myBar = new Chart(ctx, {
-            type: 'bar',
-            data: barChartData,
-            options: {
-                elements: {
-                    rectangle: {
-                        borderWidth: 2,
-                        borderColor: '#c1c1c1',
-                        borderSkipped: 'bottom'
-                    }
-                },
-                responsive: true,
-                title: {
-                    display: true,
-                    text: 'Yearly User Joined'
-                }
-            }
-        });
-    };
+  const data = {
+    labels: labels,
+    datasets: [{
+      label: 'Statistique des ventes',
+      backgroundColor: 'rgb(255, 99, 132)',
+      borderColor: 'rgb(255, 99, 132)',
+      data: [0, 10, 5, 2, 20, 30, 45,60,30,20,80,70,40],
+    }]
+  };
+
+  const config = {
+    type: 'line',
+    data: data,
+    options: {}
+  };
+</script>
+<script>
+  const myChart = new Chart(
+    document.getElementById('myChart'),
+    config
+  );
 </script>
 <!-- /.content-wrapper -->
 @endsection
