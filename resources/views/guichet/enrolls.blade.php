@@ -31,7 +31,7 @@
 <div class="container-fluid">
 <div class="row mb-2">
 <div class="col-sm-6">
-    <h1>Enrollements Recent</h1>
+    <h1>Liste des enrollements</h1>
 </div>
 </div>
 </div>
@@ -75,40 +75,51 @@
 
 <div class="card px-4">
     <div class="card-header">
-    <h3 class="card-title">VENTE : ATTENTE</h3>
+    <h3 class="card-title">Historiques des enrollements</h3>
     </div>
 
     <div class="card-body p-0">
-    <table class="table table-striped">
+    <table id="example" class="table table-striped table-hover table-bordered">
     <thead>
     <tr>
     <th>Guichet</th>
     <th>Usager</th>
     <th>Contact Usager</th>
-    <th>Chassie Engin</th>
-    <th style="width: 40px">Status</th>
-    <th style="width: 40px">Action</th>
+    <th>Status</th>
+    @can('agent_enroll')
+        <th style="width: 40px">Actions</th>
+    @endcan
     </tr>
     </thead>
     <tbody>
 
-        @for ($i=0; $i < count($pendingSales); $i++)
-        <tr>
-            <td>{{ $pendingSales[$i]['guichet'] }}</td>
-            <td>{{ $pendingSales[$i]['usager'] }}</td>
-            <td>{{ $pendingSales[$i]['userphone'] }}</td>
-            <td>{{ $pendingSales[$i]['chassie'] }}</td>
-            <td class="text-danger">Attente</td>
-            <td>
-                <form action="{{ route('salesStepOne') }}" method="post">
-                    @csrf
-                    <input required name="enrollId" type="hidden" value={{ $pendingSales[$i]['enrollId'] }}>
-                    <button type="submit" class="btn btn-primary">CAISSE </button>
-                </form>
-            </td>
 
-        </tr>
+        @for($i=0; $i < count($histories); $i++)
+            <tr>
+                <td>{{ $histories[$i]['guichet'] }}</td>
+                <td>{{ $histories[$i]['usager'] }}</td>
+                <td>{{ $histories[$i]['userphone'] }}</td>
+                @if($histories[$i]['status'] === 0)
+                <td class="text-danger">Attente</td>
+
+                @can('agent_enroll')    
+                    <td class="text-danger">
+                        <a href="{{ route('enrollStepTwo', $histories[$i]['userId']) }}" class="btn btn-warning"><h4>&#8594;</h4></a>
+                    </td>
+                @endcan
+                @else
+                <td class="text-success">Traite</td>
+
+                @can('agent_enroll')    
+                    <td class="text-danger">
+                        <button type="button" disabled href="#" class="btn btn-success"><h4>&#x2714;</h4></button>
+                    </td>
+                @endcan
+                @endif
+            </tr>
         @endfor
+
+
     </tbody>
     </table>
     </div>
@@ -127,12 +138,6 @@
 
 </div>
 @endsection 
-
-
-
-
-
-
 
 
 

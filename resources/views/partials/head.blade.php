@@ -12,7 +12,7 @@
    <meta name="description" content="">
    <meta name="author" content="">
    <!-- Site Icons -->
-   <link rel="shortcut icon" href="{{asset('/images/ika-icon.png')}}" type="image/x-icon" />
+   <link rel="shortcut icon" href="{{asset('/images/logo.png')}}" type="image/x-icon" />
    <link rel="apple-touch-icon" href="{{asset('/images/apple-touch-icon.png')}}">
    <!-- Bootstrap CSS -->
    <link rel="stylesheet" href="{{asset('/css/bootstrap.min.css')}}">

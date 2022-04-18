@@ -41,7 +41,7 @@
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
       <!-- Navbar Search -->
-      <li class="nav-item">
+      <!-- <li class="nav-item">
         <a class="nav-link" data-widget="navbar-search" href="#" role="button">
           <i class="fas fa-search"></i>
         </a>
@@ -60,18 +60,18 @@
             </div>
           </form>
         </div>
-      </li>
+      </li> -->
 
       <!-- Messages Dropdown Menu -->
-      <li class="nav-item dropdown">
+      <!-- <li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown" href="#">
           <i class="far fa-comments"></i>
           <span class="badge badge-danger navbar-badge">3</span>
-        </a>
-        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-          <a href="#" class="dropdown-item">
+        </a> -->
+        <!-- <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+          <a href="#" class="dropdown-item"> -->
             <!-- Message Start -->
-            <div class="media">
+            <!-- <div class="media">
               <img src="{{ asset('admindash/dist/img/user1-128x128.jpg') }}" alt="User Avatar" class="img-size-50 mr-3 img-circle">
               <div class="media-body">
                 <h3 class="dropdown-item-title">
@@ -81,18 +81,18 @@
                 <p class="text-sm">Call me whenever you can...</p>
                 <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
               </div>
-            </div>
+            </div> -->
             <!-- Message End -->
-          </a>
+          <!-- </a>
           <div class="dropdown-divider"></div>
-        </div>
-      </li>
+        </div> -->
+      <!-- </li> -->
       <!-- Notifications Dropdown Menu -->
-      <li class="nav-item dropdown">
-        <a class="nav-link" data-toggle="dropdown" href="#">
+      <!-- <li class="nav-item dropdown"> -->
+        <!-- <a class="nav-link" data-toggle="dropdown" href="#">
           <i class="far fa-bell"></i>
           <span class="badge badge-warning navbar-badge">15</span>
-        </a>
+        </a> -->
         <!-- <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
           <span class="dropdown-item dropdown-header">15 Notifications</span>
           <div class="dropdown-divider"></div>
@@ -113,17 +113,17 @@
           <div class="dropdown-divider"></div>
           <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
         </div> -->
-      </li>
-      <li class="nav-item">
+      <!-- </li> -->
+      <!-- <li class="nav-item">
         <a class="nav-link" data-widget="fullscreen" href="#" role="button">
           <i class="fas fa-expand-arrows-alt"></i>
         </a>
-      </li>
-      <li class="nav-item">
+      </li> -->
+      <!-- <li class="nav-item">
         <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button">
           <i class="fas fa-th-large"></i>
         </a>
-      </li>
+      </li> -->
     </ul>
   </nav>
   <!-- /.navbar -->
@@ -173,6 +173,34 @@
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
+            @can('elu')
+                <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="/enrollement-1" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Rapport des Ventes</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('enrollList') }}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Rapport des enrollements</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('enroll.index') }}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Historiques des Ventes</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('enroll.index') }}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Historiques des Enrollements</p>
+                    </a>
+                </li>
+                </ul>
+            @endcan
             @can('agent_enroll')
                 <ul class="nav nav-treeview">
                 <li class="nav-item">
@@ -184,13 +212,13 @@
                 <li class="nav-item">
                     <a href="{{ route('enrollList') }}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Enrollement Récent</p>
+                    <p>Enrollements Récents</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('enrollList') }}" class="nav-link">
+                    <a href="{{ route('enroll.index') }}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Historiques des Enrollements</p>
+                    <p>Historiques Enrollements</p>
                     </a>
                 </li>
                 </ul>
@@ -206,13 +234,13 @@
                 <li class="nav-item">
                     <a href="{{ route('enrollList') }}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Ventes Récent</p>
+                    <p>Ventes Récentes</p>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('enrollList') }}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Historiques des Ventes</p>
+                    <p>Historiques Ventes</p>
                     </a>
                 </li>
                 </ul>
@@ -266,6 +294,31 @@
                 <a href="{{ route('guichet.index') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Liste des guichets</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-copy"></i>
+              <p>
+                Gestion des Agents
+                <i class="fas fa-angle-left right"></i>
+                
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{ route('guichet.create') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Nouveau Agent</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('guichet.index') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Liste des Agents</p>
                 </a>
               </li>
             </ul>

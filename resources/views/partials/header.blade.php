@@ -1,7 +1,7 @@
       <header style="width: 95%; margin: auto;">
          <div class="header-top wow fadeIn" >
             <div class="container" >
-               <a class="navbar-brand" href="/"><img src="images/ika-logo.png" alt="image"></a>
+               <a class="navbar-brand" href="/"><img style="width:50px; height:100px;" src="images/logo.png" alt="image"></a>
                <div class="right-header">
                   <div class="header-info">
                  

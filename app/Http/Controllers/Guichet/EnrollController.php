@@ -22,6 +22,34 @@ use Session;
 
 class EnrollController extends Controller
 {
+    public function index()
+    {
+        $histories = EnrollHistory::take(30)->orderBy('updated_at')->get();
+
+        $histories_list       = [];
+        foreach($histories as $histories){
+            $user   = User::find($histories->userId);
+
+            $histories_list[]  = [
+                'userId'    => $user->id,
+                'usager'    => $user->firstname." ".$user->lastname,
+                'userphone' => $user->phone,
+                'guichet'   => $histories->guichetRef, 
+                'enrollId'  => $histories->id, 
+                'status'    => $histories->status,
+            ]; 
+        }
+
+
+
+        $histories = $histories_list;
+
+        return view('guichet/enrolls')
+               ->with('histories', $histories);
+    }
+
+
+
     public function stepOne()
     {
         return view('guichet.enrollViewOne');
@@ -83,7 +111,7 @@ class EnrollController extends Controller
         $User->isVerified = 1;
         $User->save();
 
-        //Agent Refs
+        // Agent Refs
         $agentRef = AgentRef::where('agentId', Auth::user()->id)->first();
 
         // Enroll History backUp
@@ -96,28 +124,37 @@ class EnrollController extends Controller
         $history->userId        =   $User->id;
         $history->save();
 
-<<<<<<< HEAD
         return $this->sendOTP($telephone, $code, $user_pass);
-=======
-         $this->sendOPT($telephone, $code, $user_pass);
-         return view('enrollement-2');
->>>>>>> 8c3f584cb7facca48e5982fecd96d9066f8333c8
     }
 
 
     public function enrollList()
     {
-        $users_list = [];
-        $agentRef           = AgentRef::where('agentId', Auth::user()->id)->first();
-        $PendingEnrolls     = EnrollHistory::where('status', 0)
-                                           ->where('townHallRef', $agentRef->townHallRef)
-                                           ->get();
-        foreach($PendingEnrolls as $PendingEnroll)
-        {
-            $users_list[]   = User::find($PendingEnroll->userId);
+        $pendingEnrolls = EnrollHistory::where('status', '0')->orderBy('created_at', 'desc')->get();
+
+        // dd($pendingEnrolls);
+
+        // dd($pendingEnrolls);
+        $user_list       = [];
+        foreach($pendingEnrolls as $pendingEnroll){
+            $user   = User::find($pendingEnroll->userId);
+
+            $user_list[]  = [
+                'userId'    => $user->id,
+                'usager'    => $user->firstname." ".$user->lastname,
+                'userphone' => $user->phone,
+                'guichet'   => $pendingEnroll->guichetRef, 
+                'enrollId'  => $pendingEnroll->id, 
+                'status'    => $pendingEnroll->status,
+            ]; 
         }
 
-        return view('guichet.salesIndexView')->with('users', $users_list);
+
+
+        $pendingEnrolls = $user_list;
+ 
+        return view('guichet/enrollHistory')
+                ->with('pendingEnrolls', $pendingEnrolls);
 
     }
 
@@ -134,11 +171,6 @@ class EnrollController extends Controller
             'documentJustificatif' 	 => 'required|file|image|max:10096',
         ]);
 
-<<<<<<< HEAD
-        // dd($request->all());
-        // dd($user_id); 
-=======
->>>>>>> 8c3f584cb7facca48e5982fecd96d9066f8333c8
         //dd($key);
         $usager          = User::find($request->user_id);
         $data            = $request->all();
@@ -152,43 +184,19 @@ class EnrollController extends Controller
 
         $engin               = $this->createEngin($data);
 
-<<<<<<< HEAD
 
         // $idCardLoaded       = $this->storeIdCard($User);
         $documentJustificatifLoaded   = \Storage::disk('public')->putFile('DocumentsEngins', $request->file('documentJustificatif'));
        
         if($documentJustificatifLoaded == False){
-=======
-        $id                 = $User->id;
-        $code               = $User->code;
-        $telephone          = $User->phone;
-        $idCardLoaded       = $this->storeIdCard($User);
 
-        if($idCardLoaded == False){
->>>>>>> 8c3f584cb7facca48e5982fecd96d9066f8333c8
-
-            $User->delete();
-            return redirect()->route('enrollStepTwo', $usager)
+            $engin->delete();
+            return redirect()->route('enrollList')
                              ->with('error', 'Erreur d\'enregistrement! Vérifier votre connexion internet puis réessayer.')
                              ->withInput();
         }
-
-
-
-<<<<<<< HEAD
-        return $this->sendOTPEngin($usager->phone, $request->marque, $request->modele, $request->chassie);
-    
-       
-      
-=======
-        $User->password = $user_pass;
-        $User->save();
-
-        return $this->sendOPT($telephone, $code, $user_pass);
-
-
-
->>>>>>> 8c3f584cb7facca48e5982fecd96d9066f8333c8
+        
+        return $this->sendOTPEngin($usager->phone, $request->marque, $request->modele, $request->chassie); 
     }
 
 
@@ -223,7 +231,7 @@ class EnrollController extends Controller
         $TempVerificationCode->save();
 
         return redirect()->route('enrollStepTwo', $user)->with('success', 'Enrollement partie 1 effectué avec succès!')
-                                                        ->with('warning', 'Completer l\'enrollement a sur cette page!');
+                                                        ->with('error', 'Completer l\'enrollement a sur cette page!');
     }
 
     public function sendOTPEngin($phone, $marque, $modele, $chassie)
