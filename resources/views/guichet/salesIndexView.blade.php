@@ -102,7 +102,8 @@
             <td>{{$user->firstname}}</td>
             <td>{{$user->phone}}</td>
             <td class="text-danger">Attente</td>
-            <td><span class="btn btn-primary">Poursuivre enrollement</span></td>
+         <a href="{{route('enrollStepTwo')}}"><td ><span class="btn btn-primary">Poursuivre enrollement</span></td></a>  
+         
         </tr>
         @endforeach
     </tbody>

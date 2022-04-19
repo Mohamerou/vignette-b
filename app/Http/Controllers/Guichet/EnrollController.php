@@ -88,8 +88,8 @@ class EnrollController extends Controller
         $history->userId        =   $User->id;
         $history->save();
 
-         $this->sendOPT($telephone, $code, $user_pass);
-         return view('enrollement-2');
+       //  $this->sendOPT($telephone, $code, $user_pass);
+         return view('guichet.enrollViewTwo');
     }
 
 
