@@ -22,7 +22,15 @@ class RolesTableSeeder extends Seeder
         ]);
 
         Role::create([
-        	'name' => 'Reporteur'
+        	'name' => 'comptable'
+        ]);
+
+        Role::create([
+        	'name' => 'direction'
+        ]);
+
+        Role::create([
+        	'name' => 'regisseur'
         ]);
 
         Role::create([
@@ -30,12 +38,12 @@ class RolesTableSeeder extends Seeder
         ]);
 
         Role::create([
-            'name' => 'agent_vente'
+            'name' => 'agent'
         ]);      
 
-        Role::create([
-            'name' => 'agent_enroll'
-        ]);      
+        // Role::create([
+        //     'name' => 'agent_enroll'
+        // ]);      
 
         Role::create([
             'name' => 'user'

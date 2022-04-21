@@ -18,7 +18,7 @@ class CreateEnginsTable extends Migration
             $table->foreignId('userId')->constrained('users');
             $table->string('marque');
             $table->string('modele');
-            $table->string('mairie');
+            $table->string('mairie')->nullable();
             $table->string('chassie')->unique()->nullable();
             $table->string('immatriculation')->unique()->nullable();
             $table->string('puissanceFiscale');

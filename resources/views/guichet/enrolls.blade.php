@@ -17,6 +17,16 @@
         });
     } );
 </script>
+<script src="{{ asset('html2pdf/dist/html2pdf.bundle.min.js') }}"></script>
+
+<script>
+    function generatePDF() {
+        // Choose the element that our invoice is rendered in.
+        const element = document.getElementById('printPdf');
+        // Choose the element and save the PDF for our user.
+        html2pdf().from(element).save();
+    }
+</script>
 <style>
     #modaldata tbody tr > td:last-of-type{display:none;}
 </style>
@@ -26,15 +36,15 @@
 @section('content')
 
 <div class="content-wrapper">
-
+<div id="printPdf" >
 <section class="content-header">
-<div class="container-fluid">
-<div class="row mb-2">
-<div class="col-sm-6">
-    <h1>Liste des enrollements</h1>
-</div>
-</div>
-</div>
+    <div class="container-fluid">
+    <div class="row mb-2">
+    <div class="col-sm-6">
+        <h1>Liste des enrollements</h1>
+    </div>
+    </div>
+    </div>
 </section>
 
 <section class="content">
@@ -82,13 +92,11 @@
     <table id="example" class="table table-striped table-hover table-bordered">
     <thead>
     <tr>
-    <th>Guichet</th>
+    <th>Agent</th>
     <th>Usager</th>
     <th>Contact Usager</th>
     <th>Status</th>
-    @can('agent_enroll')
-        <th style="width: 40px">Actions</th>
-    @endcan
+    <th style="width: 40px">Actions</th>
     </tr>
     </thead>
     <tbody>
@@ -96,26 +104,16 @@
 
         @for($i=0; $i < count($histories); $i++)
             <tr>
-                <td>{{ $histories[$i]['guichet'] }}</td>
+                <td>{{ $histories[$i]['agent'] }}</td>
                 <td>{{ $histories[$i]['usager'] }}</td>
                 <td>{{ $histories[$i]['userphone'] }}</td>
-                @if($histories[$i]['status'] === 0)
-                <td class="text-danger">Attente</td>
+                <td class="text-danger">TRAITE</td>
 
-                @can('agent_enroll')    
+                @can('agent')    
                     <td class="text-danger">
-                        <a href="{{ route('enrollStepTwo', $histories[$i]['userId']) }}" class="btn btn-warning"><h4>&#8594;</h4></a>
+                        <button disabled type="button" class="btn btn-success"><h4>&#x2611;</h4></button>
                     </td>
                 @endcan
-                @else
-                <td class="text-success">Traite</td>
-
-                @can('agent_enroll')    
-                    <td class="text-danger">
-                        <button type="button" disabled href="#" class="btn btn-success"><h4>&#x2714;</h4></button>
-                    </td>
-                @endcan
-                @endif
             </tr>
         @endfor
 
@@ -123,9 +121,8 @@
     </tbody>
     </table>
     </div>
-
     </div>
-
+    <!-- <button class="btn btn-primary" onclick="generatePDF()">Generer un Rapport</button> -->
     </div>
 
 </div>
@@ -135,6 +132,8 @@
 
 </div>
 </section>
+</div>
+
 
 </div>
 @endsection 

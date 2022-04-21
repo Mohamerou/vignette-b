@@ -389,11 +389,6 @@ li {
     <li>Email : {{ $agent_data['email']}}</li>
     <li>Mot de passe : {{ $agent_data['password']}}</li>
   </ul> 
-
-  infos Guichet affilie:
-  <ul>
-    <li>Reference Guichet : {{ $agent_data['guichetRef']}}</li>
-  </ul>
 </p>
 
 <!-- <p class="h6">

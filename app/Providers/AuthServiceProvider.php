@@ -27,28 +27,41 @@ class AuthServiceProvider extends ServiceProvider
 
         //
 
+        Gate::define('superadmin', function($user){
+            return $user->hasRole('superadmin');
+        });
+
         Gate::define('user', function($user){
             return $user->hasRole('user');
         });
 
-        Gate::define('agent_vente', function($user){
-            return $user->hasRole('agent_vente');
-        });
-
-        Gate::define('agent_enroll', function($user){
-            return $user->hasRole('agent_enroll');
+        Gate::define('agent', function($user){
+            return $user->hasRole('agent');
         });
 
         Gate::define('elu', function($user){
             return $user->hasRole('elu');
         });
 
-        Gate::define('reporteur', function($user){
-            return $user->hasRole('reporteur');
+        Gate::define('regisseur', function($user){
+            return $user->hasRole('regisseur');
         });
 
         Gate::define('superviseur', function($user){
             return $user->hasRole('superviseur');
+        });
+
+        Gate::define('direction', function($user){
+            return $user->hasRole('direction');
+        });
+
+        Gate::define('comptable', function($user){
+            if($user->hasRole('superviseur'))
+                return $user->hasRole('superviseur');
+            
+            if($user->hasRole('comptable'))
+                return $user->hasRole('comptable');
+
         });
 
     }

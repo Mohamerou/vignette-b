@@ -1,6 +1,37 @@
 @extends('layouts.app')
 
 @section('content')
+
+
+<div class="row justify-content-center">
+        @if($errors->any())
+            @foreach($errors->all() as $error)
+                <div class="alert alert-class alert-danger text-center col-6">
+
+                {{$error}}<br>
+            </div>
+            @endforeach
+        @endif
+        @if(Session::has('success'))
+
+            <div class="alert
+            {{ Session::get('alert-class', 'alert-success') }} text-center col-md-8">
+
+                    {{Session::get('success') }}
+            </div>
+
+        @endif
+
+        @if(Session::has('error'))
+
+            <div class="alert
+            {{ Session::get('alert-class', 'alert-danger') }} text-center col-8">
+
+                {{Session::get('error') }}
+            </div>
+
+        @endif
+    </div>
 <div class="container mt-5">
     @can('user')
     

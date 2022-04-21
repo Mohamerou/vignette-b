@@ -24,19 +24,23 @@ class EnrollController extends Controller
 {
     public function index()
     {
-        $histories = EnrollHistory::take(30)->orderBy('updated_at')->get();
+        $histories = EnrollHistory::where('status', '1')
+                                  ->take(30)
+                                  ->orderBy('updated_at')
+                                  ->get();
 
         $histories_list       = [];
-        foreach($histories as $histories){
-            $user   = User::find($histories->userId);
+        foreach($histories as $history){
+            $user   = User::find($history->userId);
 
             $histories_list[]  = [
                 'userId'    => $user->id,
                 'usager'    => $user->firstname." ".$user->lastname,
                 'userphone' => $user->phone,
-                'guichet'   => $histories->guichetRef, 
-                'enrollId'  => $histories->id, 
-                'status'    => $histories->status,
+                'agent'     => $history->agentName.' - '.$history->agentPhone, 
+                'enrollId'  => $history->id, 
+                'status'    => $history->status, 
+                'enginId'   => $history->enginId,
             ]; 
         }
 
@@ -116,11 +120,9 @@ class EnrollController extends Controller
 
         // Enroll History backUp
         $history = new EnrollHistory();
-        $history->townHallRef   =   $agentRef->townHallRef;
-        $history->agentRef      =   $agentRef->agentId;
+        $history->agentRef      =   Auth::user()->id;
         $history->agentName     =   Auth::user()->firstname;
         $history->agentPhone    =   Auth::user()->phone;
-        $history->guichetRef    =   $agentRef->guichetRef;
         $history->userId        =   $User->id;
         $history->save();
 
@@ -134,11 +136,11 @@ class EnrollController extends Controller
 
         // dd($pendingEnrolls);
 
-        // dd($pendingEnrolls);
         $user_list       = [];
         foreach($pendingEnrolls as $pendingEnroll){
-            $user   = User::find($pendingEnroll->userId);
+            $user        = User::find($pendingEnroll->userId);
 
+            // dd($pendingEnroll->userId);
             $user_list[]  = [
                 'userId'    => $user->id,
                 'usager'    => $user->firstname." ".$user->lastname,
@@ -184,10 +186,13 @@ class EnrollController extends Controller
 
         $engin               = $this->createEngin($data);
 
-
         // $idCardLoaded       = $this->storeIdCard($User);
         $documentJustificatifLoaded   = \Storage::disk('public')->putFile('DocumentsEngins', $request->file('documentJustificatif'));
-       
+        $history = EnrollHistory::where('userId', $usager->id)->first();
+        $history->enginId   = $engin->id;
+        $history->save();
+
+        
         if($documentJustificatifLoaded == False){
 
             $engin->delete();
@@ -299,7 +304,18 @@ class EnrollController extends Controller
             'chassie' 	        => $data['chassie'],
             'puissanceFiscale' 	=> $data['puissanceFiscale'],
         ]);
-            
+        
+        $tarif = 0;
+        if ($engin->puissanceFiscale === "125") {
+            $engin->tarif = 6000;
+            $engin->save();
+        }
+
+        if ($engin->puissanceFiscale === "125+") {
+            $engin->tarif = 12000;
+            $engin->save();
+        }
+
         return $engin;
     }
 

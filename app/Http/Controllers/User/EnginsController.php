@@ -8,6 +8,7 @@ use App\Models\Engins;
 use Illuminate\Http\Request;
 use App\Models\Marque;
 use App\Models\Administration;
+use App\Models\EnrollHistory;
 use App\Models\Vignettes;
 use Carbon\Carbon;
 
@@ -206,7 +207,7 @@ class EnginsController extends Controller
     {
         //
         $userId = Auth::user()->id;
-        
+
         request()->validate([
             'marque'                => 'required|string',
             'modele'                => 'required|string',
@@ -245,12 +246,30 @@ class EnginsController extends Controller
             $enginId        = $token2.$token1.$enginId;
             $userId         = $token4.$token3.$userId;
 
-            $this->storeFacture($engin);
+            // $documentJustificatifLoaded = $this->storeFacture($engin);
+
+            $documentJustificatifLoaded   = \Storage::disk('public')->putFile('DocumentsEngins', $request->file('documentJustificatif'));
+        
+        if($documentJustificatifLoaded == False){
+
+            $engin->delete();
+            return redirect()->route('user.selectEnginType')
+                             ->with('error', 'Erreur d\'enregistrement! Vérifier votre connexion internet puis réessayer.')
+                             ->withInput();
+        }
+
+            $history = EnrollHistory::where('userId', Auth::user()->id)->first();
+            $history->enginId   = $engin->id;
+            $history->status = 1;
+            $history->save();
 
             //dd("Okay");
             //return redirect()->route('user.demande_vignette', [['userdId' => $userId],['enginId' => $engin->id]]);
 
-            return redirect('/vignettes/'.$enginId.'/'.$userId);
+            // return redirect('/vignettes/'.$enginId.'/'.$userId);
+
+            return redirect()->route('home')
+                             ->with('success', 'Engin ajoute avec succes! Veuillez vous rendre a la caisse pour le payement.');
     }
 
     /**
@@ -298,13 +317,13 @@ class EnginsController extends Controller
         //
     }
 
-    private function storeFacture($engin)
-    {
-        if (request()->has('documentJustificatif')) {
-            $engin->update([
-                'documentJustificatif' => request()->documentJustificatif->store('uploads/enginDocument', 's3'),
-            ]);
-        }
-    }
+    // private function storeFacture($engin)
+    // {
+    //     if (request()->has('documentJustificatif')) {
+    //         $engin->update([
+    //             'documentJustificatif' => request()->documentJustificatif->store('uploads/enginDocument', 's3'),
+    //         ]);
+    //     }
+    // }
 
 }

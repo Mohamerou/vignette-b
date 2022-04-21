@@ -176,32 +176,20 @@
             @can('elu')
                 <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="/enrollement-1" class="nav-link">
+                    <a href="#" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Rapport des Ventes</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('enrollList') }}" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Rapport des enrollements</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('enroll.index') }}" class="nav-link">
+                    <a href="{{ route('salesHistory') }}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Historiques des Ventes</p>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="{{ route('enroll.index') }}" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Historiques des Enrollements</p>
-                    </a>
-                </li>
                 </ul>
             @endcan
-            @can('agent_enroll')
+            @can('agent')
                 <ul class="nav nav-treeview">
                 <li class="nav-item">
                     <a href="/enrollement-1" class="nav-link">
@@ -222,31 +210,23 @@
                     </a>
                 </li>
                 </ul>
-            @endcan
-            @can('agent_vente')
                 <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="{{ route('enrollList') }}" class="nav-link">
+                    <a href="{{ route('pendingSales') }}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Nouvel Vente</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('enrollList') }}" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Ventes Récentes</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('enrollList') }}" class="nav-link">
+                    <a href="{{ route('salesHistory') }}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Historiques Ventes</p>
                     </a>
                 </li>
                 </ul>
-            @endcan
           </li>
-          @can('reporteur')
+          @endcan
+          @can('regisseur')
           <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-copy"></i>
@@ -258,15 +238,41 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="pages/layout/top-nav.html" class="nav-link">
+                <a href="#" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Rapports des Ventes</p>
+                  <p>Generer un rapport</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{ route('enrollHistory') }}" class="nav-link">
+                <a href="{{ route('salesHistory') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Rapports des Enrollements</p>
+                  <p>Historique des ventes</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          @endcan
+          @can('superadmin')
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-copy"></i>
+              <p>
+                GESTION DE COMPTE
+                <i class="fas fa-angle-left right"></i>
+                
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{ route('superadmin.create') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>CREATION DE COMPTE</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('superadmin.index') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>MODIFICATION / SUPPRESSION DE COMPTE</p>
                 </a>
               </li>
             </ul>
@@ -274,28 +280,104 @@
           @endcan
           @can('superviseur')
 
+            <li class="nav-item">
+              <!-- <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-copy"></i>
+                <p>
+                  Gestion des Guichets
+                  <i class="fas fa-angle-left right"></i>
+                  
+                </p>
+              </a> -->
+              <ul class="nav nav-treeview">
+                <!-- <li class="nav-item">
+                  <a href="{{ route('guichet.create') }}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Nouveau Guichet</p>
+                  </a>
+                </li> -->
+                <!-- <li class="nav-item">
+                  <a href="{{ route('guichet.index') }}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Liste des guichets</p>
+                  </a>
+                </li> -->
+              </ul>
+            </li>
+
+            <li class="nav-item">
+              <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-copy"></i>
+                <p>
+                  Gestion des Agents
+                  <i class="fas fa-angle-left right"></i>
+                  
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="{{ route('agent.create') }}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Nouveau Agent</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{{ route('agent.index') }}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Liste des Agents</p>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-copy"></i>
+                <p>
+                  Historiques Ventes
+                  <i class="fas fa-angle-left right"></i>
+                  
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="{{ route('salesHistory') }}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Historique des Ventes</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{{ route('enroll.index') }}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Historique des Enrollements</p>
+                  </a>
+                </li>
+              </ul>
+            </li>
+          @endcan
+          @can('comptable')
+
           <li class="nav-item">
-            <a href="#" class="nav-link">
+            <!-- <a href="#" class="nav-link">
               <i class="nav-icon fas fa-copy"></i>
               <p>
                 Gestion des Guichets
                 <i class="fas fa-angle-left right"></i>
                 
               </p>
-            </a>
+            </a> -->
             <ul class="nav nav-treeview">
-              <li class="nav-item">
+              <!-- <li class="nav-item">
                 <a href="{{ route('guichet.create') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Nouveau Guichet</p>
                 </a>
-              </li>
-              <li class="nav-item">
+              </li> -->
+              <!-- <li class="nav-item">
                 <a href="{{ route('guichet.index') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Liste des guichets</p>
                 </a>
-              </li>
+              </li> -->
             </ul>
           </li>
 
@@ -310,13 +392,13 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{{ route('guichet.create') }}" class="nav-link">
+                <a href="{{ route('agent.create') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Nouveau Agent</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{ route('guichet.index') }}" class="nav-link">
+                <a href="{{ route('agent.index') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Liste des Agents</p>
                 </a>
@@ -327,20 +409,20 @@
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-copy"></i>
               <p>
-                Historiques des Guichets
+                Historiques Ventes
                 <i class="fas fa-angle-left right"></i>
                 
               </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="pages/layout/top-nav.html" class="nav-link">
+                <a href="{{ route('salesHistory') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Historique des Ventes</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{ route('enrollHistory') }}" class="nav-link">
+                <a href="{{ route('enroll.index') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Historique des Enrollements</p>
                 </a>

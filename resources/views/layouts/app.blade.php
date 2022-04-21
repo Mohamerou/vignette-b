@@ -25,7 +25,7 @@
         <nav class="navbar navbar-expand-md navbar-light fixed-top bg-white shadow-sm"  style="margin: auto;">
             <div class="container" style="" >
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    <img style="width:50px; height:100px;" src="{{ asset('/images/logo.png') }}" class="navbar-brand-img" alt="Logo ikaVignetti">
+                    <img style="width:50px; height:50px;" src="{{ asset('/images/logo.png') }}" class="navbar-brand-img" alt="Logo ikaVignetti">
                 </a>
                 {{-- <a class="navbar-brand" href="{{ url('/') }}">
                     {{ config('app.name', 'ikaVignetti') }}
@@ -51,9 +51,9 @@
                             @endif
                             
                             @if (Route::has('register'))
-                                <!-- <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('inscription') }}">{{ __('S\'Inscrire') }}</a>
-                                </li> -->
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('inscription') }}">{{ __('Creer un compte') }}</a>
+                                </li>
                             @endif
                         @else
                             @can('user')

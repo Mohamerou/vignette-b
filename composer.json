@@ -9,6 +9,7 @@
     "license": "MIT",
     "require": {
         "php": "^7.3||^8.0",
+        "barryvdh/laravel-dompdf": "^1.0",
         "betterapp/laravel-db-encrypter": "^1.0",
         "calcinai/php-imagick": "^0.1.2",
         "ferdous/laravel-otp-validate": "^0.2.0",
@@ -28,6 +29,7 @@
         "simplesoftwareio/simple-qrcode": "~4",
         "snapappointments/bootstrap-select": "^1.13",
         "stripe/stripe-php": "^7.78",
+        "usmanhalalit/laracsv": "^2.1",
         "vonage/client": "^2.4"
     },
     "require-dev": {

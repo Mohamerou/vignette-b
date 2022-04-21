@@ -55,7 +55,7 @@
 
       <div class="container-fluid">
         <!-- form end -->
-        <form method="POST" action="{{ route('agent.postCreate') }}" enctype="multipart/form-data">
+        <form method="POST" action="{{ route('agent.store') }}">
             @csrf
 
         <!-- Start row -->
@@ -69,8 +69,7 @@
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <!-- <form method="POST" action="{{ route('agent.postCreate') }}" enctype="multipart/form-data">
-                @csrf -->
+              
                 <div class="card-body">
                   <div class="form-group">
                     <label for="lastname">Nom</label>
@@ -92,62 +91,31 @@
                     <label for="address">Adresse</label>
                     <input required name="address" type="text" class="form-control" id="address" placeholder="Adresse complet">
                   </div>
-                  <div class="form-group">
+                  <!-- <div class="form-group">
                     <label for="idCard">Piece d\'identité</label>
                     <div class="input-group">
                       <div class="custom-file">
                         <input required name="idCard" type="file" class="custom-file-input" id="idCard">
                         <label  class="custom-file-label" for="idCard">Choisir un document</label>
                       </div>
-                      <!-- <div class="input-group-append">
+                      <div class="input-group-append">
                         <span class="input-group-text">Charger</span>
-                      </div> -->
+                      </div>
                     </div>
-                  </div>
+                  </div> -->
                 </div>
                 <!-- /.card-body -->
 
                 <!-- <div class="card-footer">
                   <button type="submit" class="btn btn-primary">Ajouter</button>
                 </div> -->
-              <!-- </form> -->
+
             </div>
             <!-- /.card -->
 
 
           </div>
           <!--/.col (left) -->
-          <!-- right column -->
-          <div class="col-md-6">
-                        <!-- general form elements -->
-            <div class="card card-primary">
-              <div class="card-header">
-                <h3 class="card-title">Guichet Affilie</h3>
-              </div>
-              <!-- /.card-header -->
-              <!-- form start -->
-              <!-- <form method="POST" action="{{ route('agent.postCreate') }}" enctype="multipart/form-data">
-                @csrf -->
-                <div class="card-body">
-                  <div class="form-group">
-                        <select required name="guichet" class="form-control select2" style="width: 100%;">
-                            <option>Guichet</option>
-                            @foreach($guichets as $guichet)
-                                <option value="{{$guichet->ref}}">{{ $guichet->type }} {{ $guichet->number }}</option>
-                            @endforeach
-                        </select>
-                  </div>
-                </div>
-                <!-- /.card-body -->
-
-                <!-- <div class="card-footer">
-                  <button type="submit" class="btn btn-primary">Ajouter</button>
-                </div> -->
-              <!-- </form> -->
-            </div>
-            <!-- /.card --> 
-                      </div>
-          <!--/.col (right) -->
         </div>
         <!-- /.row -->
         <div class="card-footer">

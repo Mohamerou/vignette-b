@@ -16,7 +16,6 @@ class CreateAgentRefsTable extends Migration
         Schema::create('agent_refs', function (Blueprint $table) {
             $table->id();
             $table->string('townHallRef', 255);
-            $table->string('guichetRef', 255);
             $table->string('agentId', 255);
             $table->timestamps();
         });
