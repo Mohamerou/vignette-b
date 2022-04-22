@@ -22,7 +22,7 @@
         </div>
     @endcan
 
-    @can('admin')
+    @can('agent_vente')
         <div class="row justify-content-center">
           @if (session('message'))
               <div class="alert alert-success text-center col-md-6" role="alert">

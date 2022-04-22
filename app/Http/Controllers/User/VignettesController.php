@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Vignettes;
 use App\Models\TrackDemandeVignette;
 use App\Models\Declarations;
-use App\Models\Administration;
+use App\Models\TownHall;
 use App\Models\Engins;
 use App\Notifications\DemandeVignette;
 use App\Notifications\DemandeValider;
@@ -31,7 +31,7 @@ class VignettesController extends Controller
 
         // Codec de l'administration ciblée                        
         $mairieCode = $engin_a_modifier->mairie;
-        $mairie     = Administration::where('code', $mairieCode)->first();
+        $mairie     = TownHall::where('ref', $mairieCode)->first();
         $mairieId   = $mairie->id;
 
         /// Notification processing

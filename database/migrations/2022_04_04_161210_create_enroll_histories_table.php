@@ -20,7 +20,8 @@ class CreateEnrollHistoriesTable extends Migration
             $table->string('agentName', 255);
             $table->string('agentPhone', 255);
             $table->string('guichetRef', 255);
-            $table->string('userId', 255);
+            $table->bigInteger('userId');
+            $table->bigInteger('enginId')->nullable();
             $table->boolean('status')->default('0');
             $table->timestamps();
         });

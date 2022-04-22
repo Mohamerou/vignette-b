@@ -1,6 +1,6 @@
 
   <!-- Template Main JS & CSSFile -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -75,41 +75,40 @@
 
 <div class="card px-4">
     <div class="card-header">
-    <h3 class="card-title">Enrollement Recent</h3>
+    <h3 class="card-title">VENTE : ATTENTE</h3>
     </div>
 
     <div class="card-body p-0">
-    <table id="example" class="table table-striped table-hover table-bordered">
+    <table class="table table-striped">
     <thead>
     <tr>
     <th>Guichet</th>
     <th>Usager</th>
     <th>Contact Usager</th>
-    <th>Status</th>
-    @can('agent_enroll')
-        <th style="width: 40px">Actions</th>
-    @endcan
+    <th>Chassie Engin</th>
+    <th style="width: 40px">Status</th>
+    <th style="width: 40px">Action</th>
     </tr>
     </thead>
     <tbody>
 
+        @for ($i=0; $i < count($pendingSales); $i++)
+        <tr>
+            <td>{{ $pendingSales[$i]['guichet'] }}</td>
+            <td>{{ $pendingSales[$i]['usager'] }}</td>
+            <td>{{ $pendingSales[$i]['userphone'] }}</td>
+            <td>{{ $pendingSales[$i]['chassie'] }}</td>
+            <td class="text-danger">Attente</td>
+            <td>
+                <form action="{{ route('salesStepOne') }}" method="post">
+                    @csrf
+                    <input required name="enrollId" type="hidden" value={{ $pendingSales[$i]['enrollId'] }}>
+                    <button type="submit" class="btn btn-primary">CAISSE </button>
+                </form>
+            </td>
 
-        @for($i=0; $i < count($pendingEnrolls); $i++)
-            <tr>
-                <td>{{ $pendingEnrolls[$i]['guichet'] }}</td>
-                <td>{{ $pendingEnrolls[$i]['usager'] }}</td>
-                <td>{{ $pendingEnrolls[$i]['userphone'] }}</td>
-                <td class="text-danger">Attente</td>
-
-                @can('agent_enroll')    
-                    <td class="text-danger">
-                        <a href="{{ route('enrollStepTwo', $pendingEnrolls[$i]['userId']) }}" class="btn btn-warning"><h3>&#8594;</h3></a>
-                    </td>
-                @endcan
-            </tr>
+        </tr>
         @endfor
-
-
     </tbody>
     </table>
     </div>
@@ -128,6 +127,12 @@
 
 </div>
 @endsection 
+
+
+
+
+
+
 
 
 

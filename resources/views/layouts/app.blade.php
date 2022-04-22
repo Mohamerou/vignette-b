@@ -25,7 +25,7 @@
         <nav class="navbar navbar-expand-md navbar-light fixed-top bg-white shadow-sm"  style="margin: auto;">
             <div class="container" style="" >
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    <img src="{{ asset('/brand/ika-logo.png') }}" class="navbar-brand-img" alt="Logo ikaVignetti">
+                    <img style="width:50px; height:100px;" src="{{ asset('/images/logo.png') }}" class="navbar-brand-img" alt="Logo ikaVignetti">
                 </a>
                 {{-- <a class="navbar-brand" href="{{ url('/') }}">
                     {{ config('app.name', 'ikaVignetti') }}
@@ -87,7 +87,7 @@
                                 </li>
                             @endcan
 
-                            @can('admin')
+                            @can('agent_vente')
                                 <li class="nav-item dropdown">
                                         <a id="navbarDropdown" class="nav-link dropdown-toggle btn btn-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                             Notifications <span class="badge bg-primary text-light">
