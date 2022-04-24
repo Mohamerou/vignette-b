@@ -1,3 +1,5 @@
+<script src="{{ asset('js/chart/chart.min.js') }}"></script>
+
 @extends('layouts.admin')
 
 @section('content')
@@ -51,7 +53,33 @@
     </div><!-- /.container-fluid -->
   </div>
   <!-- /.content-header -->
+  <!-- Content Header (Page header) -->
+  <div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-md-12">
+          <h1 class="m-0">Progression par rapport a la prevision</h1>
+        </div><!-- /.col -->
+        <div class="col-md-8">
+          <p class="text-center">
+            <strong></strong>
+          </p>
 
+
+
+          <div class="progress-group">
+            Total des ventes / Prevision
+            <span class="float-right"><b>{{ $total_sales }}</b>/{{ $previsionMontant }}</span>
+            <div class="shadow p-3 mb-5 bg-body rounded rounded progress">
+              <div class="progress-bar bg-danger" style="width: {{ $poucentage }}%"></div>
+            </div>
+          </div>
+          <!-- /.progress-group -->
+        </div>
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
+  <!-- /.content-header -->
   <!-- Main content -->
   <section class="content">
     <div class="container-fluid">
@@ -61,7 +89,7 @@
     <div class="row">
         <div class="col-lg-3 col-6">
           <!-- small box -->
-          <div class="small-box bg-info">
+          <div class="shadow-lg p-3 mb-5 bg-body rounded small-box bg-info">
             <div class="inner">
               <h3>{{ $total_sales }} FCFA<h3>
               <h4> Ventes journalières </h4>
@@ -76,11 +104,11 @@
         <!-- ./col -->
         <div class="col-lg-3 col-6">
           <!-- small box -->
-          <div class="small-box bg-success">
+          <div class="shadow-lg p-3 mb-5 bg-body rounded small-box bg-success">
             <div class="inner">
-              <h3>1369</h3>
-              <h4>Nombre de vente du mois</h4>
-              <h5>{{$month}}</h5>
+              <h3>{{ $total_sales }} FCFA FCFA</h3>
+              <h4>Ventes du mois</h4>
+              <h5>{{$current_month}}</h5>
             </div>
             <div class="icon">
               <i class="ion ion-stats-bars"></i>
@@ -91,16 +119,16 @@
         <!-- ./col -->
         <div class="col-lg-3 col-6">
           <!-- small box -->
-          <div class="small-box bg-warning">
+          <div class="shadow-lg p-3 mb-5 bg-body rounded small-box bg-warning">
             <div class="inner">
 
-              <h3>1369</h3>
-              <h4>Engins enrôlés</h4>
-              <h5>{{$month}}</h5>
+              <h3>{{ $vignetted_engin_count }}</h3>
+              <h4>Engins enregistrés</h4>
+              <h5></h5>
 
             </div>
             <div class="icon">
-              <i class="ion ion-person-add"></i>
+              <i class="ion ion-stats-bars"></i>
             </div>
             <a href="#" class="small-box-footer"><i class="fas fa-arrow-circle-right"></i></a>
           </div>
@@ -108,15 +136,15 @@
         <!-- ./col -->
         <div class="col-lg-3 col-6">
           <!-- small box -->
-          <div class="small-box bg-danger">
+          <div class="shadow-lg p-3 mb-5 bg-body rounded small-box bg-danger">
             <div class="inner">
-              <h3>1965</h3>
+              <h3>{{ $user_count }}</h3>
 
-              <h4>Usagers Enregistrés</h4>
+              <h4>Usagers enregistrés</h4>
               <h4>&nbsp;</h4>
             </div>
             <div class="icon">
-              <i class="ion ion-pie-graph"></i>
+              <i class="ion ion-stats-bars"></i>
             </div>
             <a href="#" class="small-box-footer"><i class="fas fa-arrow-circle-right"></i></a>
           </div>
@@ -126,7 +154,7 @@
     <div class="row">
         <div class="col-lg-3 col-6">
           <!-- small box -->
-          <div class="small-box bg-info">
+          <div class="shadow-lg p-3 mb-5 bg-body rounded small-box bg-info">
             <div class="inner">
               <h3>{{ $total_sales }} FCFA</h3>
               <h4> Toutes les Ventes </h4>
@@ -143,7 +171,7 @@
       <!-- /.row -->
 
       <!-- Action Row -->
-      <div class="row">
+      <div class="shadow p-3 mb-5 bg-body rounded row">
           <div class="col-md-12">
           <div class="card card-primary card-outline">
               <div class="card-header">
@@ -178,9 +206,10 @@
       <!-- End Action Row -->
     @endcan
 
+    
     @can('superadmin')
       <!-- Action Row -->
-      <div class="row">
+      <div class="shadow p-3 mb-5 bg-body rounded row">
           <div class="col-md-12">
           <div class="card card-primary card-outline">
               <div class="card-header">
@@ -219,11 +248,11 @@
       <!-- End Action Row -->
     @endcan
 
-@can('regisseur')
+@can('regisseur-public')
 <div class="row">
     <div class="col-lg-3 col-6">
       <!-- small box -->
-      <div class="small-box bg-info">
+      <div class="shadow-lg p-3 mb-5 bg-body rounded small-box bg-info">
         <div class="inner">
           <h3>{{ $total_sales }} FCFA<h3>
           <h4> Ventes journalières </h4>
@@ -238,11 +267,11 @@
     <!-- ./col -->
     <div class="col-lg-3 col-6">
       <!-- small box -->
-      <div class="small-box bg-success">
+      <div class="shadow-lg p-3 mb-5 bg-body rounded small-box bg-success">
         <div class="inner">
-          <h3>1369</h3>
-          <h4>Nombre de vente du mois</h4>
-          <h5>{{$month}}</h5>
+          <h3>{{ $total_sales }} FCFA</h3>
+          <h4>Nombre de vente du msois</h4>
+          <h5>{{$current_month}}</h5>
         </div>
         <div class="icon">
           <i class="ion ion-stats-bars"></i>
@@ -253,16 +282,16 @@
     <!-- ./col -->
     <div class="col-lg-3 col-6">
       <!-- small box -->
-      <div class="small-box bg-warning">
+      <div class="shadow-lg p-3 mb-5 bg-body rounded small-box bg-warning">
         <div class="inner">
           
-          <h3>1369</h3>
-          <h4>Engins enrôlés</h4>
-          <h5>{{$month}}</h5>
+          <h3>{{ $vignetted_engin_count }}</h3>
+          <h4>Engins enregistrés</h4>
+          <h5></h5>
           
         </div>
         <div class="icon">
-          <i class="ion ion-person-add"></i>
+          <i class="ion ion-stats-bars"></i>
         </div>
         <a href="#" class="small-box-footer"><i class="fas fa-arrow-circle-right"></i></a>
       </div>
@@ -270,15 +299,15 @@
     <!-- ./col -->
     <div class="col-lg-3 col-6">
       <!-- small box -->
-      <div class="small-box bg-danger">
+      <div class="shadow-lg p-3 mb-5 bg-body rounded small-box bg-danger">
         <div class="inner">
-          <h3>1965</h3>
+          <h3>{{ $user_count }}</h3>
 
-          <h4>Usagers Enregistrés</h4>
+          <h4>Usagers enregistrés</h4>
           <h4>&nbsp;</h4>
         </div>
         <div class="icon">
-          <i class="ion ion-pie-graph"></i>
+          <i class="ion ion-stats-bars"></i>
         </div>
         <a href="#" class="small-box-footer"><i class="fas fa-arrow-circle-right"></i></a>
       </div>
@@ -288,7 +317,7 @@
   <!-- /.row -->
 
   <!-- Action Row -->
-  <div class="row">
+  <div class="shadow p-3 mb-5 bg-body rounded row">
       <div class="col-md-12">
       <div class="card card-primary card-outline">
           <div class="card-header">
@@ -305,22 +334,11 @@
               </tr>
               <tr>
               <td>
-                  <button type="button" class="btn btn-block btn-primary btn-lg"><i class="fa fa-book" aria-hidden="true"></i>
-  Generer un rapports</button>
+                <a class="btn btn-block btn-primary btn-lg" href="{{ route('salesReport') }}"><i class="fa fa-book" aria-hidden="true"></i>Generer un rapports</a>
+  </button>
               </td>
               <td>
-                  <button type="button" class="btn btn-block btn-primary btn-lg"> <i class="fa fa-archive" aria-hidden="true"></i>
-  Historiques des ventes</button>
-              </td>
-              </tr>
-              <tr>
-              <td>
-                  <button type="button" onClick = "imprimer('rintChart')" class="btn btn-block btn-primary btn-lg"><i class="fa fa-book" aria-hidden="true"></i>
-  IMPRIMER LE GRAPHE</button>
-              </td>
-              <td>
-                  <button type="button" class="btn btn-block btn-primary btn-lg"> <i class="fa fa-archive" aria-hidden="true"></i>
-  Historiques des ventes</button>
+                <a class="btn btn-block btn-primary btn-lg" href="{{ route('salesHistory') }}"><i class="fa fa-book" aria-hidden="true"></i>Historiques des ventes</a>
               </td>
               </tr>
           </tbody></table>
@@ -333,11 +351,13 @@
   <!-- End Action Row -->
 @endcan
 
-@can('superviseur')
+
+
+@can('comptable-public')
 <div class="row">
     <div class="col-lg-3 col-6">
       <!-- small box -->
-      <div class="small-box bg-info">
+      <div class="shadow-lg p-3 mb-5 bg-body rounded small-box bg-info">
         <div class="inner">
           <h3>{{ $total_sales }} FCFA<h3>
           <h4> Ventes journalières </h4>
@@ -352,11 +372,11 @@
     <!-- ./col -->
     <div class="col-lg-3 col-6">
       <!-- small box -->
-      <div class="small-box bg-success">
+      <div class="shadow-lg p-3 mb-5 bg-body rounded small-box bg-success">
         <div class="inner">
-          <h3>1369</h3>
-          <h4>Nombre de vente du mois</h4>
-          <h5>{{$month}}</h5>
+          <h3>{{ $total_sales }} FCFA</h3>
+          <h4>Nombre de vente du msois</h4>
+          <h5>{{$current_month}}</h5>
         </div>
         <div class="icon">
           <i class="ion ion-stats-bars"></i>
@@ -367,16 +387,16 @@
     <!-- ./col -->
     <div class="col-lg-3 col-6">
       <!-- small box -->
-      <div class="small-box bg-warning">
+      <div class="shadow-lg p-3 mb-5 bg-body rounded small-box bg-warning">
         <div class="inner">
           
-          <h3>1369</h3>
-          <h4>Engins enrôlés</h4>
-          <h5>{{$month}}</h5>
+          <h3>{{ $vignetted_engin_count }}</h3>
+          <h4>Engins enregistrés</h4>
+          <h5></h5>
           
         </div>
         <div class="icon">
-          <i class="ion ion-person-add"></i>
+          <i class="ion ion-stats-bars"></i>
         </div>
         <a href="#" class="small-box-footer"><i class="fas fa-arrow-circle-right"></i></a>
       </div>
@@ -384,15 +404,15 @@
     <!-- ./col -->
     <div class="col-lg-3 col-6">
       <!-- small box -->
-      <div class="small-box bg-danger">
+      <div class="shadow-lg p-3 mb-5 bg-body rounded small-box bg-danger">
         <div class="inner">
-          <h3>1965</h3>
+          <h3>{{ $user_count }}</h3>
 
-          <h4>Usagers Enregistrés</h4>
+          <h4>Usagers enregistrés</h4>
           <h4>&nbsp;</h4>
         </div>
         <div class="icon">
-          <i class="ion ion-pie-graph"></i>
+          <i class="ion ion-stats-bars"></i>
         </div>
         <a href="#" class="small-box-footer"><i class="fas fa-arrow-circle-right"></i></a>
       </div>
@@ -402,131 +422,7 @@
   <!-- /.row -->
 
   <!-- Action Row -->
-  <div class="row">
-      <div class="col-md-12">
-      <div class="card card-primary card-outline">
-          <div class="card-header">
-          <h3 class="card-title">
-              <i class="fas fa-edit"></i>
-              Pallette de commande
-          </h3>
-          </div>
-          <div class="card-body pad table-responsive">
-          <table class="table table-bordered text-center">
-              <tbody><tr>
-              <th></th>
-              <th></th>
-              </tr>
-              <tr>
-              <td>
-                  <button type="button" class="btn btn-block btn-primary btn-lg"><i class="fa fa-book" aria-hidden="true"></i>
-  Historiques ventes</button>
-              </td>
-              <td>
-                  <a href="{{ route('enroll.index') }}" class="btn btn-block btn-primary btn-lg"> <i class="fa fa-archive" aria-hidden="true"></i>
-  Historiques enrollements</a>
-              </td>
-              </tr>
-              <tr>
-              <td>
-                  <a href="{{ route('guichet.create') }}" class="btn btn-block btn-primary btn-lg"><i class="fa fa-book" aria-hidden="true"></i>
-  Ajouter un guichet</a>
-              </td>
-              <td>
-                  <a href="{{ route('guichet.index') }}" class="btn btn-block btn-primary btn-lg"> <i class="fa fa-archive" aria-hidden="true"></i>
-  Liste des guichets</a>
-              </td>
-              </tr>
-              <tr>
-              <td>
-                  <a href="{{ route('agent.create') }}" class="btn btn-block btn-primary btn-lg"><i class="fa fa-book" aria-hidden="true"></i>
-  Ajouter un agent</a>
-              </td>
-              <td>
-                  <a href="#" class="btn btn-block btn-primary btn-lg"> <i class="fa fa-archive" aria-hidden="true"></i>
-  Liste des Agents</button>
-              </td>
-              </tr>
-          </tbody></table>
-          </div>
-          <!-- /.card -->
-      </div>
-      </div>
-      <!-- /.col -->
-  </div>
-  <!-- End Action Row -->
-@endcan
-
-@can('comptable')
-<div class="row">
-    <div class="col-lg-3 col-6">
-      <!-- small box -->
-      <div class="small-box bg-info">
-        <div class="inner">
-          <h3>{{ $total_sales }} FCFA<h3>
-          <h4> Ventes journalières </h4>
-          <h5>{{$today}}</h5>
-        </div>
-        <div class="icon">
-          <i class="ion ion-stats-bars"></i>
-        </div>
-        <a href="#" class="small-box-footer"><i class="fas fa-arrow-circle-right"></i></a>
-      </div>
-    </div>
-    <!-- ./col -->
-    <div class="col-lg-3 col-6">
-      <!-- small box -->
-      <div class="small-box bg-success">
-        <div class="inner">
-          <h3>1369</h3>
-          <h4>Nombre de vente du mois</h4>
-          <h5>{{$month}}</h5>
-        </div>
-        <div class="icon">
-          <i class="ion ion-stats-bars"></i>
-        </div>
-        <a href="#" class="small-box-footer"><i class="fas fa-arrow-circle-right"></i></a>
-      </div>
-    </div>
-    <!-- ./col -->
-    <div class="col-lg-3 col-6">
-      <!-- small box -->
-      <div class="small-box bg-warning">
-        <div class="inner">
-          
-          <h3>1369</h3>
-          <h4>Engins enrôlés</h4>
-          <h5>{{$month}}</h5>
-          
-        </div>
-        <div class="icon">
-          <i class="ion ion-person-add"></i>
-        </div>
-        <a href="#" class="small-box-footer"><i class="fas fa-arrow-circle-right"></i></a>
-      </div>
-    </div>
-    <!-- ./col -->
-    <div class="col-lg-3 col-6">
-      <!-- small box -->
-      <div class="small-box bg-danger">
-        <div class="inner">
-          <h3>1965</h3>
-
-          <h4>Usagers Enregistrés</h4>
-          <h4>&nbsp;</h4>
-        </div>
-        <div class="icon">
-          <i class="ion ion-pie-graph"></i>
-        </div>
-        <a href="#" class="small-box-footer"><i class="fas fa-arrow-circle-right"></i></a>
-      </div>
-    </div>
-    <!-- ./col -->
-  </div>
-  <!-- /.row -->
-
-  <!-- Action Row -->
-  <div class="row">
+  <div class="shadow p-3 mb-5 bg-body rounded row">
       <div class="col-md-12">
       <div class="card card-primary card-outline">
           <div class="card-header">
@@ -561,6 +457,13 @@
   Liste des agents</a>
               </td>
               </tr>
+              <tr>
+                <td>
+                  <a href="{{ route('prevision.index') }}" class="btn btn-block btn-primary btn-lg"><i class="fa fa-book" aria-hidden="true"></i>
+                  Definir une prevision</a>
+                </td>
+               
+                </tr>
           </tbody></table>
           </div>
           <!-- /.card -->
@@ -571,11 +474,11 @@
   <!-- End Action Row -->
 @endcan
 
-@can('agent')
+@can('guichet')
 <div class="row">
     <div class="col-lg-3 col-6">
       <!-- small box -->
-      <div class="small-box bg-info">
+      <div class="shadow-lg p-3 mb-5 bg-body rounded small-box bg-info">
         <div class="inner">
           <h3>{{ $total_sales }} FCFA<h3>
           <h4> Ventes journalières </h4>
@@ -590,11 +493,11 @@
     <!-- ./col -->
     <div class="col-lg-3 col-6">
       <!-- small box -->
-      <div class="small-box bg-success">
+      <div class="shadow-lg p-3 mb-5 bg-body rounded small-box bg-success">
         <div class="inner">
-          <h3>1369</h3>
-          <h4>Nombre de vente du mois</h4>
-          <h5>{{$month}}</h5>
+          <h3>{{ $total_sales }} FCFA</h3>
+          <h4>Nombre de vente du msois</h4>
+          <h5>{{$current_month}}</h5>
         </div>
         <div class="icon">
           <i class="ion ion-stats-bars"></i>
@@ -605,16 +508,16 @@
     <!-- ./col -->
     <div class="col-lg-3 col-6">
       <!-- small box -->
-      <div class="small-box bg-warning">
+      <div class="shadow-lg p-3 mb-5 bg-body rounded small-box bg-warning">
         <div class="inner">
           
-          <h3>1369</h3>
-          <h4>Engins enrôlés</h4>
-          <h5>{{$month}}</h5>
+          <h3>{{ $vignetted_engin_count }}</h3>
+          <h4>Engins enregistrés</h4>
+          <h5></h5>
           
         </div>
         <div class="icon">
-          <i class="ion ion-person-add"></i>
+          <i class="ion ion-stats-bars"></i>
         </div>
         <a href="#" class="small-box-footer"><i class="fas fa-arrow-circle-right"></i></a>
       </div>
@@ -622,15 +525,15 @@
     <!-- ./col -->
     <div class="col-lg-3 col-6">
       <!-- small box -->
-      <div class="small-box bg-danger">
+      <div class="shadow-lg p-3 mb-5 bg-body rounded small-box bg-danger">
         <div class="inner">
-          <h3>1965</h3>
+          <h3>{{ $user_count }}</h3>
 
-          <h4>Usagers Enregistrés</h4>
+          <h4>Usagers enregistrés</h4>
           <h4>&nbsp;</h4>
         </div>
         <div class="icon">
-          <i class="ion ion-pie-graph"></i>
+          <i class="ion ion-stats-bars"></i>
         </div>
         <a href="#" class="small-box-footer"><i class="fas fa-arrow-circle-right"></i></a>
       </div>
@@ -640,7 +543,7 @@
   <!-- /.row -->
 
   <!-- Action Row -->
-  <div class="row">
+  <div class="shadow p-3 mb-5 bg-body rounded row">
       <div class="col-md-12">
       <div class="card card-primary card-outline">
           <div class="card-header">
@@ -681,7 +584,7 @@
 
 
   <!-- Action Row -->
-  <div class="row">
+  <div class="shadow p-3 mb-5 bg-body rounded row">
       <div class="col-md-12">
       <div class="card card-primary card-outline">
           <div class="card-header">
@@ -730,144 +633,55 @@
 
       <!-- Main row -->
       <div id="printChart">
-      <div class="row">
-        <!-- Left col -->
-        <section class="col-md-12 connectedSortable">
-          <!-- Custom tabs (Charts with tabs)-->
-          <div class="card  " >
-            <div class="card-header">
-              <h3 class="card-title">
-                <i class="fas fa-chart-pie mr-1"></i>
-                Ventes
-              </h3>
-              <div class="card-tools">
-                <ul class="nav nav-pills ml-auto">
-                  <li class="nav-item">
-                    <a class="nav-link active" href="#revenue-chart" >Area</a>
-                  </li>
-                </ul>
+        <div class="row">
+          <!-- Left col -->
+          <section class="col-md-12 connectedSortable">
+            <!-- Custom tabs (Charts with tabs)-->
+            <div class="card  " >
+              <div class="card-header">
+                <h3 class="card-title">
+                  <i class="fas fa-chart-pie mr-1"></i>
+                  Ventes
+                </h3>
+                <div class="card-tools">
+                  <ul class="nav nav-pills ml-auto">
+                    <li class="nav-item">
+                      <a class="nav-link active" href="#revenue-chart" >Area</a>
+                    </li>
+                  </ul>
+                </div>
               </div>
-            </div>
-            
-            <!-- /.card-header -->
-            <div class="card-body">
-              <div class="tab-content p-0">
-                <!-- Morris chart - Sales -->
-                <div class="chart tab-pane active" id="revenue-chart"
-                     style="position: relative;  ">
-                     <canvas id="myChart"></canvas>
+              
+              <!-- /.card-header -->
+              <div class="card-body">
+                <div class="tab-content p-0">
+                  <!-- Morris chart - Sales -->
+                    <div class="chart tab-pane active" id="revenue-chart"
+                      style="position: relative;  ">
+                      <!-- <canvas id="myChart"></canvas> -->
+                      <canvas id="canvas" height="280" width="600"></canvas>
                     </div>
-                </div>
+                  </div>
               </div>
+              <!-- /.card-body -->
             </div>
-            <!-- /.card-body -->
-          </div>
-          <!-- /.card -->
-        </section>
+            <!-- /.card -->
+          </section>
 
 
 
-        <section class="col-md-12 connectedSortable">
-          <!-- Custom tabs (Charts with tabs)-->
-          <div class="card  " >
-            <div class="card-header">
-              <h3 class="card-title">
-                <i class="fas fa-chart-pie mr-1"></i>
-                Ventes
-              </h3>
-              <div class="card-tools">
-                <ul class="nav nav-pills ml-auto">
-                  <li class="nav-item">
-                    <a class="nav-link" href="#donut-chart" data-toggle="tab">Donut</a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            
-            <!-- /.card-header -->
-            <div class="card-body">
-              <div class="tab-content p-0">
-                <!-- Morris chart - Sales -->
-                <div class="chart tab-pane active" id="donut-chart"
-                     style="position: relative;  ">
-                     <canvas id="donoughtChart" width="400" height="400"></canvas>
-                    </div>
-                </div>
-              </div>
-            </div>
-            <!-- /.card-body -->
-          </div>
-          <!-- /.card -->
-        </section>
+          
 
 
 
-        <!-- /.Left col -->
+          <!-- /.Left col -->
 
 
 
-        <!-- right col (We are only adding the ID to make the widgets sortable)-->
-        <section class="col-lg-5 connectedSortable">
-
-          <!-- Map card -->
-          <div class="card bg-gradient-primary">
-            <div class="card-header border-0">
-              <h3 class="card-title">
-                <i class="fas fa-map-marker-alt mr-1"></i>
-                Usagers
-              </h3>
-              <!-- card tools -->
-              <div class="card-tools">
-                <button type="button" class="btn btn-primary btn-sm daterange" title="Date range">
-                  <i class="far fa-calendar-alt"></i>
-                </button>
-                <button type="button" class="btn btn-primary btn-sm" data-card-widget="collapse" title="Collapse">
-                  <i class="fas fa-minus"></i>
-                </button>
-              </div>
-              <!-- /.card-tools -->
-            </div>
-            <div class="card-body">
-              <div id="world-map" style="height: 250px; width: 100%;"></div>
-            </div>
-            <!-- /.card-body-->
-            <div class="card-footer bg-transparent">
-              <div class="row">
-                <div class="col-4 text-center">
-                  <div id="sparkline-1"></div>
-                  <div class="text-white">Visitors</div>
-                </div>
-                <!-- ./col -->
-                <div class="col-4 text-center">
-                  <div id="sparkline-2"></div>
-                  <div class="text-white">Online</div>
-                </div>
-                <!-- ./col -->
-                <div class="col-4 text-center">
-                  <div id="sparkline-3"></div>
-                  <div class="text-white">Sales</div>
-                </div>
-                <!-- ./col -->
-              </div>
-              <!-- /.row -->
-            </div>
-          </div>
-          <!-- /.card -->
-          <div class="col-md-10 offset-md-1">
-            <div class="panel panel-default">
-                <div class="panel-heading">Tableau de bord</div>
-                <div class="panel-body">
-                    <canvas id="canvas" height="280" width="600"></canvas>
-                </div>
-            </div>
-
-            <div>
-
-
-
-        </section>
-        <!-- right col -->
-      </div>
+          <!-- right col (We are only adding the ID to make the widgets sortable)-->
+          
+          <!-- right col -->
+        </div>
       </div>
   
   @endif
@@ -878,8 +692,9 @@
 </div>
 
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <!-- <script>
+<<<<<<< HEAD
   const labels = [
     'Janvier',
     'Février',
@@ -1038,6 +853,8 @@ const config_donut = {
 
 
 <script>
+=======
+>>>>>>> af2d8799dfab851770c946042e747f6afd532542
 function imprimer(printChart) {
    var printContents = document.getElementById(printChart).innerHTML;
    var originalContents = document.body.innerHTML;
@@ -1045,8 +862,80 @@ function imprimer(printChart) {
    window.print();
    document.body.innerHTML = originalContents;
    }
+</script> -->
+
+
+
+
+
+<!-- //////////////////////////////////////////////////////// -->
+
+<script>
+  var _xdata = {!! $monthCountEngins !!};
+  var _ydata = {!! json_encode($months) !!};
 </script>
 
+<<<<<<< HEAD
 >>>>>>> 64cc5e1ad934c284ed0425871937102210367c62
+=======
+<script>
+const ctx = document.getElementById('canvas').getContext('2d');
+const myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: _ydata,
+        datasets: [{
+            label: '# Engins',
+            data: _xdata,
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+</script>
+
+
+<!-- <script>
+    var chartdata = {
+    type: 'bar',
+    data: {
+    labels: 
+    // labels: month,
+    datasets: [
+    {
+    label: 'this year',
+    backgroundColor: '#26B99A',
+    borderWidth: 1,
+    data: 
+    }
+    ]
+    },
+    options: {
+    scales: {
+    yAxes: [{
+    ticks: {
+    beginAtZero:true
+    }
+    }]
+    }
+    }
+    }
+    var ctx = document.getElementById('canvas').getContext('2d');
+    new Chart(ctx, chartdata);
+  </script> -->
+
+>>>>>>> af2d8799dfab851770c946042e747f6afd532542
 <!-- /.content-wrapper -->
 @endsection

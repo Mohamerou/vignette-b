@@ -15,7 +15,6 @@ class CreatePaymentsTable extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-
             $table->string('csrf_token')->nullable();
             $table->string('site_id')->nullable();
             $table->string('firstname')->nullable();
@@ -25,7 +24,7 @@ class CreatePaymentsTable extends Migration
             $table->string('marque')->nullable();
             $table->string('modele')->nullable();
             $table->string('chassie')->nullable();
-            $table->string('puissanceFiscale')->nullable();
+            $table->string('cylindre')->nullable();
             $table->string('amount')->nullable();
             $table->string('trans_id')->nullable();
             $table->string('trans_date')->nullable();

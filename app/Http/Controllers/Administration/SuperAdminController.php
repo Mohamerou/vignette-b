@@ -38,7 +38,8 @@ class SuperAdminController extends Controller
      */
     public function index()
     {
-        $users       = User::take(100)->get();
+        $users       = User::where('administration', Auth::user()->administration)
+                           ->get();
         $user_list  = [];
 
         foreach ($users as $user) {
@@ -48,22 +49,46 @@ class SuperAdminController extends Controller
                     'role' => 'Elu',
                 ];
             }
-            if ($user->hasRole('comptable')) {
+            
+            if ($user->hasRole('ordonateur')) {
                 $user_list[] = [
                     'user' => $user,
-                    'role' => 'Comptable General',
+                    'role' => 'Ordonateur',
                 ];
             }
+            
+            if ($user->hasRole('controle-gestion')) {
+                $user_list[] = [
+                    'user' => $user,
+                    'role' => 'Controle De Gestion',
+                ];
+            }
+            
+            if ($user->hasRole('dfm')) {
+                $user_list[] = [
+                    'user' => $user,
+                    'role' => 'Dierction des Finances et des Materiels',
+                ];
+            }
+            
+            if ($user->hasRole('comptable-public')) {
+                $user_list[] = [
+                    'user' => $user,
+                    'role' => 'Comptable Public',
+                ];
+            }
+
             if ($user->hasRole('superviseur')) {
                 $user_list[] = [
                     'user' => $user,
                     'role' => 'Superviseur',
                 ];
             }
-            if ($user->hasRole('regisseur')) {
+
+            if ($user->hasRole('regisseur-public')) {
                 $user_list[] = [
                     'user' => $user,
-                    'role' => 'Regisseur',
+                    'role' => 'Regisseur Public',
                 ];
             }
         }
@@ -84,7 +109,7 @@ class SuperAdminController extends Controller
         $roles = Role::all();
 
         foreach ($roles as $role) {
-            if ($role->name === 'superadmin' || $role->name === 'user' || $role->name === 'agent') {
+            if ($role->name === 'superadmin' || $role->name === 'user' || $role->name === 'guichet') {
             }else {
                 $role_list[] = $role;
             }  
@@ -168,6 +193,7 @@ class SuperAdminController extends Controller
 
         $compte_data = [
             'email'         => $User->email,
+            'phone'         => $User->phone,
             'password'      => $password,
             'fullname'      => $data['firstname']." ".$data['lastname'],
         ];
@@ -300,6 +326,7 @@ class SuperAdminController extends Controller
             'lastname' 	=> $data['lastname'],
             'firstname' => $data['firstname'],
             'address'   => $data['address'],
+            'administration'   => Auth::user()->administration,
             'avatar' 	=> 'avatar.png',
             'phone' 	=> $data['phone'],
             'code'      => $code,

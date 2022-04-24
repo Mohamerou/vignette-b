@@ -16,7 +16,7 @@ class Engins extends Model
     	'mairie', 
     	'chassie', 
     	'immatriculation', 
-    	'puissanceFiscale', 
+    	'cylindre', 
     	'signaler_perdue', 
     	'documentJustificatif', 
     	'tarif',

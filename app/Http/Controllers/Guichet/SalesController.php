@@ -17,6 +17,7 @@ use DB;
 use Redirect;
 use Illuminate\Support\Facades\Session;
 use PDF;
+use File;
 
 use App\Models\User;
 use App\Models\Engins;
@@ -35,6 +36,8 @@ class SalesController extends Controller
         $pendingSales = EnrollHistory::where('status', '1')->orderBy('created_at', 'desc')->get();
 
         // dd($pendingSales);
+
+
 
         $user_list       = [];
         $engin_list      = [];
@@ -79,15 +82,22 @@ class SalesController extends Controller
         $history    = EnrollHistory::where('enginId', $enginId)->first();
         $user       = User::findOrfail($history->userId);
         $engin      = Engins::findOrfail($enginId);
-        
-        $puissanceFiscale = $engin->puissanceFiscale;
+
+        $cylindre   = $engin->cylindre;
         $chassie            = $engin->chassie;
 
-        if($puissanceFiscale === "125")
+        if($cylindre === "0")
+            $amount     = 1500;
+        
+        if($cylindre === "50")
+            $amount     = 3000;
+
+        if($cylindre === "125")
             $amount     = 6000;
         
-        if($puissanceFiscale === "125+")
+        if($cylindre === "+125")
             $amount     = 12000;
+
 
         $data = [
             'firstname'          =>     $user->firstname,
@@ -96,8 +106,9 @@ class SalesController extends Controller
             'address'            =>     $user->address,
             'marque'             =>     $engin->marque,
             'modele'             =>     $engin->modele,
-            'puissanceFiscale'   =>     $engin->puissanceFiscale,
+            'cylindre'           =>     $engin->cylindre,
             'amount'             =>     $amount,
+            
             'chassie'            =>     $chassie,
         ];
         
@@ -114,7 +125,7 @@ class SalesController extends Controller
             'address'           => 'required|string|max:255',
             'marque'            => 'required|string|max:255',
             'modele'            => 'required|string|max:255',
-            'puissanceFiscale'  => 'required|string|max:255',
+            'cylindre'           => 'required|string|max:255',
             'amount'            => 'required|string|max:255',
             'chassie'           => 'required|string|max:255',
         ]);
@@ -129,7 +140,7 @@ class SalesController extends Controller
         $payment->address           = $data['address'];
         $payment->marque            = $data['marque'];
         $payment->modele            = $data['modele'];
-        $payment->puissanceFiscale  = $data['puissanceFiscale'];
+        $payment->cylindre  = $data['cylindre'];
         $payment->amount            = $data['amount'];
         $payment->chassie           = $data['chassie'];
         $payment->save();
@@ -510,14 +521,27 @@ class SalesController extends Controller
         $data = [
             'SalesHistories'    =>$SalesHistories,
             'totalSales'        =>$totalSales,
+            'fileName'          =>$fileName,
         ];
 
       view()->share('data',$data);
     //   $pdf = PDF::loadView('guichet.rapportVente', ['data' => $data])->setOptions(['defaultFont' => 'sans-serif']);
       // download PDF file with download method
     //   return $pdf->download($fileName.'.pdf');
+    
+    $path = storage_path('reports');
 
-    $pdf = PDF::loadView('guichet.rapportVente',['data' => $data])->setOptions(['defaultFont' => 'sans-serif']);
+    // dd($path);
+    if(!File::exists($path)) {
+        File::makeDirectory($path, $mode = 0755, true, true);
+
+    } 
+    else {}
+
+
+    $pdf = PDF::loadView('guichet.rapportVente',['data' => $data])->setOptions(['defaultFont' => 'sans-serif'])
+              ->save(''.$path.'/'.$fileName.'.pdf');
+
     $pdf->getDomPDF()->setHttpContext(
         stream_context_create([
             'ssl' => [
@@ -527,7 +551,7 @@ class SalesController extends Controller
             ]
         ])
     );
-      return $pdf->stream($fileName.'.pdf');
+      return $pdf->download($fileName.'.pdf');
     
     }
 

@@ -14,6 +14,8 @@ use App\Models\TempVerificationCode;
 use App\Models\Engins;
 use App\Models\Vignettes;
 use App\Models\EnrollHistory;
+use App\Models\UsagerAccountType;
+use App\Models\Prevision;
 //use App\Models\administration;
 //use App\Models\DemandesVignette;
 use Illuminate\Support\Facades\Hash;
@@ -94,15 +96,18 @@ class AuthController extends Controller
                 return redirect()->route('resend_code',['phone' => $phone]);
             }
 
-            if($user->hasRole('superadmin') || $user->hasRole('elu') || $user->hasRole('comptable')){
+            if($user->hasRole('superadmin') || $user->hasRole('elu') || $user->hasRole('comptable-public')){
+                return Redirect('admin-dashboard');
+            }
+            if($user->hasRole('ordonateur') || $user->hasRole('control-gestion') || $user->hasRole('dfm')){
                 return Redirect('admin-dashboard');
             }
 
-            if($user->hasRole('regisseur') || $user->hasRole('superviseur')){
+            if($user->hasRole('regisseur-public') || $user->hasRole('superviseur')){
                 return Redirect('admin-dashboard');
             }
 
-            if($user->hasRole('agent')){
+            if($user->hasRole('guichet')){
                 return Redirect('admin-dashboard');
             }
 
@@ -158,6 +163,11 @@ class AuthController extends Controller
         $User->save();
 
 
+        $account_type   = UsagerAccountType::create([
+            'user_id' => $User->id,
+            'type'    => $data['account_type'],
+        ]);
+
         // Enroll History backUp
         $history = new EnrollHistory();
         $history->agentRef      =   $User->id;
@@ -191,35 +201,77 @@ class AuthController extends Controller
 
     public function adminDashboard()
     {
-      if(Auth::check()){
-
-        $year = ['2021','2022','2023','2024','2025','2026'];
+      if(Auth::check()){  
+        // Array of engins
+        $engin_array = [];
+        $vignetted_engin_count = 0;
         $total_sales = 0;
+        $user_count  = 0;
 
-        $user = [];
-        // foreach ($year as $key => $value) {
-        //     $user[] = User::where(\DB::raw("DATE_FORMAT(created_at, '%Y')"),$value)->count();
-        // }
 
+       
+
+        // Engin classified per month
+        // $data = Engins::select('id', 'created_at')->get()->groupBy(function($data){
+        //     return Carbon::parse($data->created_at)->format('M');
+        // });
+
+        $data = Vignettes::join('engins', 'vignettes.enginId', '=', 'engins.id')
+                             ->get(['engins.id', 'vignettes.created_at'])
+                             ->groupBy(function($data){
+                                return Carbon::parse($data->created_at)->format('M');
+                             });
+
+        // Counting Engin per month
+        $months = [];
+        $monthCountEngins = [];
+        foreach ($data as $month => $value) {
+            $months[]   = $month;
+            $monthCountEngins = count($value);
+        }
 
         $vignettes      = Vignettes::where('status', 1)->get();
         foreach ($vignettes as $vignette) {
-            $engin      = Engins::find($vignette->enginId);
-            $total_sales += $engin->tarif;
-        }     
+            $engin          = Engins::find($vignette->enginId);
+            $user_count     += 1;
+            $engin_array[]  = $engin;
+            $vignetted_engin_count  +=1;
+            $total_sales    += $engin->tarif;
+        }
+        $prevision = Prevision::orderBy('updated_at', 'desc')->first();
+        if(!empty($prevision)){
+        $previsionMontant = $prevision->montant;
+        $poucentage = 0;
+
+        if($previsionMontant > 0)
+            $poucentage = ($total_sales/$previsionMontant)*100;
+    }
+    else{
+        $previsionMontant =0;  
+        $poucentage = 0;
+    }
+      
+        
+
+
+
 
         $user           = Auth::user();
-        
         $notifications = $user->notifications;
         $today = Carbon::now()->format('d-m-Y');
-        $month = Carbon::now()->format('m-Y');
+        $current_month = Carbon::now()->format('m-Y');
         
-        return view('dash')->with('notifications', $notifications)
-                           ->with('today', $today)
-                           ->with('month', $month)
-                           ->with('year',json_encode($year,JSON_NUMERIC_CHECK))
+        // dd(json_encode($months));
+        return view('dash')->with('today', $today)
+                           ->with('current_month', $current_month)
+                           ->with('months', $months)
+                           ->with('monthCountEngins', json_encode($monthCountEngins, JSON_NUMERIC_CHECK))
+                           ->with('data', $data)
+                           ->with('previsionMontant', $previsionMontant)
+                           ->with('poucentage', $poucentage)
                            ->with('total_sales', $total_sales)
-                           ->with('user',json_encode($user,JSON_NUMERIC_CHECK));
+                           ->with('vignetted_engin_count', $vignetted_engin_count)
+                           ->with('user_count', $user_count);
       }
        return redirect()->route("get_admin_login")->withSuccess('Opps! You do not have access');
     }
@@ -318,11 +370,11 @@ public function sendOPT($phone, $code)
 //dd($response);
 
 
-    $OTP = Nexmo::message()->send([
-                                    'to'   => '+223'.$phone,
-                                    'from' => '+22369141418',
-                                    'text' => "ikaVignetti, code de confirmation ".$code.". ",
-                                    ]);
+    // $OTP = Nexmo::message()->send([
+    //                                 'to'   => '+223'.$phone,
+    //                                 'from' => '+22369141418',
+    //                                 'text' => "ikaVignetti, code de confirmation ".$code.". ",
+    //                                 ]);
 
    
     

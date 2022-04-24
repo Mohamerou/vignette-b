@@ -31,7 +31,7 @@ class AgentController extends Controller
      */
     public function __construct()
     {        
-        $this->middleware('can:comptable');      
+        $this->middleware('can:comptable-public');      
     }
     
 
@@ -48,10 +48,10 @@ class AgentController extends Controller
         $user_list  = [];
 
         foreach ($users as $user) {
-            if ($user->hasRole('agent')) {
+            if ($user->hasRole('guichet')) {
                 $user_list[] = [
                     'user' => $user,
-                    'role' => 'Agent',
+                    'role' => 'guichet',
                 ];
             }
         }
@@ -76,7 +76,7 @@ class AgentController extends Controller
         $roles          = Role::all();
 
         foreach ($roles as $role) {
-            if ($role->name != 'agent') {
+            if ($role->name != 'guichet') {
             }else {
                 $role_list[] = $role;
 
@@ -113,7 +113,7 @@ class AgentController extends Controller
 
         
         foreach ($roles as $role) {
-            if ($role->name != 'agent') {
+            if ($role->name != 'guichet') {
             }else {
                 if ($user->hasRole($role->name)) {
                     $user_current_role = $role->id;
@@ -219,7 +219,7 @@ class AgentController extends Controller
         // } 
         
 
-        $role = Role::select('id')->where('name', 'agent')->first();
+        $role = Role::select('id')->where('name', 'guichet')->first();
 
         $User->roles()->attach($role);
         $User->save();
@@ -235,6 +235,7 @@ class AgentController extends Controller
 
         $agent_data = [
             'email'         => $User->email,
+            'phone'         => $User->phone,
             'password'      => $password,
             'agent_fullname'    => $data['firstname']." ".$data['lastname'],
         ];

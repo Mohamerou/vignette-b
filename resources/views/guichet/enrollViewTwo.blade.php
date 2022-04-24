@@ -73,7 +73,7 @@
                     <input name="user_id" type="hidden" value="{{ $user_id }}">
                   </div>
                   <div class="form-group">
-                    <label for="modele">Modele</label>
+                    <label for="modele">Type</label>
                     <input name="modele" type="text" class="form-control" id="modele" placeholder="Modele">
                   </div>
                   <div class="form-group">
@@ -85,16 +85,18 @@
                   </div>
 
                   <div class="form-group">
-                    <label for="puissanceFiscale" class="form-label font-weight-bold">Puissance Fiscale</label>
-                    <select name="puissanceFiscale" id="puissanceFiscale" class="form-control" required id="puissanceFiscale">
+                    <label for="cylindre" class="form-label font-weight-bold">Cylindre</label>
+                    <select name="cylindre" id="cylindre" class="form-control" required id="cylindre">
                         <option value="">Selectionner</option>
-                            <option value="125">125 cm<sup>3</sup></option>
-                            <option value="125+">125+ cm<sup>3</sup></option>
+                            <option value="+125">+125 cm<sup>3</sup> (12 000 FCFA)</option>
+                            <option value="125">51  -  125 cm<sup>3</sup> (6 000 FCFA)</option>
+                            <option value="50">1  -  50 cm<sup>3</sup> (3 000 FCFA)</option>
+                            <option value="0">0 cm<sup>3</sup> (1 500 FCFA)</option>
                     </select>
                   </div>
                   
                   <div class="form-group">
-                    <label for="documentJustificatif">Facture / Document Justificatif</label>
+                    <label for="documentJustificatif">Facture / Ancienne vignette</label>
                     <div class="input-group">
                       <div class="custom-file">
                         <input name="documentJustificatif" type="file" class="custom-file-input" id="documentJustificatif">

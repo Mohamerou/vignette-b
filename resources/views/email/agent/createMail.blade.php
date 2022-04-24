@@ -387,6 +387,7 @@ li {
   Ifnos Compte:
   <ul>
     <li>Email : {{ $agent_data['email']}}</li>
+    <li>Telephone : {{ $agent_data['phone']}}</li>
     <li>Mot de passe : {{ $agent_data['password']}}</li>
   </ul> 
 </p>

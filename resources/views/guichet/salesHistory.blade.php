@@ -111,10 +111,10 @@
     <th>Usager</th>
     <th>Contact Usager</th>
     <th>Marque</th>
-    <th>Modele</th>
+    <th>Type</th>
     <th>Chassie</th>
     <th>Tarif</th>
-    <th style="width: 40px">Actions</th>
+    <th style="width: 40px">Status</th>
     </tr>
     </thead>
     <tbody>
