@@ -86,7 +86,7 @@
     <th>Usager</th>
     <th>Contact Usager</th>
     <th>Status</th>
-    @can('agent_enroll')
+    @can('guichet')
         <th style="width: 40px">Actions</th>
     @endcan
     </tr>
@@ -101,7 +101,7 @@
                 <td>{{ $pendingEnrolls[$i]['userphone'] }}</td>
                 <td class="text-danger">Attente</td>
 
-                @can('agent_enroll')    
+                @can('guichet')    
                     <td class="text-danger">
                         <a href="{{ route('enrollStepTwo', $pendingEnrolls[$i]['userId']) }}" class="btn btn-warning"><h3>&#8594;</h3></a>
                     </td>

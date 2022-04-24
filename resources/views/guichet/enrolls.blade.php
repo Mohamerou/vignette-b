@@ -95,8 +95,7 @@
     <th>Agent</th>
     <th>Usager</th>
     <th>Contact Usager</th>
-    <th>Status</th>
-    <th style="width: 40px">Actions</th>
+    <th style="width: 40px">Status</th>
     </tr>
     </thead>
     <tbody>
@@ -107,13 +106,7 @@
                 <td>{{ $histories[$i]['agent'] }}</td>
                 <td>{{ $histories[$i]['usager'] }}</td>
                 <td>{{ $histories[$i]['userphone'] }}</td>
-                <td class="text-danger">TRAITE</td>
-
-                @can('agent')    
-                    <td class="text-danger">
-                        <button disabled type="button" class="btn btn-success"><h4>&#x2611;</h4></button>
-                    </td>
-                @endcan
+                <td class="text-danger"><button disabled type="button" class="btn btn-success"><h4>&#x2611;</h4></button></td>
             </tr>
         @endfor
 

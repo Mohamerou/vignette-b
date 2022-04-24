@@ -79,6 +79,16 @@
                     <label for="phone">Contact</label>
                     <input name="phone" type="text" class="form-control" id="phone" placeholder="Telephone">
                   </div>
+
+                  <div class="form-group">
+                    <label for="account_type" class="form-label font-weight-bold">Type de compte</label>
+                    <select name="account_type" id="account_type" class="form-control" required id="account_type">
+                        <option value="">Selectionner</option>
+                            <option value="usager">Usager</option>
+                            <option value="entreprise">Entreprise</option>
+                    </select>
+                  </div>
+
                   <div class="form-group">
                     <label for="address">Adresse</label>
                     <input name="address" type="text" class="form-control" id="address" placeholder="Adresse complet">

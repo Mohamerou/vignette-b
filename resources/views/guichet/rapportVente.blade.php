@@ -164,9 +164,9 @@ tr:hover .cut { opacity: 1; }
 	<body>
 		<header>
 			<h1>Rapport de Vente</h1>
-			<span><img alt="" src="{{asset('images/logo.png')}}"></span>
+			<!-- <span><img alt="" src="{{asset('images/logo.png')}}"></span> -->
 			<address contenteditable style="margin-top:4%">
-				<p>Rapport N :#</p>
+				<p>Rapport N :# {{ $data['fileName'] }}</p>
 				<p>Date : {{date('d-m-Y')}}</p>
 				
 			</address>

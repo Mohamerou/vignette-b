@@ -189,7 +189,7 @@
                 </li>
                 </ul>
             @endcan
-            @can('agent')
+            @can('guichet')
                 <ul class="nav nav-treeview">
                 <li class="nav-item">
                     <a href="/enrollement-1" class="nav-link">
@@ -226,7 +226,7 @@
                 </ul>
           </li>
           @endcan
-          @can('regisseur')
+          @can('regisseur-public')
           <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-copy"></i>
@@ -238,7 +238,7 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ route('salesReport') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Generer un rapport</p>
                 </a>
@@ -278,83 +278,8 @@
             </ul>
           </li>
           @endcan
-          @can('superviseur')
-
-            <li class="nav-item">
-              <!-- <a href="#" class="nav-link">
-                <i class="nav-icon fas fa-copy"></i>
-                <p>
-                  Gestion des Guichets
-                  <i class="fas fa-angle-left right"></i>
-                  
-                </p>
-              </a> -->
-              <ul class="nav nav-treeview">
-                <!-- <li class="nav-item">
-                  <a href="{{ route('guichet.create') }}" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Nouveau Guichet</p>
-                  </a>
-                </li> -->
-                <!-- <li class="nav-item">
-                  <a href="{{ route('guichet.index') }}" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Liste des guichets</p>
-                  </a>
-                </li> -->
-              </ul>
-            </li>
-
-            <li class="nav-item">
-              <a href="#" class="nav-link">
-                <i class="nav-icon fas fa-copy"></i>
-                <p>
-                  Gestion des Agents
-                  <i class="fas fa-angle-left right"></i>
-                  
-                </p>
-              </a>
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                  <a href="{{ route('agent.create') }}" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Nouveau Agent</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="{{ route('agent.index') }}" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Liste des Agents</p>
-                  </a>
-                </li>
-              </ul>
-            </li>
-            <li class="nav-item">
-              <a href="#" class="nav-link">
-                <i class="nav-icon fas fa-copy"></i>
-                <p>
-                  Historiques Ventes
-                  <i class="fas fa-angle-left right"></i>
-                  
-                </p>
-              </a>
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                  <a href="{{ route('salesHistory') }}" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Historique des Ventes</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="{{ route('enroll.index') }}" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Historique des Enrollements</p>
-                  </a>
-                </li>
-              </ul>
-            </li>
-          @endcan
-          @can('comptable')
+          
+          @can('comptable-public')
 
           <li class="nav-item">
             <!-- <a href="#" class="nav-link">
@@ -409,7 +334,7 @@
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-copy"></i>
               <p>
-                Historiques Ventes
+                Historiques
                 <i class="fas fa-angle-left right"></i>
                 
               </p>

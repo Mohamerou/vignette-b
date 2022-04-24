@@ -127,3 +127,10 @@ Route::get('/resend-code/{phone}', [App\Http\Controllers\VerificationController:
    Route::get('/payement', [App\Http\Controllers\PaymentController::class, 'checkoutShow'])->middleware('auth')->name('payement');
    Route::post('/payement', [App\Http\Controllers\PaymentController::class, 'checkout'])->middleware('auth')->name('payement');
    Route::get('/elu', [App\Http\Controllers\eluController::class, 'eluIndex'])->name('elu');
+
+
+   //prevision
+   Route::get('prevision', [App\Http\Controllers\PrevisionController::class, 'index'])->name('prevision.index');
+   Route::post('prevision', [App\Http\Controllers\PrevisionController::class, 'store'])->name('prevision.store');
+   Route::get('prevision/edit/{id}',[App\Http\Controllers\PrevisionController::class, 'edit'])->name('prevision.edit');
+   Route::put('prevision/update/{id}', [App\Http\Controllers\PrevisionController::class, 'update'])->name('prevision.update');

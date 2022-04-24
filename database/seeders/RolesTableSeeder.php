@@ -22,15 +22,19 @@ class RolesTableSeeder extends Seeder
         ]);
 
         Role::create([
-        	'name' => 'comptable'
+        	'name' => 'ordonateur'
         ]);
 
         Role::create([
-        	'name' => 'direction'
+        	'name' => 'controle-gestion'
         ]);
 
         Role::create([
-        	'name' => 'regisseur'
+        	'name' => 'dfm'
+        ]);
+
+        Role::create([
+        	'name' => 'comptable-public'
         ]);
 
         Role::create([
@@ -38,12 +42,12 @@ class RolesTableSeeder extends Seeder
         ]);
 
         Role::create([
-            'name' => 'agent'
-        ]);      
+        	'name' => 'regisseur-public'
+        ]);
 
-        // Role::create([
-        //     'name' => 'agent_enroll'
-        // ]);      
+        Role::create([
+            'name' => 'guichet'
+        ]);   
 
         Role::create([
             'name' => 'user'

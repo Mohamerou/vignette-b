@@ -35,32 +35,38 @@ class AuthServiceProvider extends ServiceProvider
             return $user->hasRole('user');
         });
 
-        Gate::define('agent', function($user){
-            return $user->hasRole('agent');
+        Gate::define('guichet', function($user){
+            return $user->hasRole('guichet');
         });
 
         Gate::define('elu', function($user){
-            return $user->hasRole('elu');
+            if($user->hasRole('elu'))
+                return $user->hasRole('elu');
+            
+            if($user->hasRole('dfm'))
+                return $user->hasRole('dfm');
+
+            if($user->hasRole('ordonateur'))
+                return $user->hasRole('ordonateur');
+
+            if($user->hasRole('controle-gestion'))
+                return $user->hasRole('controle-gestion');
         });
 
-        Gate::define('regisseur', function($user){
-            return $user->hasRole('regisseur');
+        Gate::define('regisseur-public', function($user){
+            return $user->hasRole('regisseur-public');
         });
 
         Gate::define('superviseur', function($user){
             return $user->hasRole('superviseur');
         });
 
-        Gate::define('direction', function($user){
-            return $user->hasRole('direction');
-        });
-
-        Gate::define('comptable', function($user){
+        Gate::define('comptable-public', function($user){
             if($user->hasRole('superviseur'))
                 return $user->hasRole('superviseur');
             
-            if($user->hasRole('comptable'))
-                return $user->hasRole('comptable');
+            if($user->hasRole('comptable-public'))
+                return $user->hasRole('comptable-public');
 
         });
 

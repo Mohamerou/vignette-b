@@ -59,14 +59,18 @@
 		    	<option value="moto">Moto</option>
 		    </select>
 		  </div>
-		  <div class="mb-3">
-		    <label for="type" class="form-label">Type Engin</label>
-		    <select class="form-control" id="type">
-		    	<option value="">Sélectionner</option>
-		    	<option value="auto">Auto</option>
-		    	<option value="moto">Moto</option>
-		    </select>
+
+		  <div class="form-group">
+			<label for="cylindre" class="form-label font-weight-bold">Cylindre</label>
+			<select name="cylindre" id="cylindre" class="form-control" required id="cylindre">
+				<option value="">Selectionner</option>
+					<option value="+125">+125 cm<sup>3</sup> (12 000 FCFA)</option>
+					<option value="125">125 cm<sup>3</sup> (6 000 FCFA)</option>
+					<option value="51">51 cm<sup>3</sup> (3 000 FCFA)</option>
+					<option value="0">0 cm<sup>3</sup> (1 500 FCFA)</option>
+			</select>
 		  </div>
+		
 		  <div class="mb-3">
 		    <label for="exampleInputPassword1" class="form-label">Password</label>
 		    <input type="password" class="form-control" id="exampleInputPassword1">

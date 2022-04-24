@@ -10,6 +10,7 @@ use Validator,Redirect,Response;
 use Auth;
 use Nexmo;
 Use App\Models\User;
+Use App\Models\UsagerAccountType;
 use App\Models\Engins;
 use App\Models\Role;
 use App\Models\AgentRef;
@@ -109,7 +110,11 @@ class EnrollController extends Controller
         $User->roles()->attach($role);
         $User->save();
 
-        $user_pass = 'password';
+        $user_pass      = 'password';
+        $account_type   = UsagerAccountType::create([
+            'user_id' => $User->id,
+            'type'    => $data['account_type'],
+        ]);
 
         $User->password = Hash::make($user_pass);
         $User->isVerified = 1;
@@ -169,38 +174,53 @@ class EnrollController extends Controller
             'modele'                 => 'required|string',
             'mairie' 	             => 'required|string',
             'chassie'                => 'required|string',
-            'puissanceFiscale' 	     => 'required|string',
+            'cylindre' 	     => 'required|string',
             'documentJustificatif' 	 => 'required|file|image|max:10096',
         ]);
 
-        //dd($key);
-        $usager          = User::find($request->user_id);
-        $data            = $request->all();
-        $IfEnginExist    = Engins::where('chassie', $request->chassie)->first();
-        if ($IfEnginExist) {
-            # code...
+        $data           = $request->all();
+        $usager         = User::find($data['user_id']);
+
+        // Check limits
+        $account_type   = UsagerAccountType::where('user_id', $usager->id)
+                                           ->first();
+        $account_type   = $account_type->type;
+        
+        $limit          = Engins::where('userId', $usager->id)->count();
+        if($limit === 4)
+            $limit = true;
+
+        if($account_type === "usager")
+            if($limit)
+                return redirect()->route('enrollStepOne', $usager)
+                                 ->with('error', "Nombre maximal d'enregistrement atteint!");
+
+
+
+        $IfEnginExist    = Engins::where('chassie', $data['chassie'])->first();
+        if ($IfEnginExist)
             return redirect()->route('enrollStepTwo', $usager)
-                             ->with('error', 'Numero de chassie non disponible!')
+                            ->with('error', 'Numero de chassie non disponible!')
+                            ->withInput();
+
+                                    
+        $engin  = $this->createEngin($data);      
+        
+
+        // $idCardLoaded       = $this->storeIdCard($User);
+        $documentJustificatifLoaded    = \Storage::disk('public')->putFile('DocumentsEngins', $request->file('documentJustificatif'));
+        if($documentJustificatifLoaded == False)
+        {
+            $engin->delete();
+            return redirect()->route('enrollStepTwo', $usager)
+                             ->with('error', 'Erreur d\'enregistrement! Vérifier votre connexion internet puis réessayer.')
                              ->withInput();
         }
 
-        $engin               = $this->createEngin($data);
-
-        // $idCardLoaded       = $this->storeIdCard($User);
-        $documentJustificatifLoaded   = \Storage::disk('public')->putFile('DocumentsEngins', $request->file('documentJustificatif'));
         $history = EnrollHistory::where('userId', $usager->id)->first();
         $history->enginId   = $engin->id;
         $history->save();
 
-        
-        if($documentJustificatifLoaded == False){
-
-            $engin->delete();
-            return redirect()->route('enrollList')
-                             ->with('error', 'Erreur d\'enregistrement! Vérifier votre connexion internet puis réessayer.')
-                             ->withInput();
-        }
-        
         return $this->sendOTPEngin($usager->phone, $request->marque, $request->modele, $request->chassie); 
     }
 
@@ -267,8 +287,7 @@ class EnrollController extends Controller
     private function storeIdCard($user)
     {
 
-
-        if (request()->has('idCard')) {dd('hi');
+        if (request()->has('idCard')) {
             $user->update([
                 'idCard' => request()->idCard->store('uploads/userIdCard', 'public'),
             ]);
@@ -294,6 +313,8 @@ class EnrollController extends Controller
         return $user;
     }
 
+
+
     public function createEngin(array $data)
     {
         $engin =  Engins::create([
@@ -302,19 +323,27 @@ class EnrollController extends Controller
             'modele'            => $data['modele'],
             'mairie'            => Auth::user()->administration,
             'chassie' 	        => $data['chassie'],
-            'puissanceFiscale' 	=> $data['puissanceFiscale'],
+            'cylindre' 	        => $data['cylindre'],
         ]);
         
         $tarif = 0;
-        if ($engin->puissanceFiscale === "125") {
-            $engin->tarif = 6000;
-            $engin->save();
-        }
 
-        if ($engin->puissanceFiscale === "125+") {
+        if ($engin->cylindre === "+125")
             $engin->tarif = 12000;
             $engin->save();
-        }
+
+        if ($engin->cylindre === "125")
+            $engin->tarif = 6000;
+            $engin->save();
+
+        if ($engin->cylindre === "51")
+            $engin->tarif = 3000;
+            $engin->save();
+
+        if ($engin->cylindre === "0")
+            $engin->tarif = 1500;
+            $engin->save();
+
 
         return $engin;
     }

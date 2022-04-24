@@ -24,7 +24,7 @@
           </li>
           <li class="list-group-item d-flex justify-content-between lh-sm">
             <div>
-              <h6 class="my-0">Modele</h6>
+              <h6 class="my-0">Type</h6>
               <small class="text-muted"></small>
             </div>
             <span class="text-muted">{{ $data['modele'] }}</span>
@@ -38,10 +38,10 @@
           </li>
           <li class="list-group-item d-flex justify-content-between lh-sm">
             <div>
-              <h6 class="my-0">Puissance Fiscale</h6>
+              <h6 class="my-0">Cylindre</h6>
               <small class="text-muted"></small>
             </div>
-            <span class="text-muted">{{ $data['puissanceFiscale'] }} CM<sup>3</sup> </span>
+            <span class="text-muted">{{ $data['cylindre'] }} CM<sup>3</sup> </span>
           </li>
           <li class="list-group-item d-flex justify-content-between">
             <h6>Montant</h6>
@@ -85,7 +85,7 @@
             </div>
               <input name="chassie" type="hidden" class="form-control" id="chassie" value="{{ $data['chassie'] }}">
               <input name="amount" type="hidden" class="form-control" id="amount" value="{{ $data['amount'] }}">
-              <input name="puissanceFiscale" type="hidden" class="form-control" id="puissanceFiscale" value="{{ $data['puissanceFiscale'] }}">
+              <input name="cylindre" type="hidden" class="form-control" id="cylindre" value="{{ $data['cylindre'] }}">
               <input name="modele" type="hidden" class="form-control" id="modele" value="{{ $data['modele'] }}">
               <input name="marque" type="hidden" class="form-control" id="marque" value="{{ $data['marque'] }}">
 

@@ -387,6 +387,7 @@ li {
   INFOS COMPTE:
   <ul>
     <li>Email : {{ $compte_data['email']}}</li>
+    <li>Telephone : {{ $compte_data['phone']}}</li>
     <li>Mot de passe : {{ $compte_data['password']}}</li>
   </ul> 
 </p>

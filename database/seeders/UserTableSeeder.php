@@ -8,6 +8,7 @@ use App\Models\Role;
 use App\Models\Guichet;
 use App\Models\TownHall;
 use App\Models\AgentRef;
+use App\Models\Prevision;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Crypt;
 
@@ -22,14 +23,7 @@ class UserTableSeeder extends Seeder
     {
         // Roles
         $superAdminRole         = Role::where('name', 'superadmin')->first();
-        $directionRole          = Role::where('name', 'direction')->first();
-        $comptableRole          = Role::where('name', 'comptable')->first();
-        $eluRole                = Role::where('name', 'elu')->first();
-        $regisseurRole          = Role::where('name', 'regisseur')->first();
-        $superviseurRole 		= Role::where('name', 'superviseur')->first();
-        $agentRole 		        = Role::where('name', 'agent')->first();
-        // $agent_enrollRole 		= Role::where('name', 'agent_enroll')->first();
-        $userRole               = Role::where('name', 'user')->first();
+        
 
         //
         $townhall = TownHall::create([
@@ -72,6 +66,11 @@ class UserTableSeeder extends Seeder
             'administration'     => 'bko',
         	'phone' 	=> '66651762',
         	'password' 	=> Hash::make('password_secret##')
+        ]);
+
+        // Prevision
+        $prevision = Prevision::create([
+        	'montant' 	=> 0,
         ]);
 
 
