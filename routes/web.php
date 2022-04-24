@@ -62,13 +62,24 @@ Route::get('/resend-code/{phone}', [App\Http\Controllers\VerificationController:
 
 
 	// 	Administration Routes
+	Route::get('/super', [App\Http\Controllers\Administration\SuperAdminController::class, 'index'])->middleware('auth')->name("superadmin.index");
+	Route::get('/super/create', [App\Http\Controllers\Administration\SuperAdminController::class, 'create'])->middleware('auth')->name("superadmin.create");
+	Route::get('/super/edit/{id}', [App\Http\Controllers\Administration\SuperAdminController::class, 'edit'])->middleware('auth')->name("superadmin.edit");
+	Route::put('/super/update/{id}', [App\Http\Controllers\Administration\SuperAdminController::class, 'update'])->middleware('auth')->name("superadmin.update");
+	Route::post('/super/create', [App\Http\Controllers\Administration\SuperAdminController::class, 'store'])->middleware('auth')->name("superadmin.store");
+	Route::delete('/super/delete/{id}', [App\Http\Controllers\Administration\SuperAdminController::class, 'destroy'])->middleware('auth')->name("superadmin.destroy");
+
 	Route::get('/adminsh', [App\Http\Controllers\AuthController::class, 'admin_login'])->name("get_admin_login");
 	Route::get('/admin-dashboard', [App\Http\Controllers\AuthController::class, 'adminDashboard'])->middleware('auth')->name("get_admin_dash");
 	Route::get('/examiner/{usagerId}/{enginId}/{notificationId}/{demandeTrackId}', [App\Http\Controllers\Administration\GestionVignettesController::class, 'examinerDemande'])->middleware('auth')->name('examinerDemande');
 	Route::post('/ikvUE-validation/{enginId}/{notificationId}/{usager}/{demandeTrackId}', [App\Http\Controllers\Administration\GestionVignettesController::class, 'demandeValidation'])->middleware('auth')->name('validerDemande');
 
 	Route::get('/nouveau-agent', [App\Http\Controllers\Administration\AgentController::class, 'createShow'])->middleware('auth')->name("agent.create");
-	Route::post('/nouveau-agent', [App\Http\Controllers\Administration\AgentController::class, 'postCreate'])->middleware('auth')->name("agent.postCreate");
+	Route::post('/nouveau-agent', [App\Http\Controllers\Administration\AgentController::class, 'store'])->middleware('auth')->name("agent.store");
+	Route::get('/agents', [App\Http\Controllers\Administration\AgentController::class, 'index'])->middleware('auth')->name("agent.index");
+	Route::get('/agent/edit/{id}', [App\Http\Controllers\Administration\AgentController::class, 'edit'])->middleware('auth')->name("agent.edit");
+	Route::put('/agent/update/{id}', [App\Http\Controllers\Administration\AgentController::class, 'update'])->middleware('auth')->name("agent.update");
+	Route::delete('/agent/delete/{id}', [App\Http\Controllers\Administration\AgentController::class, 'destroy'])->middleware('auth')->name("agent.destroy");
 
 
 	Route::get('/enrollHistory', [App\Http\Controllers\Administration\HistoryController::class, 'enrollHistory'])->middleware('auth')->name("enrollHistory");
@@ -89,15 +100,21 @@ Route::get('/resend-code/{phone}', [App\Http\Controllers\VerificationController:
 
 	Route::get('enrollList', [App\Http\Controllers\Guichet\EnrollController::class, 'enrollList'])->middleware('auth')->name('enrollList');
 	Route::get('enrolls', [App\Http\Controllers\Guichet\EnrollController::class, 'index'])->middleware('auth')->name('enroll.index');
+	Route::get('csv-list', [App\Http\Controllers\Guichet\SalesController::class, 'csv_print_list'])->middleware('auth')->name('csv.list');
+	Route::get('csv/{enginId}', [App\Http\Controllers\Guichet\SalesController::class, 'csv'])->middleware('auth')->name('csv');
 
 
 
 	// Sales routes
 	Route::get('sales/index', [App\Http\Controllers\Guichet\SalesController::class, 'pendingSales'])->middleware('auth')->name('pendingSales');
-	Route::post('sales/checkout/', [App\Http\Controllers\Guichet\SalesController::class, 'stepOne'])->middleware('auth')->name('salesStepOne');
+	Route::get('sales/checkout/{enginId}', [App\Http\Controllers\Guichet\SalesController::class, 'stepOne'])->middleware('auth')->name('salesStepOne');
 	Route::post('sales/checkout/process', [App\Http\Controllers\Guichet\SalesController::class, 'stepTwo'])->middleware('auth')->name('salesStepTwo');
+	Route::get('sales/history', [App\Http\Controllers\Guichet\SalesController::class, 'salesHistory'])->middleware('auth')->name('salesHistory');
+	Route::post('sales/history', [App\Http\Controllers\Guichet\SalesController::class, 'salesHistoryPost'])->middleware('auth')->name('salesHistorypost');
+	Route::get('sales/report', [App\Http\Controllers\Guichet\SalesController::class, 'salesReport'])->middleware('auth')->name('salesReport');
+	Route::get('sales/reportFilter/{}', [App\Http\Controllers\Guichet\SalesController::class, 'salesReportFilter'])->middleware('auth')->name('salesReportFilter');
 	Route::any('sales/checkout/notify', [App\Http\Controllers\PaymentController::class, 'notify'])->name('salesCheckoutNotify');
-	Route::get('sales/checkout/return', [App\Http\Controllers\PaymentController::class, 'return'])->name('salesCheckoutNotify');
+	Route::get('sales/checkout/return', [App\Http\Controllers\PaymentController::class, 'return'])->name('salesCheckoutReturn');
 	
 
 // Vignette verification routes

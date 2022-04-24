@@ -15,10 +15,8 @@ class CreateSalesHistoriesTable extends Migration
     {
         Schema::create('sales_histories', function (Blueprint $table) {
             $table->id();
-            $table->string('townHallRef', 255);
-            $table->string('agentRef', 255);
-            $table->string('guichet', 255);
-            $table->string('userId', 255);
+            $table->string('enrollId', 255);
+            $table->bigInteger('agentRef');
             $table->timestamps();
         });
     }

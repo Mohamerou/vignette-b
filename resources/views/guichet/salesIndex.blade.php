@@ -31,7 +31,7 @@
 <div class="container-fluid">
 <div class="row mb-2">
 <div class="col-sm-6">
-    <h1>Enrollements Recent</h1>
+    <h1>Panel de Vente</h1>
 </div>
 </div>
 </div>
@@ -75,40 +75,36 @@
 
 <div class="card px-4">
     <div class="card-header">
-    <h3 class="card-title">VENTE : ATTENTE</h3>
+    <h3 class="card-title">Panel de Vente</h3>
     </div>
 
     <div class="card-body p-0">
-    <table class="table table-striped">
+    <table id="example" class="table table-striped table-hover table-bordered">
     <thead>
     <tr>
-    <th>Guichet</th>
+    <th>Agent</th>
     <th>Usager</th>
     <th>Contact Usager</th>
-    <th>Chassie Engin</th>
-    <th style="width: 40px">Status</th>
-    <th style="width: 40px">Action</th>
+    <th>Status</th>
+    <th style="width: 40px">Actions</th>
     </tr>
     </thead>
     <tbody>
 
-        @for ($i=0; $i < count($pendingSales); $i++)
-        <tr>
-            <td>{{ $pendingSales[$i]['guichet'] }}</td>
-            <td>{{ $pendingSales[$i]['usager'] }}</td>
-            <td>{{ $pendingSales[$i]['userphone'] }}</td>
-            <td>{{ $pendingSales[$i]['chassie'] }}</td>
-            <td class="text-danger">Attente</td>
-            <td>
-                <form action="{{ route('salesStepOne') }}" method="post">
-                    @csrf
-                    <input required name="enrollId" type="hidden" value={{ $pendingSales[$i]['enrollId'] }}>
-                    <button type="submit" class="btn btn-primary">CAISSE </button>
-                </form>
-            </td>
 
-        </tr>
+        @for($i=0; $i < count($pendingSales); $i++)
+            <tr>
+                <td>{{ $pendingSales[$i]['agent'] }}</td>
+                <td>{{ $pendingSales[$i]['usager'] }}</td>
+                <td>{{ $pendingSales[$i]['userphone'] }}</td>
+                <td class="text-danger">Operation Caisse</td>    
+                <td class="text-danger">
+                    <a href="{{ route('salesStepOne', $pendingSales[$i]['enginId']) }}" class="btn btn-success"><h4>CAISSE</h4></a>
+                </td>
+            </tr>
         @endfor
+
+
     </tbody>
     </table>
     </div>
@@ -127,12 +123,6 @@
 
 </div>
 @endsection 
-
-
-
-
-
-
 
 
 

@@ -15,13 +15,12 @@ class CreateEnrollHistoriesTable extends Migration
     {
         Schema::create('enroll_histories', function (Blueprint $table) {
             $table->id();
-            $table->string('townHallRef', 255);
+            $table->string('townHallRef', 255)->nullable();
             $table->string('agentRef', 255);
             $table->string('agentName', 255);
             $table->string('agentPhone', 255);
-            $table->string('guichetRef', 255);
             $table->bigInteger('userId');
-            $table->bigInteger('enginId')->nullable();
+            $table->bigInteger('enginId')->unique()->nullable();
             $table->boolean('status')->default('0');
             $table->timestamps();
         });

@@ -20,6 +20,7 @@ class CreateVignettesTable extends Migration
             $table->string('unique_token');
             $table->string('qr')->nullable();
             $table->string('qr_download_path')->nullable();
+            $table->boolean('status')->default(1);
             $table->timestamp('expired_at')->nullable();
             $table->timestamps();
         });

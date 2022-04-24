@@ -37,7 +37,6 @@ class ProcessAgentCreate implements ShouldQueue
      */
     public function handle()
     {
-
         Mail::to($this->agent_data['email'])->send(new AgentCreateMail($this->agent_data));
     }
 }

@@ -10,7 +10,8 @@ class PaymentController extends Controller
 
      public function checkoutShow(Request $request) 
      {
-           return view('user.checkout');
+            // dd($request);
+           return view('payment');
      }
 
 

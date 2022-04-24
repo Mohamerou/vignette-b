@@ -22,11 +22,13 @@ class UserTableSeeder extends Seeder
     {
         // Roles
         $superAdminRole         = Role::where('name', 'superadmin')->first();
+        $directionRole          = Role::where('name', 'direction')->first();
+        $comptableRole          = Role::where('name', 'comptable')->first();
         $eluRole                = Role::where('name', 'elu')->first();
-        $reporteurRole          = Role::where('name', 'reporteur')->first();
+        $regisseurRole          = Role::where('name', 'regisseur')->first();
         $superviseurRole 		= Role::where('name', 'superviseur')->first();
-        $agent_venteRole 		= Role::where('name', 'agent_vente')->first();
-        $agent_enrollRole 		= Role::where('name', 'agent_enroll')->first();
+        $agentRole 		        = Role::where('name', 'agent')->first();
+         $agent_enrollRole 		= Role::where('name', 'agent_enroll')->first();
         $userRole               = Role::where('name', 'user')->first();
 
         //
@@ -85,8 +87,8 @@ class UserTableSeeder extends Seeder
         	'password' 	         => Hash::make('password')
         ]);
 
-        $reporteur = User::create([
-        	'lastname' 	=> 'Reporteur General',
+        $regisseur = User::create([
+        	'lastname' 	=> 'Regisseur General',
         	'firstname' => 'Mr le',
         	'gender' 	=> 1,
         	'avatar' 	=> 'male.png',
@@ -110,8 +112,8 @@ class UserTableSeeder extends Seeder
         	'password' 	         => Hash::make('password')
         ]);
 
-        $agent1_vente = User::create([
-        	'lastname' 	=> 'Vente',
+        $agent          = User::create([
+        	'lastname' 	=> 'Agent',
         	'firstname' => 'Agent',
         	'gender' 	=> 1,
         	'avatar' 	=> 'male.png',
@@ -142,24 +144,23 @@ class UserTableSeeder extends Seeder
         	'avatar' 	=> 'male.png',
         	'address' 	=> 'Daoudabougou',
             'isverified'=> 1,
-        	'phone' 	=> '60690343',
+        	'phone' 	=> '60690345',
         	'password' 	=> Hash::make('password')
         ]);
 
 
         // Agent References
 
-        $agent_enroll1_ref  = AgentRef::create([
+        $agentRef  = AgentRef::create([
             'townHallref'       => $superviseur->administration,
-            'guichetRef'        => $guichet_enroll1->ref,
-            'agentId'           => $agent1_enroll->id,
+            'agentId'           => $agent->id,
         ]);
 
-        $agent_vente1_ref   = AgentRef::create([
-            'townHallref'       => $superviseur->administration,
-            'guichetRef'        => $guichet_vente1->ref,
-            'agentId'           => $agent1_vente->id,
-        ]);
+        // $agent_vente1_ref   = AgentRef::create([
+        //     'townHallref'       => $superviseur->administration,
+        //     'guichetRef'        => $guichet_vente1->ref,
+        //     'agentId'           => $agent1_vente->id,
+        // ]);
 
 
         
@@ -168,11 +169,11 @@ class UserTableSeeder extends Seeder
         $superAdmin->roles()->attach($superAdminRole);
         $elu->roles()->attach($eluRole);
 
-        $reporteur->roles()->attach($reporteurRole);
+        $regisseur->roles()->attach($regisseurRole);
         $superviseur->roles()->attach($superviseurRole);
 
-        $agent1_enroll->roles()->attach($agent_enrollRole);
-        $agent1_vente->roles()->attach($agent_venteRole);
+        $agent->roles()->attach($agentRole);
+        // $agent1_vente->roles()->attach($agent_venteRole);
 
         $usager->roles()->attach($userRole);
     }

@@ -53,7 +53,7 @@
 		    <input disabled value="51-125 CM3" name="uiDescription" type="text" class="form-control" id="disabledTextInput">
 		  </div>
 
-		  <input hidden value="moto51-125" name="puissanceFiscale" type="text" class="form-control">
+		  <input hidden value="125" name="puissanceFiscale" type="text" class="form-control">
 
 		  <div class="mb-3">
 		    <label for="Tarif" class="form-label font-weight-bold">Tarif</label>

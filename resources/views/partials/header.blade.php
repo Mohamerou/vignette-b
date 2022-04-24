@@ -32,7 +32,7 @@
                         <li><a  data-scroll href="{{ route('login') }}">Se connecter</a></li>
 
                         @if (Route::has('register'))
-                           <!-- <li><a data-scroll href="{{ route('register') }}">Créer un Compte</a></li> -->
+                           <li><a data-scroll href="{{ route('register') }}">Créer un Compte</a></li>
                         @endif
                     @endauth
                 

@@ -11,6 +11,9 @@ use Validator,Redirect,Response;
 Use App\Models\User;
 use App\Models\Role;
 use App\Models\TempVerificationCode;
+use App\Models\Engins;
+use App\Models\Vignettes;
+use App\Models\EnrollHistory;
 //use App\Models\administration;
 //use App\Models\DemandesVignette;
 use Illuminate\Support\Facades\Hash;
@@ -83,20 +86,23 @@ class AuthController extends Controller
 
         if (Auth::attempt(['phone' => $phone, 'password' => $password])) {
 
+
             $user = User::where('phone', $request->phone)->first();
+
+            // dd($user);
             if ($user->isverified != 1) {
                 return redirect()->route('resend_code',['phone' => $phone]);
             }
 
-            if($user->hasRole('superadmin') || $user->hasRole('elu')){
+            if($user->hasRole('superadmin') || $user->hasRole('elu') || $user->hasRole('comptable')){
                 return Redirect('admin-dashboard');
             }
 
-            if($user->hasRole('reporteur') || $user->hasRole('superviseur')){
+            if($user->hasRole('regisseur') || $user->hasRole('superviseur')){
                 return Redirect('admin-dashboard');
             }
 
-            if($user->hasRole('agent_vente') || $user->hasRole('agent_enroll')){
+            if($user->hasRole('agent')){
                 return Redirect('admin-dashboard');
             }
 
@@ -151,6 +157,15 @@ class AuthController extends Controller
         $User->roles()->attach($role);
         $User->save();
 
+
+        // Enroll History backUp
+        $history = new EnrollHistory();
+        $history->agentRef      =   $User->id;
+        $history->agentName     =   $User->firstname;
+        $history->agentPhone    =   $User->phone;
+        $history->userId        =   $User->id;
+        $history->save();
+
         return $this->sendOPT($telephone, $code);
     
        
@@ -179,14 +194,21 @@ class AuthController extends Controller
       if(Auth::check()){
 
         $year = ['2021','2022','2023','2024','2025','2026'];
+        $total_sales = 0;
 
         $user = [];
-        foreach ($year as $key => $value) {
-            $user[] = User::where(\DB::raw("DATE_FORMAT(created_at, '%Y')"),$value)->count();
-        }
+        // foreach ($year as $key => $value) {
+        //     $user[] = User::where(\DB::raw("DATE_FORMAT(created_at, '%Y')"),$value)->count();
+        // }
 
 
-        $user = Auth::user();
+        $vignettes      = Vignettes::where('status', 1)->get();
+        foreach ($vignettes as $vignette) {
+            $engin      = Engins::find($vignette->enginId);
+            $total_sales += $engin->tarif;
+        }     
+
+        $user           = Auth::user();
         
         $notifications = $user->notifications;
         $today = Carbon::now()->format('d-m-Y');
@@ -196,6 +218,7 @@ class AuthController extends Controller
                            ->with('today', $today)
                            ->with('month', $month)
                            ->with('year',json_encode($year,JSON_NUMERIC_CHECK))
+                           ->with('total_sales', $total_sales)
                            ->with('user',json_encode($user,JSON_NUMERIC_CHECK));
       }
        return redirect()->route("get_admin_login")->withSuccess('Opps! You do not have access');

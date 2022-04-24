@@ -16,12 +16,6 @@ class CreatePendingEnrollsTable extends Migration
         Schema::create('pending_enrolls', function (Blueprint $table) {
             $table->id();
             $table->string('user_id');
-            $table->string('user_id');
-            $table->string('user_id');
-            $table->string('user_id');
-            $table->string('user_id');
-            $table->string('user_id');
-            $table->string('user_id');
             $table->timestamps();
         });
     }
