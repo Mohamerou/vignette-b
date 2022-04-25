@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Guichet;
 
 use App\Http\Controllers\Controller;
+use App\Models\Agent;
 use Illuminate\Http\Request;
 use App\Notifications\DemandeVignette;
 use App\Notifications\DemandeValider;
@@ -23,7 +24,8 @@ use App\Models\Engins;
 use App\Models\Vignettes; 
 use App\Models\EnrollHistory; 
 use App\Models\SalesHistory;  
-use App\Models\Payment; 
+use App\Models\Payment;
+use Illuminate\Support\Facades\DB as FacadesDB;
 
 class SalesController extends Controller
 {
@@ -356,12 +358,29 @@ class SalesController extends Controller
 
 
 
-    public function salesHistory()
+    public function salesHistory(Request $request)
     {
-        $SalesHistories = SalesHistory::take(30)->orderBy('updated_at', 'desc')->get();
-
-      
-
+        $date     = $request->date;
+        $agent    = $request->agent;
+        if (!empty($agent)) {
+            if ($agent == 'all') {
+                if (empty($date)) {
+                    $SalesHistories = SalesHistory::take(30)->orderBy('updated_at', 'desc')->get();
+                } else {
+                    $SalesHistories = DB::table('SalesHistorys')
+                                      ->Where('updated_at', '=', $date)
+                                        ->orderBy('updated_at', 'desc')->get();
+                }
+            } else {
+                $SalesHistories = DB::table('SalesHistorys')
+                                      ->where('updated_at', '=', $date)
+                                      ->where('agentRef', '=', $agent)
+                                        ->orderBy('updated_at', 'desc')->get();
+            }
+        } else {
+            $SalesHistories = SalesHistory::take(30)->orderBy('updated_at', 'desc')->get();
+        }
+    
         $user_list       = [];
         $engin_list      = [];
         $totalSales      = 0;
@@ -392,10 +411,71 @@ class SalesController extends Controller
 
 
         $SalesHistories = $user_list;
- 
+        $agentList = Agent::all();
         return view('guichet/salesHistory')
                 ->with('SalesHistories', $SalesHistories)
-                ->with('totalSales', $totalSales);
+                ->with('totalSales', $totalSales)
+                ->with('allagent',$agentList);
+    }
+    public function salesHistoryPost(Request $request)
+    {
+        $date     = $request->date;
+        $agent    = $request->agent;
+        $currentYear = Date('Y-m-d'); 
+        if (!empty($agent)) {
+            if ($agent == 'all') {
+                if (empty($date)) {
+                    $SalesHistories = SalesHistory::whereYear('created_at', $currentYear)->orderBy('updated_at', 'desc')->get();
+                } else {
+                    $SalesHistories = DB::table('SalesHistorys')
+                                      ->WhereDate('created_at', '=', $date)
+                                        ->orderBy('created_at', 'desc')->get();
+                }
+            } else {
+                $SalesHistories = DB::table('SalesHistorys')
+                                      ->where('created_at', '=', $date)
+                                      ->where('agentRef', '=', $agent)
+                                        ->orderBy('created_at', 'desc')->get();
+            }
+        } else {
+            $SalesHistories = SalesHistory::whereYear('created_at', $currentYear)->orderBy('updated_at', 'desc')->get();
+        }
+    
+        $user_list       = [];
+        $engin_list      = [];
+        $totalSales      = 0;
+
+        foreach($SalesHistories as $SalesHistory){
+            $enrollHistory  = EnrollHistory::find($SalesHistory->enrollId);
+            $agent_vente    = User::find($SalesHistory->agentRef);
+            $user           = User::find($enrollHistory->userId);
+            $engin          = Engins::find($enrollHistory->enginId);
+            $vignette       = Vignettes::where('enginId', $enrollHistory->enginId)
+                                  ->first();
+
+            if ($vignette) {
+
+                $totalSales += $engin->tarif;
+
+                $user_list[]    = [
+                    'usager'    => $user->firstname." ".$user->lastname,
+                    'userphone' => $user->phone,
+                    'marque'    => $engin->marque,
+                    'modele'    => $engin->modele,
+                    'chassie'   => $engin->chassie,
+                    'agent'     => $agent_vente->firstname.' - '.$agent_vente->phone,
+                    'tarif'     => $engin->tarif,
+                ];
+            } 
+        }
+
+
+        $SalesHistories = $user_list;
+        $agentList = Agent::all();
+        return view('guichet/salesHistory')
+                ->with('SalesHistories', $SalesHistories)
+                ->with('totalSales', $totalSales)
+                ->with('allagent',$agentList);
     }
 
 
@@ -474,4 +554,7 @@ class SalesController extends Controller
       return $pdf->download($fileName.'.pdf');
     
     }
+
+
+    
 }

@@ -694,6 +694,167 @@
 
 
 <!-- <script>
+<<<<<<< HEAD
+  const labels = [
+    'Janvier',
+    'Février',
+    'Mars',
+    'Avril',
+    'Mai',
+    'ecembre',
+    'Juillet',
+    'Août',
+    'Septembre',
+    'Octobre',
+    'Novembre',
+    'Decembre',
+  ];
+
+  const data = {
+    labels: [
+      'Jan',
+      'Fev',
+      'Mars',
+      'Avr',
+      'Mai',
+      'Juin',
+      'Jul',
+      'Aout',
+      'Sept',
+      'Oct',
+      'Nov',
+      'Dec'
+    ]
+    datasets: [{
+      label: 'Statistique des ventes',
+      borderColor: 'rgb(255, 99, 132)',
+      data: [0, 10, 5, 2, 20, 30, 45,60,30,20,80,70,40],
+      backgroundColor: [
+        'rgb(255,99,132)',
+        'rgb(54,162,235)',
+        'rgb(155,205,89)',
+        'rgb(74,89,23)',
+        'rgb(233,99,87)',
+        'rgb(25,198,132)',
+        'rgb(255,199,132)',
+        'rgb(98,199,12)',
+        'rgb(156,99,126)',
+        'rgb(234,25,65)',
+        'rgb(144,36,132)',
+        'rgb(255,78,67)'
+      ],
+    }]
+  };
+
+  const config = {
+    type: 'doughnut',
+    data: data,
+    options: {}
+  };
+</script>
+<script>
+  const myChart = new Chart(
+    document.getElementById('donutChart'),
+    config
+  );
+</script> -->
+
+
+<!-- Line Chart Representation -->
+<script>
+  const labels = [
+    'Janvier',
+    'Février',
+    'Mars',
+    'Avril',
+    'Mai',
+    'ecembre',
+    'Juillet',
+    'Août',
+    'Septembre',
+    'Octobre',
+    'Novembre',
+    'Decembre',
+  ];
+
+  const data = {
+    labels: labels,
+    datasets: [{
+      label: 'Statistique des ventes',
+      backgroundColor: 'rgb(255, 99, 132)',
+      borderColor: 'rgb(255, 99, 132)',
+      data: [0, 10, 5, 2, 20, 30, 45,60,30,20,80,70,40],
+    }]
+  };
+
+  const config_line = {
+    type: 'line',
+    data: data,
+    options: {}
+  };
+
+
+</script>
+
+
+<!-- Doughnut Chart Representation -->
+<script>
+// <block:setup:1>
+const data_doughnut = {
+  labels: [
+    'Red',
+    'Blue',
+    'Yellow'
+  ],
+  datasets: [{
+    label: 'My First Dataset',
+    data: [300, 50, 100],
+    backgroundColor: [
+      'rgb(255, 99, 132)',
+      'rgb(54, 162, 235)',
+      'rgb(255, 205, 86)'
+    ],
+    hoverOffset: 4
+  }]
+};
+// </block:setup>
+
+// <block:config:0>
+const config_donut = {
+  type: 'doughnut',
+  data: data_doughnut,
+  options: {}
+};
+// </block:config>
+
+// module.exports = {
+//   actions: [],
+//   config: config_donut,
+// };
+</script>
+
+
+
+<script>
+  const myChart = new Chart(
+    document.getElementById('myChart'),
+    config_line
+  );
+
+  const donoughtChart = new Chart(
+    document.getElementById('donoughtChart'),
+    config_donut
+  );
+</script>
+<<<<<<< HEAD
+ 
+=======
+
+
+
+<script>
+=======
+>>>>>>> af2d8799dfab851770c946042e747f6afd532542
 function imprimer(printChart) {
    var printContents = document.getElementById(printChart).innerHTML;
    var originalContents = document.body.innerHTML;
@@ -714,6 +875,9 @@ function imprimer(printChart) {
   var _ydata = {!! json_encode($months) !!};
 </script>
 
+<<<<<<< HEAD
+>>>>>>> 64cc5e1ad934c284ed0425871937102210367c62
+=======
 <script>
 const ctx = document.getElementById('canvas').getContext('2d');
 const myChart = new Chart(ctx, {
@@ -772,5 +936,6 @@ const myChart = new Chart(ctx, {
     new Chart(ctx, chartdata);
   </script> -->
 
+>>>>>>> af2d8799dfab851770c946042e747f6afd532542
 <!-- /.content-wrapper -->
 @endsection

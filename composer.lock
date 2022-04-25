@@ -114,16 +114,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.220.0",
+            "version": "3.220.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "8beb098a2224742b2756e3b40a07593b1e6ff967"
+                "reference": "6687dd0f1f4d121b2de36a202099e702240235c3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/8beb098a2224742b2756e3b40a07593b1e6ff967",
-                "reference": "8beb098a2224742b2756e3b40a07593b1e6ff967",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/6687dd0f1f4d121b2de36a202099e702240235c3",
+                "reference": "6687dd0f1f4d121b2de36a202099e702240235c3",
                 "shasum": ""
             },
             "require": {
@@ -199,9 +199,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.220.0"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.220.2"
             },
-            "time": "2022-04-19T18:17:15+00:00"
+            "time": "2022-04-21T18:18:21+00:00"
         },
         {
             "name": "bacon/bacon-qr-code",
@@ -2367,41 +2367,43 @@
         },
         {
             "name": "lcobucci/jwt",
-            "version": "4.1.5",
+            "version": "4.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lcobucci/jwt.git",
-                "reference": "fe2d89f2eaa7087af4aa166c6f480ef04e000582"
+                "reference": "55564265fddf810504110bd68ca311932324b0e9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lcobucci/jwt/zipball/fe2d89f2eaa7087af4aa166c6f480ef04e000582",
-                "reference": "fe2d89f2eaa7087af4aa166c6f480ef04e000582",
+                "url": "https://api.github.com/repos/lcobucci/jwt/zipball/55564265fddf810504110bd68ca311932324b0e9",
+                "reference": "55564265fddf810504110bd68ca311932324b0e9",
                 "shasum": ""
             },
             "require": {
-                "ext-hash": "*",
-                "ext-json": "*",
                 "ext-mbstring": "*",
                 "ext-openssl": "*",
-                "ext-sodium": "*",
                 "lcobucci/clock": "^2.0",
                 "php": "^7.4 || ^8.0"
             },
             "require-dev": {
-                "infection/infection": "^0.21",
+                "infection/infection": "^0.20",
                 "lcobucci/coding-standard": "^6.0",
-                "mikey179/vfsstream": "^1.6.7",
-                "phpbench/phpbench": "^1.0",
+                "mikey179/vfsstream": "^1.6",
+                "phpbench/phpbench": "^0.17",
                 "phpstan/extension-installer": "^1.0",
                 "phpstan/phpstan": "^0.12",
                 "phpstan/phpstan-deprecation-rules": "^0.12",
                 "phpstan/phpstan-phpunit": "^0.12",
                 "phpstan/phpstan-strict-rules": "^0.12",
                 "phpunit/php-invoker": "^3.1",
-                "phpunit/phpunit": "^9.5"
+                "phpunit/phpunit": "^9.4"
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.0-dev"
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "Lcobucci\\JWT\\": "src"
@@ -2425,7 +2427,7 @@
             ],
             "support": {
                 "issues": "https://github.com/lcobucci/jwt/issues",
-                "source": "https://github.com/lcobucci/jwt/tree/4.1.5"
+                "source": "https://github.com/lcobucci/jwt/tree/4.0.4"
             },
             "funding": [
                 {
@@ -2437,7 +2439,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2021-09-28T19:34:56+00:00"
+            "time": "2021-09-28T19:18:28+00:00"
         },
         {
             "name": "league/commonmark",
@@ -4779,16 +4781,16 @@
         },
         {
             "name": "stripe/stripe-php",
-            "version": "v7.124.0",
+            "version": "v7.125.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stripe/stripe-php.git",
-                "reference": "548e8ef08a86c6c621446082393dc6a1af51076c"
+                "reference": "822c00aa380c10c2a3c55d105c5da72ad577b7c4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/548e8ef08a86c6c621446082393dc6a1af51076c",
-                "reference": "548e8ef08a86c6c621446082393dc6a1af51076c",
+                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/822c00aa380c10c2a3c55d105c5da72ad577b7c4",
+                "reference": "822c00aa380c10c2a3c55d105c5da72ad577b7c4",
                 "shasum": ""
             },
             "require": {
@@ -4833,9 +4835,9 @@
             ],
             "support": {
                 "issues": "https://github.com/stripe/stripe-php/issues",
-                "source": "https://github.com/stripe/stripe-php/tree/v7.124.0"
+                "source": "https://github.com/stripe/stripe-php/tree/v7.125.0"
             },
-            "time": "2022-04-18T23:07:08+00:00"
+            "time": "2022-04-21T22:31:37+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -10211,5 +10213,5 @@
         "php": "^7.3||^8.0"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.2.0"
 }

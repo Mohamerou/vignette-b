@@ -34,23 +34,23 @@ class UserTableSeeder extends Seeder
 
         // Guichets
 
-        // $guichet_enroll1 = Guichet::create([
-        //     'type'          => 'enroll',
-        //     'number'        => '01',
-        //     'townHallRef'   => 'bko',
-        // ]);
+        $guichet_enroll1 = Guichet::create([
+            'type'          => 'enroll',
+            'number'        => '01',
+            'townHallRef'   => 'bko',
+        ]);
 
-        // $guichet_enroll1->ref = $guichet_enroll1->type.$guichet_enroll1->number;
-        // $guichet_enroll1->save();
+        $guichet_enroll1->ref = $guichet_enroll1->type.$guichet_enroll1->number;
+        $guichet_enroll1->save();
         
-        // $guichet_vente1 = Guichet::create([
-        //     'type'          => 'vente',
-        //     'number'        => '01',
-        //     'townHallRef'   => 'bko',
-        // ]);
+        $guichet_vente1 = Guichet::create([
+            'type'          => 'vente',
+            'number'        => '01',
+            'townHallRef'   => 'bko',
+        ]);
 
-        // $guichet_vente1->ref = $guichet_vente1->type.$guichet_vente1->number;
-        // $guichet_vente1->save();
+        $guichet_vente1->ref = $guichet_vente1->type.$guichet_vente1->number;
+        $guichet_vente1->save();
         
 
 
@@ -148,7 +148,7 @@ class UserTableSeeder extends Seeder
         // ]);
 
 
-        // Agent References
+        // // Agent References
 
         // $agentRef  = AgentRef::create([
         //     'townHallref'       => $superviseur->administration,
@@ -165,14 +165,14 @@ class UserTableSeeder extends Seeder
         
 
 
-        $superAdmin->roles()->attach($superAdminRole);
+         $superAdmin->roles()->attach($superAdminRole);
         // $elu->roles()->attach($eluRole);
 
         // $regisseur->roles()->attach($regisseurRole);
         // $superviseur->roles()->attach($superviseurRole);
 
         // $agent->roles()->attach($agentRole);
-        // $agent1_vente->roles()->attach($agent_venteRole);
+        // // $agent1_vente->roles()->attach($agent_venteRole);
 
         // $usager->roles()->attach($userRole);
     }

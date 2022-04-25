@@ -62,6 +62,7 @@ class EnrollController extends Controller
 
     public function stepTwo(int $user_id)
     {
+
         // dd($user_id);
         return view('guichet.enrollViewTwo')->with('user_id', $user_id)
                                             ->with('success', 'Enrollement partie 1 effectué avec succès!');
@@ -131,7 +132,8 @@ class EnrollController extends Controller
         $history->userId        =   $User->id;
         $history->save();
 
-        return $this->sendOTP($telephone, $code, $user_pass);
+       //  $this->sendOPT($telephone, $code, $user_pass);
+         return view('guichet.enrollViewTwo');
     }
 
 

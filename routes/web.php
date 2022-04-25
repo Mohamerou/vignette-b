@@ -25,7 +25,7 @@ Route::get('/connexion', [App\Http\Controllers\AuthController::class, 'index'])-
 Route::post('/connexion', [App\Http\Controllers\AuthController::class, 'postLogin'])->name('postLogin');
 Route::get('/inscription', [App\Http\Controllers\AuthController::class, 'register'])->middleware('guest')->name('inscription');
 Route::post('/inscription', [App\Http\Controllers\AuthController::class, 'postRegister'])->name('postInscription');
-Route::get('/logout', [App\Http\Controllers\AuthController::class, 'logout'])->name('deconnexion');
+Route::get('/logout', 		 [App\Http\Controllers\AuthController::class, 'logout'])->name('deconnexion');
 
 Route::get('/password/resetter/{query}', [App\Http\Controllers\PasswordResetController::class, 'resetter'])->name('resetter');
 
@@ -110,7 +110,9 @@ Route::get('/resend-code/{phone}', [App\Http\Controllers\VerificationController:
 	Route::get('sales/checkout/{enginId}', [App\Http\Controllers\Guichet\SalesController::class, 'stepOne'])->middleware('auth')->name('salesStepOne');
 	Route::post('sales/checkout/process', [App\Http\Controllers\Guichet\SalesController::class, 'stepTwo'])->middleware('auth')->name('salesStepTwo');
 	Route::get('sales/history', [App\Http\Controllers\Guichet\SalesController::class, 'salesHistory'])->middleware('auth')->name('salesHistory');
+	Route::post('sales/history', [App\Http\Controllers\Guichet\SalesController::class, 'salesHistoryPost'])->middleware('auth')->name('salesHistorypost');
 	Route::get('sales/report', [App\Http\Controllers\Guichet\SalesController::class, 'salesReport'])->middleware('auth')->name('salesReport');
+	Route::get('sales/reportFilter/{}', [App\Http\Controllers\Guichet\SalesController::class, 'salesReportFilter'])->middleware('auth')->name('salesReportFilter');
 	Route::any('sales/checkout/notify', [App\Http\Controllers\PaymentController::class, 'notify'])->name('salesCheckoutNotify');
 	Route::get('sales/checkout/return', [App\Http\Controllers\PaymentController::class, 'return'])->name('salesCheckoutReturn');
 	

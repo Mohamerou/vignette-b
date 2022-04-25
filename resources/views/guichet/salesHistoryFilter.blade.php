@@ -10,7 +10,7 @@
     jQuery(document).ready(function($) {
         //jQuery Functionality
         $('#example').DataTable();
-        $(document).on('click', '#example tbody tr button', function() {
+        $(document).on('click', '#example tbody tr button', function() {       
         $("#modaldata tbody tr").html("");
         $("#modaldata tbody tr").html($(this).closest("tr").html());
         $("#exampleModal").modal("show");
@@ -33,23 +33,6 @@
 <div class="col-sm-6">
     <h1>Historique Vente</h1>
 </div>
-<div class="row">
-  <td>
-    <form method="post" action="{{route('salesHistorypost')}}" class="form-group">
-        @csrf
-        <select>
-            <option value="all">Tous Les Agents</option>
-            
-            @foreach($allagent as $agent)
-            <option value="{{$agent->id}}">{{$agent->lastname}} {{$agent->firstname}} {{$agent->phone}}</option>
-            @endforeach
-        </select>
-        <input type="date" name="date" >
-        <input Class="btn btn-primary" type="submit" value="Générer le rapport">
-    </form>
-    </td>
-
-                  </div>
 <div class="col-sm-6">
     <div class="col-sm-3">
         <h1>Total Vente:</h1>
@@ -111,10 +94,10 @@
     <th>Usager</th>
     <th>Contact Usager</th>
     <th>Marque</th>
-    <th>Type</th>
+    <th>Modele</th>
     <th>Chassie</th>
     <th>Tarif</th>
-    <th style="width: 40px">Status</th>
+    <th style="width: 40px">Actions</th>
     </tr>
     </thead>
     <tbody>
@@ -128,7 +111,7 @@
                 <td>{{ $SalesHistories[$i]['marque'] }}</td>
                 <td>{{ $SalesHistories[$i]['modele'] }}</td>
                 <td>{{ $SalesHistories[$i]['chassie'] }}</td>
-                <td class="text-danger">{{ $SalesHistories[$i]['tarif'] }}</td>
+                <td class="text-danger">{{ $SalesHistories[$i]['tarif'] }}</td>    
                 <td>
                 <button disabled type="button" class="btn btn-success"><h4>&#x2611;</h4></button>
                 </td>
@@ -153,4 +136,8 @@
 </section>
 
 </div>
-@endsection
+@endsection 
+
+
+
+    
