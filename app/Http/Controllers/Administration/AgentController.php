@@ -259,6 +259,7 @@ class AgentController extends Controller
             'lastname' 	=> $data['lastname'],
             'firstname' => $data['firstname'],
             'address'   => $data['address'],
+            'administration'   => Auth::user()->administration,
             'avatar' 	=> 'avatar.png',
             'phone' 	=> $data['phone'],
             'code'      => $code,

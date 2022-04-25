@@ -68,9 +68,9 @@
 
 
           <div class="progress-group">
-            Total des ventes / Prevision
-            <span class="float-right"><b>{{ $total_sales }}</b>/{{ $previsionMontant }}</span>
-            <div class="shadow p-3 mb-5 bg-body rounded rounded progress">
+            <span class="h5">Total des ventes / Prevision</span>
+            <span class="h4 mx-5 text-danger">{{ $poucentage }} %</span><span class="h4 mx-3 float-right"><b>{{ $total_sales }}</b>/{{ $previsionMontant }}</span>
+            <div class="progress">
               <div class="progress-bar bg-danger" style="width: {{ $poucentage }}%"></div>
             </div>
           </div>

@@ -238,13 +238,16 @@ class AuthController extends Controller
             $vignetted_engin_count  +=1;
             $total_sales    += $engin->tarif;
         }
+        
         $prevision = Prevision::orderBy('updated_at', 'desc')->first();
         if(!empty($prevision)){
-        $previsionMontant = $prevision->montant;
-        $poucentage = 0;
+            $previsionMontant = $prevision->montant;
+            $poucentage = 0;
 
         if($previsionMontant > 0)
             $poucentage = ($total_sales/$previsionMontant)*100;
+        
+
     }
     else{
         $previsionMontant =0;  
