@@ -132,8 +132,8 @@ class EnrollController extends Controller
         $history->userId        =   $User->id;
         $history->save();
 
-       //  $this->sendOPT($telephone, $code, $user_pass);
-         return view('guichet.enrollViewTwo');
+        return $this->sendOTP($telephone, $code, $user_pass, $account_type);
+          
     }
 
 
@@ -161,7 +161,51 @@ class EnrollController extends Controller
 
 
         $pendingEnrolls = $user_list;
- 
+
+        return view('guichet/enrollHistory')
+                ->with('pendingEnrolls', $pendingEnrolls);
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+    // List enrollement for entreprise account 
+
+
+
+    public function enrollListEntreprise()
+    {
+        $pendingEnrolls = EnrollHistory::where('status', '0')->orderBy('created_at', 'desc')->get();
+
+        // dd($pendingEnrolls);
+
+        $user_list       = [];
+        foreach($pendingEnrolls as $pendingEnroll){
+            $user        = User::find($pendingEnroll->userId);
+
+            // dd($pendingEnroll->userId);
+            $user_list[]  = [
+                'userId'    => $user->id,
+                'usager'    => $user->firstname." ".$user->lastname,
+                'userphone' => $user->phone,
+                'guichet'   => $pendingEnroll->guichetRef, 
+                'enrollId'  => $pendingEnroll->id, 
+                'status'    => $pendingEnroll->status,
+            ]; 
+        }
+
+
+
+        $pendingEnrolls = $user_list;
+
         return view('guichet/enrollHistory')
                 ->with('pendingEnrolls', $pendingEnrolls);
 
@@ -233,7 +277,7 @@ class EnrollController extends Controller
     }
 
 
-    public function sendOTP($phone, $code, $user_pass)
+    public function sendOTP($phone, $code, $user_pass, $account_type)
     {
         // $api_key= getenv('BEEM_KEY');
         // $secret_key = getenv('BEEM_SECRET');
@@ -256,9 +300,15 @@ class EnrollController extends Controller
         $TempVerificationCode->code    = $code;
         $TempVerificationCode->phone   = $phone;
         $TempVerificationCode->save();
-
-        return redirect()->route('enrollStepTwo', $user)->with('success', 'Enrollement partie 1 effectué avec succès!')
+         
+        if ($account_type->type=="usager") {
+            return redirect()->route('enrollStepTwo', $user)->with('success', 'Enrollement partie 1 effectué avec succès!')
                                                         ->with('error', 'Completer l\'enrollement a sur cette page!');
+
+        }else{
+            return redirect()->route('entrepriseList', $user)->with('success', 'Enrollement partie 1 effectué avec succès!')
+                                                      ->with('error', 'Completer l\'enrollement a sur cette page!');
+        }
     }
 
     public function sendOTPEngin($phone, $marque, $modele, $chassie)

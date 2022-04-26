@@ -3,7 +3,7 @@
 <html class="no-js" lang="zxx">
 
 	<head>
-
+		@include('sweetalert::alert')
 		@include('partials.head')
 
 	</head>

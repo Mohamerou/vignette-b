@@ -96,7 +96,9 @@ Route::get('/resend-code/{phone}', [App\Http\Controllers\VerificationController:
 	Route::get('enrollement-1', [App\Http\Controllers\Guichet\EnrollController::class, 'stepOne'])->middleware('auth')->name('enrollStepOne');
 	Route::post('enrollement-1', [App\Http\Controllers\Guichet\EnrollController::class, 'postStepOne'])->middleware('auth')->name('postStepOne');
 	Route::get('enrollement-2/{user_id}', [App\Http\Controllers\Guichet\EnrollController::class, 'stepTwo'])->middleware('auth')->name('enrollStepTwo');
+	Route::get('entrepriseList/{user_id}', [App\Http\Controllers\Guichet\EnrollController::class, 'stepTwo'])->middleware('auth')->name('entrepriseList');
 	Route::post('enrollement-2', [App\Http\Controllers\Guichet\EnrollController::class, 'postStepTwo'])->middleware('auth')->name('postStepTwo');
+	Route::post('entrepriseList', [App\Http\Controllers\Guichet\EnrollController::class, 'postStepTwo'])->middleware('auth')->name('entrepriseList');
 
 	Route::get('enrollList', [App\Http\Controllers\Guichet\EnrollController::class, 'enrollList'])->middleware('auth')->name('enrollList');
 	Route::get('enrolls', [App\Http\Controllers\Guichet\EnrollController::class, 'index'])->middleware('auth')->name('enroll.index');

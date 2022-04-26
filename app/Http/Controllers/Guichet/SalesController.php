@@ -18,6 +18,8 @@ use Redirect;
 use Illuminate\Support\Facades\Session;
 use PDF;
 use File;
+use RealRashid\SweetAlert\Facades\Alert;
+
 
 use App\Models\User;
 use App\Models\Engins;
@@ -362,17 +364,18 @@ class SalesController extends Controller
     {
         $date     = $request->date;
         $agent    = $request->agent;
+  
         if (!empty($agent)) {
             if ($agent == 'all') {
                 if (empty($date)) {
                     $SalesHistories = SalesHistory::take(30)->orderBy('updated_at', 'desc')->get();
                 } else {
-                    $SalesHistories = DB::table('SalesHistorys')
+                    $SalesHistories = DB::table('sales_histories')
                                       ->Where('updated_at', '=', $date)
                                         ->orderBy('updated_at', 'desc')->get();
                 }
             } else {
-                $SalesHistories = DB::table('SalesHistorys')
+                $SalesHistories = DB::table('sales_histories')
                                       ->where('updated_at', '=', $date)
                                       ->where('agentRef', '=', $agent)
                                         ->orderBy('updated_at', 'desc')->get();
@@ -411,53 +414,61 @@ class SalesController extends Controller
 
 
         $SalesHistories = $user_list;
-        $agentList = Agent::all();
+        $users = User::all();
+        $usersList = [];
+         foreach ($users as $user) {
+             if ($user->hasRole('guichet')) {
+                 $usersList[] = $user;
+             }
+         }
+       //  dd($usersList);
+       Alert::success('Success', 'Success Message');
         return view('guichet/salesHistory')
                 ->with('SalesHistories', $SalesHistories)
                 ->with('totalSales', $totalSales)
-                ->with('allagent',$agentList);
+                ->with('allagent',$usersList);
+               
     }
     public function salesHistoryPost(Request $request)
     {
-        $date     = $request->date;
-        $agent    = $request->agent;
-        $currentYear = Date('Y-m-d'); 
-        if (!empty($agent)) {
-            if ($agent == 'all') {
-                if (empty($date)) {
+        if (isset($request->history)) {
+            $date     = $request->date;
+            $agent    = $request->agent;
+            $currentYear = Date('Y-m-d');
+            if (!empty($agent)) {
+                if ($agent == 'all' && empty($date)) {
+                    //   dd($agent);
+                
                     $SalesHistories = SalesHistory::whereYear('created_at', $currentYear)->orderBy('updated_at', 'desc')->get();
-                } else {
-                    $SalesHistories = DB::table('SalesHistorys')
+                } elseif ($agent == 'all' && !empty($date)) {
+                    $SalesHistories = DB::table('sales_histories')
                                       ->WhereDate('created_at', '=', $date)
                                         ->orderBy('created_at', 'desc')->get();
-                }
-            } else {
-                $SalesHistories = DB::table('SalesHistorys')
-                                      ->where('created_at', '=', $date)
-                                      ->where('agentRef', '=', $agent)
+                } elseif ($agent != 'all' && !empty($date)) {
+                    $SalesHistories = DB::table('sales_histories')
+                                      ->WhereDate('created_at', '=', $date)
+                                      ->where('agentRef', $agent)
                                         ->orderBy('created_at', 'desc')->get();
-            }
-        } else {
-            $SalesHistories = SalesHistory::whereYear('created_at', $currentYear)->orderBy('updated_at', 'desc')->get();
-        }
+                } elseif ($agent != 'all' && empty($date)) {
+                    $SalesHistories = SalesHistory::where('agentRef', $agent)->orderBy('updated_at', 'desc')->get();
+                }
     
-        $user_list       = [];
-        $engin_list      = [];
-        $totalSales      = 0;
+                $user_list       = [];
+                $engin_list      = [];
+                $totalSales      = 0;
 
-        foreach($SalesHistories as $SalesHistory){
-            $enrollHistory  = EnrollHistory::find($SalesHistory->enrollId);
-            $agent_vente    = User::find($SalesHistory->agentRef);
-            $user           = User::find($enrollHistory->userId);
-            $engin          = Engins::find($enrollHistory->enginId);
-            $vignette       = Vignettes::where('enginId', $enrollHistory->enginId)
+                foreach ($SalesHistories as $SalesHistory) {
+                    $enrollHistory  = EnrollHistory::find($SalesHistory->enrollId);
+                    $agent_vente    = User::find($SalesHistory->agentRef);
+                    $user           = User::find($enrollHistory->userId);
+                    $engin          = Engins::find($enrollHistory->enginId);
+                    $vignette       = Vignettes::where('enginId', $enrollHistory->enginId)
                                   ->first();
 
-            if ($vignette) {
+                    if ($vignette) {
+                        $totalSales += $engin->tarif;
 
-                $totalSales += $engin->tarif;
-
-                $user_list[]    = [
+                        $user_list[]    = [
                     'usager'    => $user->firstname." ".$user->lastname,
                     'userphone' => $user->phone,
                     'marque'    => $engin->marque,
@@ -466,18 +477,125 @@ class SalesController extends Controller
                     'agent'     => $agent_vente->firstname.' - '.$agent_vente->phone,
                     'tarif'     => $engin->tarif,
                 ];
-            } 
-        }
+                    }
+                }
 
 
-        $SalesHistories = $user_list;
-        $agentList = Agent::all();
-        return view('guichet/salesHistory')
+                $SalesHistories = $user_list;
+                $users = User::all();
+                $usersList = [];
+                foreach ($users as $user) {
+                    if ($user->hasRole('guichet')) {
+                        $usersList[] = $user;
+                    }
+                }
+                //  dd($usersList);
+                Alert::success('Success', 'Success Message');
+                return view('guichet/salesHistory')
                 ->with('SalesHistories', $SalesHistories)
                 ->with('totalSales', $totalSales)
-                ->with('allagent',$agentList);
-    }
+                ->with('allagent', $usersList);
+            }
+        }
+        if(isset($request->report)){
 
+            $date     = $request->date;
+            $agent    = $request->agent;
+            $currentYear = Date('Y-m-d');
+            
+            $today      = Carbon::now();
+            $today      = $today->format('d-m-Y');
+            $fileName   = 'Rapport Vente'.' - '.$agent.' - '.$today;
+    
+            
+            if ($agent == 'all' && empty($date)) {
+                //   dd($agent);
+            
+                $SalesHistories = SalesHistory::whereYear('created_at', $currentYear)->orderBy('updated_at', 'desc')->get();
+            } elseif ($agent == 'all' && !empty($date)) {
+                $SalesHistories = DB::table('sales_histories')
+                                  ->WhereDate('created_at', '=', $date)
+                                    ->orderBy('created_at', 'desc')->get();
+            } elseif ($agent != 'all' && !empty($date)) {
+                $SalesHistories = DB::table('sales_histories')
+                                  ->WhereDate('created_at', '=', $date)
+                                  ->where('agentRef', $agent)
+                                    ->orderBy('created_at', 'desc')->get();
+            } elseif ($agent != 'all' && empty($date)) {
+                $SalesHistories = SalesHistory::where('agentRef', $agent)->orderBy('updated_at', 'desc')->get();
+            }
+        
+            // dd($SalesHistories,$agent ,$date);
+            $user_list       = [];
+            $engin_list      = [];
+            $totalSales      = 0;
+    
+            foreach($SalesHistories as $SalesHistory){
+                $enrollHistory  = EnrollHistory::find($SalesHistory->enrollId);
+                $agent_vente    = User::find($SalesHistory->agentRef);
+                $user           = User::find($enrollHistory->userId);
+                $engin          = Engins::find($enrollHistory->enginId);
+                $vignette       = Vignettes::where('enginId', $enrollHistory->enginId)
+                                      ->first();
+    
+                if ($vignette) {
+    
+                    $totalSales += $engin->tarif;
+    
+                    $user_list[]    = [
+                        'usager'    => $user->firstname." ".$user->lastname,
+                        'userphone' => $user->phone,
+                        'marque'    => $engin->marque,
+                        'modele'    => $engin->modele,
+                        'chassie'   => $engin->chassie,
+                        'agent'     => $agent_vente->firstname.' - '.$agent_vente->phone,
+                        'tarif'     => $engin->tarif,
+                    ];
+                } 
+            }
+    
+    
+            $SalesHistories = $user_list;
+    
+            $data = [
+                'SalesHistories'    =>$SalesHistories,
+                'totalSales'        =>$totalSales,
+                'fileName'          =>$fileName,
+            ];
+    
+          view()->share('data',$data);
+        //   $pdf = PDF::loadView('guichet.rapportVente', ['data' => $data])->setOptions(['defaultFont' => 'sans-serif']);
+          // download PDF file with download method
+        //   return $pdf->download($fileName.'.pdf');
+        
+        $path = storage_path('reports');
+    
+        // dd($path);
+        if(!File::exists($path)) {
+            File::makeDirectory($path, $mode = 0755, true, true);
+    
+        } 
+        else {}
+    
+    
+        $pdf = PDF::loadView('guichet.rapportVente',['data' => $data])->setOptions(['defaultFont' => 'sans-serif'])
+                  ->save(''.$path.'/'.$fileName.'.pdf');
+    
+        $pdf->getDomPDF()->setHttpContext(
+            stream_context_create([
+                'ssl' => [
+                    'allow_self_signed'=> TRUE,
+                    'verify_peer' => FALSE,
+                    'verify_peer_name' => FALSE,
+                ]
+            ])
+        );
+          return $pdf->download($fileName.'.pdf');
+        
+
+        }
+
+    }
 
     public function salesReport()
     {
@@ -553,6 +671,11 @@ class SalesController extends Controller
     );
       return $pdf->download($fileName.'.pdf');
     
+    }
+
+    public function salesReportFilter(Request $request)
+    {
+       
     }
 
 
