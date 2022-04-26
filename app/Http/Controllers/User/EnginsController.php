@@ -14,10 +14,15 @@ use Carbon\Carbon;
 
 class EnginsController extends Controller
 {
-
+    
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
     public function __construct()
-    {
-        $this->middleware('auth');
+    {        
+        $this->middleware('can:user');      
     }
 
 
@@ -213,7 +218,7 @@ class EnginsController extends Controller
             'modele'                => 'required|string',
             'mairie'                => 'required|string',
             'chassie'               => 'required|string',
-            'puissanceFiscale'      => 'required|string',
+            'cylindre'              => 'required|string',
             'tarif'                 => 'required|integer',
             'documentJustificatif'  => 'required|file|image|max:4096',
         ]);
@@ -232,7 +237,7 @@ class EnginsController extends Controller
             'modele'                => $data['modele'],
             'mairie'                => $data['mairie'],
             'chassie'               => $data['chassie'],
-            'puissanceFiscale'      => $data['puissanceFiscale'],
+            'cylindre'              => $data['cylindre'],
             'tarif'                 => $data['tarif'],
             'documentJustificatif'  => $data['documentJustificatif'],
         ]);

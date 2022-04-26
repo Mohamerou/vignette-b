@@ -85,6 +85,7 @@
     <th>Guichet</th>
     <th>Usager</th>
     <th>Contact Usager</th>
+    <th>Date</th>
     <th>Status</th>
     @can('guichet')
         <th style="width: 40px">Actions</th>
@@ -99,6 +100,7 @@
                 <td>{{ $pendingEnrolls[$i]['guichet'] }}</td>
                 <td>{{ $pendingEnrolls[$i]['usager'] }}</td>
                 <td>{{ $pendingEnrolls[$i]['userphone'] }}</td>
+                <td>{{ $pendingEnrolls[$i]['date'] }}</td>
                 <td class="text-danger">Attente</td>
 
                 @can('guichet')    

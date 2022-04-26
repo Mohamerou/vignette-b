@@ -41,7 +41,7 @@
     <div class="container-fluid">
     <div class="row mb-2">
     <div class="col-sm-6">
-        <h1>Historique des enrollements</h1>
+        <h1>INFOS USAGER</h1>
     </div>
     </div>
     </div>
@@ -85,30 +85,50 @@
 
 <div class="card px-4">
     <div class="card-header">
-    <h3 class="card-title">Historiques des enrollements</h3>
+        <h3 class="card-title">Usager: {{ $user_name }}</h3>
     </div>
 
     <div class="card-body p-0">
+        <div class="col-md-12">
+            <div class="col-md-6">
+                <a class="btn btn-primary my-3" href="{{ route('guichet.user.ficheIndividuel', $user_id) }}">FICHE INDIVIDUELLE</a>
+            </div>
+            <div class="col-md-6">
+                <a class="btn btn-info my-3" href="{{ route('guichet.user.engin.nouvel', $user_id) }}">NOUVEL ENGIN</a>
+            </div>
+        </div>
+        
     <table id="example" class="table table-striped table-hover table-bordered">
     <thead>
     <tr>
-    <th>AGENT</th>
-    <th>USAGER</th>
-    <th>CONTACT USAGER</th>
-    <th>DATE</th>
-    <th style="width: 40px">STATUS</th>
+    <th>MARQUE</th>
+    <th>TYPE</th>
+    <th>CHASSIE</th>
+    <th>PERTE</th>
+    <th>VIGNETTE</th>
     </tr>
     </thead>
     <tbody>
 
-
-        @for($i=0; $i < count($histories); $i++)
+        @for($i=0; $i < count($user_data); $i++)
             <tr>
-                <td>{{ $histories[$i]['agent'] }}</td>
-                <td>{{ $histories[$i]['usager'] }}</td>
-                <td>{{ $histories[$i]['userphone'] }}</td>
-                <td>{{ $histories[$i]['date'] }}</td>
-                <td class="text-danger"><button disabled type="button" class="btn btn-success"><h4>&#x2611;</h4></button></td>
+                <td>{{ $user_data[$i]['engin_marque'] }}</td>
+                <td>{{ $user_data[$i]['engin_type'] }}</td>
+                <td>{{ $user_data[$i]['engin_chassie'] }}</td>
+                @if($user_data[$i]['signaler_perdue'])
+                    <td class="text-danger">
+                        <a href="{{ route('guichet.user.engin.annuler', $user_data[$i]['engin_chassie']) }}" class="btn btn-danger">ANNULER DECLARATION</a>
+                    </td>
+                @else
+                    <td class="text-success h5">
+                        <a href="{{ route('guichet.user.engin.signaler_perdue', $user_data[$i]['engin_chassie']) }}" class="btn btn-warning">FAIRE UNE DECLARATION</a>
+                    </td>
+                @endif
+                @if($user_data[$i]['vignette_status'])
+                    <td class="text-success">A JOUR</td>
+                @else
+                    <td class="text-danger"> RENOUVELLER </td>
+                @endif
             </tr>
         @endfor
 

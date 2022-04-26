@@ -29,7 +29,16 @@ use Illuminate\Support\Facades\DB as FacadesDB;
 
 class SalesController extends Controller
 {
-    //
+    
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {        
+        $this->middleware('can:intern');      
+    }
 
     public function pendingSales()
     {
@@ -70,7 +79,9 @@ class SalesController extends Controller
 
 
     public function stepOne(int $enginId) 
-    {
+    {                
+        $this->middleware('can:guichet'); 
+
         $request = new Request([
             'enginId' => $enginId,
         ]);
@@ -140,7 +151,7 @@ class SalesController extends Controller
         $payment->address           = $data['address'];
         $payment->marque            = $data['marque'];
         $payment->modele            = $data['modele'];
-        $payment->cylindre  = $data['cylindre'];
+        $payment->cylindre          = $data['cylindre'];
         $payment->amount            = $data['amount'];
         $payment->chassie           = $data['chassie'];
         $payment->save();
@@ -244,13 +255,18 @@ class SalesController extends Controller
 
     public function UserInfo()
     {
-        return view('guichet.userInfo');
+        // return view('guichet.userInfo');
     }
 
 
     public function csv_print_list()
     {
-        $SalesHistories = SalesHistory::take(30)->orderBy('updated_at', 'desc')->get();
+                        
+        $this->middleware('can:guichet');
+
+        $SalesHistories = SalesHistory::WhereYear('created_at', Date('Y-m-d'))
+                                      ->orderBy('updated_at', 'desc')
+                                      ->get();
 
       
 
@@ -313,6 +329,8 @@ class SalesController extends Controller
 
     public function csv(int $enginId)
     {
+                        
+        $this->middleware('can:guichet');
 
         $enrollHistory  = EnrollHistory::where('enginId', $enginId)->first();
         $usager         = User::findOrfail($enrollHistory->userId);
@@ -365,15 +383,15 @@ class SalesController extends Controller
         if (!empty($agent)) {
             if ($agent == 'all') {
                 if (empty($date)) {
-                    $SalesHistories = SalesHistory::take(30)->orderBy('updated_at', 'desc')->get();
+                    $SalesHistories = SalesHistory::whereYear('created_at', date('Y'))->orderBy('updated_at', 'desc')->get();
                 } else {
                     $SalesHistories = DB::table('SalesHistorys')
-                                      ->Where('updated_at', '=', $date)
+                                      ->whereDate('updated_at', '=', $date)
                                         ->orderBy('updated_at', 'desc')->get();
                 }
             } else {
                 $SalesHistories = DB::table('SalesHistorys')
-                                      ->where('updated_at', '=', $date)
+                                      ->whereDate('updated_at', '=', $date)
                                       ->where('agentRef', '=', $agent)
                                         ->orderBy('updated_at', 'desc')->get();
             }
@@ -417,8 +435,11 @@ class SalesController extends Controller
                 ->with('totalSales', $totalSales)
                 ->with('allagent',$agentList);
     }
+
+
     public function salesHistoryPost(Request $request)
     {
+                        
         $date     = $request->date;
         $agent    = $request->agent;
         $currentYear = Date('Y-m-d'); 
@@ -433,7 +454,7 @@ class SalesController extends Controller
                 }
             } else {
                 $SalesHistories = DB::table('SalesHistorys')
-                                      ->where('created_at', '=', $date)
+                                      ->whereDate('created_at', '=', $date)
                                       ->where('agentRef', '=', $agent)
                                         ->orderBy('created_at', 'desc')->get();
             }
@@ -481,6 +502,8 @@ class SalesController extends Controller
 
     public function salesReport()
     {
+                        
+        $this->middleware('can:regisseur-public');
         $today      = Carbon::now();
         $today      = $today->format('d-m-Y');
         $fileName   = 'Rapport Vente'.' - '.$today;

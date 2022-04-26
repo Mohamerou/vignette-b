@@ -19,21 +19,40 @@ use App\Models\EnrollHistory;
 use App\Models\SalesHistory;
 use App\Models\TempVerificationCode;
 use Illuminate\Support\Facades\Hash;
+use Carbon\Carbon;
 use Session;
 
 class EnrollController extends Controller
 {
+    
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {        
+        $this->middleware('can:intern');      
+    }
+
+
     public function index()
     {
-        $histories = EnrollHistory::where('status', '1')
-                                  ->take(30)
+        $currentYear = Carbon::now();
+        $currentYear = Carbon::parse($currentYear);
+        $currentYear = $currentYear->format('Y');
+
+        $histories = EnrollHistory::where('status',1)
+                                  ->whereYear('created_at', $currentYear)
                                   ->orderBy('updated_at')
                                   ->get();
 
         $histories_list       = [];
         foreach($histories as $history){
+            $createdAt = Carbon::parse($history['created_at']);
+            $date      = $createdAt->format('d-m-Y');
+            
             $user   = User::find($history->userId);
-
             $histories_list[]  = [
                 'userId'    => $user->id,
                 'usager'    => $user->firstname." ".$user->lastname,
@@ -41,7 +60,7 @@ class EnrollController extends Controller
                 'agent'     => $history->agentName.' - '.$history->agentPhone, 
                 'enrollId'  => $history->id, 
                 'status'    => $history->status, 
-                'enginId'   => $history->enginId,
+                'date'      => $date,
             ]; 
         }
 
@@ -56,20 +75,22 @@ class EnrollController extends Controller
 
 
     public function stepOne()
-    {
+    {        
+        $this->middleware('can:guichet'); 
         return view('guichet.enrollViewOne');
     }
 
     public function stepTwo(int $user_id)
-    {
-
+    {        
+        $this->middleware('can:guichet'); 
         // dd($user_id);
         return view('guichet.enrollViewTwo')->with('user_id', $user_id)
                                             ->with('success', 'Enrollement partie 1 effectué avec succès!');
     }
 
     public function postStepOne(Request $request)
-    {
+    {        
+        $this->middleware('can:guichet'); 
 
         // dd($request->idCard);
         request()->validate([
@@ -90,14 +111,19 @@ class EnrollController extends Controller
                              ->withInput();
         }
 
-        $User               = $this->create($data);
 
-        $id                 = $User->id;
-        $code               = $User->code;
-        $telephone          = $User->phone;
-        // $idCardLoaded       = $this->storeIdCard($User);
-        $idCardLoaded       = \Storage::disk('public')->putFile('idCard', $request->file('idCard'));
 
+        $User                   = $this->create($data);
+        $id                     = $User->id;
+        $code                   = $User->code;
+        $telephone              = $User->phone;
+        $userIdCardEtx          = $request->file('idCard')->getClientOriginalExtension(); 
+        $idCard_storage_path    = 'idCard/idCard-' . time() . '.' .$userIdCardEtx;
+        $idCardLoaded           = \Storage::disk('public')->put($idCard_storage_path, file_get_contents($request->file('idCard')));
+
+        $User->idCard           = $idCard_storage_path;
+        $User->save();
+        
         if($idCardLoaded == False){
 
             $User->delete();
@@ -132,13 +158,13 @@ class EnrollController extends Controller
         $history->userId        =   $User->id;
         $history->save();
 
-       //  $this->sendOPT($telephone, $code, $user_pass);
-         return view('guichet.enrollViewTwo');
+        return $this->sendOTP($telephone, $code, $user_pass);
     }
 
 
     public function enrollList()
-    {
+    {        
+        $this->middleware('can:guichet'); 
         $pendingEnrolls = EnrollHistory::where('status', '0')->orderBy('created_at', 'desc')->get();
 
         // dd($pendingEnrolls);
@@ -147,6 +173,8 @@ class EnrollController extends Controller
         foreach($pendingEnrolls as $pendingEnroll){
             $user        = User::find($pendingEnroll->userId);
 
+            $currentDate = Carbon::parse($pendingEnroll->created_at);
+            $currentDate = $currentDate->format('d-m-Y');
             // dd($pendingEnroll->userId);
             $user_list[]  = [
                 'userId'    => $user->id,
@@ -154,7 +182,7 @@ class EnrollController extends Controller
                 'userphone' => $user->phone,
                 'guichet'   => $pendingEnroll->guichetRef, 
                 'enrollId'  => $pendingEnroll->id, 
-                'status'    => $pendingEnroll->status,
+                'date'      => $currentDate,
             ]; 
         }
 
@@ -168,7 +196,8 @@ class EnrollController extends Controller
     }
 
     public function poststepTwo(Request $request)
-    {
+    {        
+        $this->middleware('can:guichet'); 
 
         request()->validate([
             'user_id' 	             => 'required|numeric',
@@ -176,7 +205,7 @@ class EnrollController extends Controller
             'modele'                 => 'required|string',
             'mairie' 	             => 'required|string',
             'chassie'                => 'required|string',
-            'cylindre' 	     => 'required|string',
+            'cylindre' 	             => 'required|string',
             'documentJustificatif' 	 => 'required|file|image|max:10096',
         ]);
 
@@ -189,11 +218,13 @@ class EnrollController extends Controller
         $account_type   = $account_type->type;
         
         $limit          = Engins::where('userId', $usager->id)->count();
+
+        
         if($limit === 4)
             $limit = true;
 
         if($account_type === "usager")
-            if($limit)
+            if($limit === true)
                 return redirect()->route('enrollStepOne', $usager)
                                  ->with('error', "Nombre maximal d'enregistrement atteint!");
 
@@ -202,15 +233,21 @@ class EnrollController extends Controller
         $IfEnginExist    = Engins::where('chassie', $data['chassie'])->first();
         if ($IfEnginExist)
             return redirect()->route('enrollStepTwo', $usager)
-                            ->with('error', 'Numero de chassie non disponible!')
+                            ->with('error', 'Numero de chassie existant !')
                             ->withInput();
 
                                     
         $engin  = $this->createEngin($data);      
+
+        $documentJustificatifLoadedEtx              = $request->file('documentJustificatif')->getClientOriginalExtension();
+        $documentJustificatifLoaded_storage_path    = 'DocumentsEngins/engin-' . time() . '.' .$documentJustificatifLoadedEtx;
+        $documentJustificatifLoaded                 = \Storage::disk('public')->put($documentJustificatifLoaded_storage_path, file_get_contents($request->file('documentJustificatif')));
+        $engin->documentJustificatif                = $documentJustificatifLoaded_storage_path;
+        $engin->save();
         
 
         // $idCardLoaded       = $this->storeIdCard($User);
-        $documentJustificatifLoaded    = \Storage::disk('public')->putFile('DocumentsEngins', $request->file('documentJustificatif'));
+
         if($documentJustificatifLoaded == False)
         {
             $engin->delete();
@@ -228,13 +265,15 @@ class EnrollController extends Controller
 
 
     public function enrollHistory()
-    {
-        return view('guichet.enrollHistory');
+    {        
+        $this->middleware('can:guichet'); 
+        // return view('guichet.enrollHistory');
     }
 
 
     public function sendOTP($phone, $code, $user_pass)
-    {
+    {        
+        $this->middleware('can:guichet'); 
         // $api_key= getenv('BEEM_KEY');
         // $secret_key = getenv('BEEM_SECRET');
 
@@ -257,12 +296,23 @@ class EnrollController extends Controller
         $TempVerificationCode->phone   = $phone;
         $TempVerificationCode->save();
 
+
+        $account_type   = UsagerAccountType::where('user_id', $user->id)
+                                           ->first();
+
+        if ($account_type === "usager")
+            return redirect()->route('enrollStepTwo', $user)->with('success', 'Enrollement partie 1 effectué avec succès!')
+            ->with('error', 'Completer l\'enrollement a sur cette page!');
+        
+        dd(":)");
         return redirect()->route('enrollStepTwo', $user)->with('success', 'Enrollement partie 1 effectué avec succès!')
-                                                        ->with('error', 'Completer l\'enrollement a sur cette page!');
+        ->with('error', 'Completer l\'enrollement a sur cette page!'); 
+        
     }
 
     public function sendOTPEngin($phone, $marque, $modele, $chassie)
-    {
+    {        
+        $this->middleware('can:guichet'); 
 
         $user       = User::where('phone', $phone)->first();
         $userId     = $user->id;
@@ -283,11 +333,12 @@ class EnrollController extends Controller
         $enrollHistory->save();
 
 
-        return redirect()->route('enrollList')->with('success', 'Enrollement partie 2 effectué avec succès!');
+        return redirect()->route('enroll.index')->with('success', 'Enrollement partie 2 effectué avec succès!');
     }
 
     private function storeIdCard($user)
-    {
+    {        
+        $this->middleware('can:guichet'); 
 
         if (request()->has('idCard')) {
             $user->update([
@@ -300,7 +351,8 @@ class EnrollController extends Controller
 
 
     public function create(array $data)
-    {
+    {        
+        $this->middleware('can:guichet'); 
 
         $code  = rand(100000, 999999);
         $user =  User::create([
@@ -318,7 +370,8 @@ class EnrollController extends Controller
 
 
     public function createEngin(array $data)
-    {
+    {        
+        $this->middleware('can:guichet'); 
         $engin =  Engins::create([
             'userId' 	        => $data['user_id'],
             'marque'            => $data['marque'],

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\User;
 use Auth;
 
 
@@ -25,7 +26,12 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $notifications = Auth::user()->notifications();
-        return view('home');
+        $notifications  = Auth::user()->notifications();
+        $user           = Auth::user();
+
+        if($user->hasRole('user'))
+            return redirect()->route('home');
+        
+        return redirect()->route('get_admin_dash');
     }
 }

@@ -19,6 +19,16 @@ use Illuminate\Http\Request;
 
 class VignettesController extends Controller
 {
+    
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {        
+        $this->middleware('can:user');      
+    }
 
     public function demande_de_vignette($engin_id, $user_id)
     {
@@ -162,10 +172,6 @@ class VignettesController extends Controller
         }
 
         return back()->with('annuler', "Déclaration annulée avec succès!");
-
-
-
-        
     }
 
 
@@ -187,9 +193,6 @@ class VignettesController extends Controller
         }
 
         return back()->with('error', "La tentative de renoullement a échouée. \nVeillez réessayer!");
-
-
-
         
     }
 

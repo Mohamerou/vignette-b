@@ -8,6 +8,17 @@ use DB;
 
 class PrevisionController extends Controller
 {
+    
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {        
+        $this->middleware('can:comptable-public');      
+    }
+    
     /**
      * Display a listing of the resource.
      *

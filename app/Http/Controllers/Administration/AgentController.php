@@ -111,6 +111,40 @@ class AgentController extends Controller
             'role'                   => 'required|numeric',
         ]);
 
+        $double_check_user_new_phone_duplicate = False;
+        $double_check_user_new_email_duplicate = False;
+        $request_phone_user  = User::where('phone', $request->phone)->first();
+        $request_email_user  = User::where('email', $request->email)->first();
+
+        
+        if(!empty($request_phone_user))
+        {
+            if ($request_phone_user->id != $id)
+                $double_check_user_new_phone_duplicate = True;
+        }
+
+        if ($double_check_user_new_phone_duplicate) {
+            # code...
+            return redirect()->route('agent.index')
+                             ->with('error', 'Ce numero est attribue a un compte!')
+                             ->withInput();
+        }
+
+
+        if(!empty($request_email_user))
+        {
+            if ($request_email_user->id != $id)
+                $double_check_user_new_email_duplicate = True;
+        }
+
+
+        if ($double_check_user_new_email_duplicate) {
+            # code...
+            return redirect()->route('agent.index')
+                             ->with('error', 'Cette adresse email est attribue a un compte!')
+                             ->withInput();
+        }
+
         
         foreach ($roles as $role) {
             if ($role->name != 'guichet') {
@@ -256,13 +290,13 @@ class AgentController extends Controller
         $code       = rand(100000, 999999);
         
         $user =  User::create([
-            'lastname' 	=> $data['lastname'],
-            'firstname' => $data['firstname'],
-            'address'   => $data['address'],
-            'administration'   => Auth::user()->administration,
-            'avatar' 	=> 'avatar.png',
-            'phone' 	=> $data['phone'],
-            'code'      => $code,
+            'lastname' 	        => $data['lastname'],
+            'firstname'         => $data['firstname'],
+            'address'           => $data['address'],
+            'administration'    => Auth::user()->administration,
+            'avatar' 	        => 'avatar.png',
+            'phone' 	        => $data['phone'],
+            'code'              => $code,
         ]);
 
 

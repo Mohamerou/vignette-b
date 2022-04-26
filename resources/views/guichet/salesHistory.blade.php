@@ -44,8 +44,8 @@
             <option value="{{$agent->id}}">{{$agent->lastname}} {{$agent->firstname}} {{$agent->phone}}</option>
             @endforeach
         </select>
-        <input type="date" name="date" >
-        <input Class="btn btn-primary" type="submit" value="Générer le rapport">
+        <input class="mx-5" type="date" name="date" >
+        <input Class="btn btn-primary" type="submit" value="FILTRER LE RAPPORT">
     </form>
     </td>
 

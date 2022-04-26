@@ -11,6 +11,19 @@ use App\Models\Guichet;
 
 class GuichetController extends Controller
 {
+
+
+    
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {        
+        $this->middleware('can:comptable-public');      
+    }
+    
     public function createShow()
     {
         return view('adminGuichet.guichet.create');

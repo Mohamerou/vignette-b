@@ -8,7 +8,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Enrollement Usager</h1>
+            <h1>MISE A JOUR USAGER</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -64,26 +64,27 @@
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form method="POST" action="{{ route('postStepOne') }}" enctype="multipart/form-data">
+              <form method="POST" action="{{ route('guichet.user.update', $user) }}" enctype="multipart/form-data">
                 @csrf
+                @method('PUT')
                 <div class="card-body">
                   <div class="form-group">
                     <label for="lastname">Nom</label>
-                    <input required name="lastname" type="text" class="form-control" id="lastname" placeholder="Nom">
+                    <input value={{ $user->lastname }} name="lastname" type="text" class="form-control" id="lastname" placeholder="Nom">
                   </div>
                   <div class="form-group">
                     <label for="firstname">Prénom</label>
-                    <input required name="firstname" type="text" class="form-control" id="firstname" placeholder="Prénom">
+                    <input value={{ $user->firstname }} name="firstname" type="text" class="form-control" id="firstname" placeholder="Prénom">
                   </div>
                   <div class="form-group">
                     <label for="phone">Contact</label>
-                    <input required name="phone" type="text" class="form-control" id="phone" placeholder="Telephone">
+                    <input value={{ $user->phone }} name="phone" type="text" class="form-control" id="phone" placeholder="Telephone">
                   </div>
 
                   <div class="form-group">
                     <label for="account_type" class="form-label font-weight-bold">Type de compte</label>
                     <select name="account_type" id="account_type" class="form-control" required id="account_type">
-                        <option value="">Selectionner</option>
+                        <option value="{{ $account_type }}">{{ $account_type }}</option>
                             <option value="usager">Usager</option>
                             <option value="entreprise">Entreprise</option>
                     </select>
@@ -91,13 +92,13 @@
 
                   <div class="form-group">
                     <label for="address">Adresse</label>
-                    <input required name="address" type="text" class="form-control" id="address" placeholder="Adresse complet">
+                    <input value={{ $user->address }} name="address" type="text" class="form-control" id="address" placeholder="Adresse complet">
                   </div>
                   <div class="form-group">
                     <label for="idCard">Piece d\'identité</label>
                     <div class="input-group">
                       <div class="custom-file">
-                        <input required name="idCard" type="file" class="custom-file-input" id="idCard">
+                        <input  name="idCard" type="file" class="custom-file-input" id="idCard">
                         <label  class="custom-file-label" for="idCard">Choisir un document</label>
                       </div>
                       <div class="input-group-append">

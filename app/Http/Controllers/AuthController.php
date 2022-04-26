@@ -92,26 +92,29 @@ class AuthController extends Controller
             $user = User::where('phone', $request->phone)->first();
 
             // dd($user);
-            if ($user->isverified != 1) {
+            if ($user->isverified != 1) 
+            {
+                Session::flush();
+                Auth::logout();
                 return redirect()->route('resend_code',['phone' => $phone]);
             }
 
             if($user->hasRole('superadmin') || $user->hasRole('elu') || $user->hasRole('comptable-public')){
-                return Redirect('admin-dashboard');
+                return redirect()->route('get_admin_dash');
             }
             if($user->hasRole('ordonateur') || $user->hasRole('control-gestion') || $user->hasRole('dfm')){
-                return Redirect('admin-dashboard');
+                return redirect()->route('get_admin_dash');
             }
 
             if($user->hasRole('regisseur-public') || $user->hasRole('superviseur')){
-                return Redirect('admin-dashboard');
+                return redirect()->route('get_admin_dash');
             }
 
             if($user->hasRole('guichet')){
-                return Redirect('admin-dashboard');
+                return redirect()->route('get_admin_dash');
             }
 
-            return redirect('home');
+            return redirect()->route('home');
         }
         return back()->with('error', 'Identifiants invalides!')
                      ->withInput();
@@ -395,8 +398,6 @@ public function sendOPT($phone, $code)
     // Logout User from the system 
     public function logout() 
     {
-        Session::flush();
-        Auth::logout();
         return Redirect('connexion');
     }
 }
