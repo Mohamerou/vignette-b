@@ -122,6 +122,8 @@ Route::get('/resend-code/{phone}', [App\Http\Controllers\VerificationController:
 	Route::get('sales/history', [App\Http\Controllers\Guichet\SalesController::class, 'salesHistory'])->middleware('can:intern')->name('salesHistory');
 	Route::post('sales/history', [App\Http\Controllers\Guichet\SalesController::class, 'salesHistoryPost'])->middleware('can:intern')->name('salesHistorypost');
 	Route::get('sales/report', [App\Http\Controllers\Guichet\SalesController::class, 'salesReport'])->middleware('can:regisseur-public')->name('salesReport');
+	Route::get('sales/reports', [App\Http\Controllers\Guichet\SalesController::class, 'salesReportList'])->middleware('can:regisseur-public')->name('sales.report.index');
+	Route::get('sales/report/{report_name}', [App\Http\Controllers\Guichet\SalesController::class, 'showReport'])->middleware('can:regisseur-public')->name('sales.report.show');
 	Route::get('sales/reportFilter/{}', [App\Http\Controllers\Guichet\SalesController::class, 'salesReportFilter'])->middleware('can:intern')->name('salesReportFilter');
 	Route::any('sales/checkout/notify', [App\Http\Controllers\PaymentController::class, 'notify'])->name('salesCheckoutNotify');
 	Route::get('sales/checkout/return', [App\Http\Controllers\PaymentController::class, 'return'])->name('salesCheckoutReturn');

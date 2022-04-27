@@ -176,7 +176,7 @@
             @can('elu')
                 <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{{ route('sales.report.index') }}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Rapport des Ventes</p>
                     </a>
@@ -246,7 +246,13 @@
               <li class="nav-item">
                 <a href="{{ route('salesReport') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Generer un rapport</p>
+                  <p>Generer le rapport journalier</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('sales.report.index') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Lister les rapports</p>
                 </a>
               </li>
               <li class="nav-item">

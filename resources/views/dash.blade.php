@@ -188,8 +188,8 @@
                 </tr>
                 <tr>
                 <td>
-                    <button type="button" class="btn btn-block btn-primary btn-lg"><i class="fa fa-book" aria-hidden="true"></i>
-    Rapports Ventes</button>
+                  <a href="{{ route('sales.report.index') }}" class="btn btn-block btn-primary btn-lg"><i class="fa fa-book" aria-hidden="true"></i>
+                RAPPORTS JOURNALIERS</a>
                 </td>
                 <td>
                 <a href="{{ route('salesHistory') }}" class="btn btn-block btn-primary btn-lg"><i class="fa fa-book" aria-hidden="true"></i>
@@ -389,6 +389,11 @@
               </td>
               <td>
                 <a class="btn btn-block btn-primary btn-lg" href="{{ route('salesHistory') }}"><i class="fa fa-book" aria-hidden="true"></i>Historiques des ventes</a>
+              </td>
+              </tr>
+              <tr>
+              <td>
+                <a class="btn btn-block btn-primary btn-lg" href="{{ route('sales.report.index') }}"><i class="fa fa-book" aria-hidden="true"></i>Historiques des rapports</a>
               </td>
               </tr>
           </tbody></table>

@@ -207,7 +207,9 @@ tr:hover .cut { opacity: 1; }
                 <td>{{ $data['SalesHistories'][$i]['userphone'] }}</td>
                 <td>{{ $data['SalesHistories'][$i]['marque'] }}</td>
                 <td>{{ $data['SalesHistories'][$i]['modele'] }}</td>
-                <td>{{ $data['SalesHistories'][$i]['chassie'] }}</td>
+                <td style="width: 160px !important;">
+                    {{ $data['SalesHistories'][$i]['chassie'] }}
+                </td>
                 <td style="color:red">{{ $data['SalesHistories'][$i]['tarif'] }} FCFA</td>    
                 
             </tr>

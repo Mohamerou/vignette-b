@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Guichet;
 use App\Http\Controllers\Controller;
 use App\Models\Agent;
 use Illuminate\Http\Request;
+use Response;
 use App\Notifications\DemandeVignette;
 use App\Notifications\DemandeValider;
 use App\Models\TrackDemandeVignette;
@@ -19,12 +20,15 @@ use Illuminate\Support\Facades\Session;
 use PDF;
 use File;
 
+use App\Models\Role;
 use App\Models\User;
 use App\Models\Engins;
 use App\Models\Vignettes; 
 use App\Models\EnrollHistory; 
 use App\Models\SalesHistory;  
 use App\Models\Payment;
+use App\Models\Report;
+
 use Illuminate\Support\Facades\DB as FacadesDB;
 
 class SalesController extends Controller
@@ -421,7 +425,7 @@ class SalesController extends Controller
                     'marque'    => $engin->marque,
                     'modele'    => $engin->modele,
                     'chassie'   => $engin->chassie,
-                    'agent'     => $agent_vente->firstname.' - '.$agent_vente->phone,
+                    'agent'     => $agent_vente->firstname.' - '.$agent_vente->lastname.' - '.$agent_vente->phone,
                     'tarif'     => $engin->tarif,
                 ];
             } 
@@ -532,7 +536,7 @@ class SalesController extends Controller
                     'marque'    => $engin->marque,
                     'modele'    => $engin->modele,
                     'chassie'   => $engin->chassie,
-                    'agent'     => $agent_vente->firstname.' - '.$agent_vente->phone,
+                    'agent'     => $agent_vente->firstname.' - '.$agent_vente->lastname.' - '.$agent_vente->phone,
                     'tarif'     => $engin->tarif,
                 ];
             } 
@@ -562,8 +566,27 @@ class SalesController extends Controller
     else {}
 
 
-    $pdf = PDF::loadView('guichet.rapportVente',['data' => $data])->setOptions(['defaultFont' => 'sans-serif'])
-              ->save(''.$path.'/'.$fileName.'.pdf');
+    $pdf = PDF::loadView('guichet.rapportVente',['data' => $data])
+                ->setOptions(['defaultFont' => 'sans-serif']);
+
+    $report_storage_path    = 'reports/'.$fileName.'.pdf';
+
+    
+    $report_storage = \Storage::disk('public')
+                ->put($report_storage_path, $pdf->output());
+
+    // dd($report_storage);
+    // Update report if existing track 
+    $report_check = Report::where('report_name', $fileName)
+                            ->first();
+
+    if (empty($report_check)) {
+        $report_track = Report::create([
+            'user_id'       => Auth::user()->id,
+            'report_name'   => $fileName
+        ]);
+    }
+
 
     $pdf->getDomPDF()->setHttpContext(
         stream_context_create([
@@ -577,6 +600,58 @@ class SalesController extends Controller
       return $pdf->download($fileName.'.pdf');
     
     }
+
+
+    public function salesReportList()
+    {
+        $date = Carbon::now();
+        $date = Carbon::parse($date);
+        $date = $date->format('Y');
+        
+        
+        $reports = Report::whereYear('created_at', $date)->get();
+        $roles   = Role::get();
+        $user_role = '';
+
+        $report_datas = [];
+
+        foreach ($reports as $report) {
+            $user = User::findOrfail($report->user_id);
+
+            foreach ($roles as $role) {
+                if (Auth::user()->hasRole('$role->name')) {
+
+                dd($role);
+                   $user_role = $role->name;
+                   dd($user_role);
+                }
+            }
+
+            $report_datas [] = [
+                'report'    => $report,
+                'user_name' => $user->firstname.' '.$user->lastname,
+                'user_role' => $user_role
+            ];
+
+        }
+
+        return view('Rapports.index')
+        ->with('report_datas', $report_datas);
+    }
+
+
+    public function showReport($repot_name)
+    {
+        
+        $path = storage_path('reports/'.$repot_name);
+        $path = $path.'.pdf';
+
+        return response()->file($path);
+        return Response::make(file_get_contents($path), 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename='.$repot_name.'.pdf'
+        ]);
+            }
 
 
     

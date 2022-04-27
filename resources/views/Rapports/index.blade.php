@@ -10,7 +10,7 @@
     jQuery(document).ready(function($) {
         //jQuery Functionality
         $('#example').DataTable();
-        $(document).on('click', '#example tbody tr button', function() {       
+        $(document).on('click', '#example tbody tr button', function() {
         $("#modaldata tbody tr").html("");
         $("#modaldata tbody tr").html($(this).closest("tr").html());
         $("#exampleModal").modal("show");
@@ -19,6 +19,10 @@
 </script>
 <style>
     #modaldata tbody tr > td:last-of-type{display:none;}
+
+    td {
+        text-align: center !imporant;
+    }
 </style>
 
 @extends ('layouts.admin')
@@ -31,15 +35,7 @@
 <div class="container-fluid">
 <div class="row mb-2">
 <div class="col-sm-6">
-    <h1>Historique Vente</h1>
-</div>
-<div class="col-sm-6">
-    <div class="col-sm-3">
-        <h1>Total Vente:</h1>
-    </div>
-    <div class="col-sm-3">
-        <h1 class="text-danger">{{ $totalSales }} FCFA</h1>
-    </div>
+    <h1>Historique des rapports</h1>
 </div>
 </div>
 </div>
@@ -83,42 +79,31 @@
 
 <div class="card px-4">
     <div class="card-header">
-    <h3 class="card-title">Panel de Vente</h3>
+    <h3 class="card-title">Historique des rapports</h3>
     </div>
 
     <div class="card-body p-0">
     <table id="example" class="table table-striped table-hover table-bordered">
     <thead>
     <tr>
-    <th>Agent</th>
-    <th>Usager</th>
-    <th>Contact Usager</th>
-    <th>Marque</th>
-    <th>Modele</th>
-    <th>Chassie</th>
-    <th>Tarif</th>
-    <th style="width: 40px">Actions</th>
+                      <th>ID</th>
+                      <th>Emetteur</th>
+                      <th>Date</th>
+                      <th>Telecharger</th>
     </tr>
     </thead>
     <tbody>
 
 
-        @for($i=0; $i < count($SalesHistories); $i++)
+        @for($i=0; $i < count($report_datas); $i++)
             <tr>
-                <td>{{ $SalesHistories[$i]['agent'] }}</td>
-                <td>{{ $SalesHistories[$i]['usager'] }}</td>
-                <td>{{ $SalesHistories[$i]['userphone'] }}</td>
-                <td style="width: 160px !important;">
-                    {{ $SalesHistories[$i]['marque'] }}
-                </td>
-                <td>{{ $SalesHistories[$i]['modele'] }}</td>
-                <td style="width: 160px !important;">
-                    {{ $SalesHistories[$i]['chassie'] }}
-                </td>
-                <td class="text-danger">{{ $SalesHistories[$i]['tarif'] }}</td>    
+                <td>{{ $report_datas[$i]['report']->id }}</td>
                 <td>
-                <button disabled type="button" class="btn btn-success"><h4>&#x2611;</h4></button>
+                    {{ $report_datas[$i]['user_name'] }} - {{ $report_datas[$i]['user_role'] }} <br>
+                    {{ $report_datas[$i]['user_phone'] }}
                 </td>
+                <td>{{ $report_datas[$i]['report']->created_at }}</td>
+                <td>Telecharger le rapport <a href="{{ route('sales.report.show', $report_datas[$i]['report']->report_name) }}">{{ $report_datas[$i]['report']->report_name }}</a></td>
             </tr>
         @endfor
 
@@ -140,8 +125,4 @@
 </section>
 
 </div>
-@endsection 
-
-
-
-    
+@endsection

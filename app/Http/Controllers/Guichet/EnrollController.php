@@ -85,7 +85,7 @@ class EnrollController extends Controller
         $this->middleware('can:guichet'); 
         // dd($user_id);
         return view('guichet.enrollViewTwo')->with('user_id', $user_id)
-                                            ->with('success', 'Enrollement partie 1 effectué avec succès!');
+                                            ->with('success', 'enrôlement partie 1 effectué avec succès!');
     }
 
     public function postStepOne(Request $request)
@@ -153,7 +153,7 @@ class EnrollController extends Controller
         // Enroll History backUp
         $history = new EnrollHistory();
         $history->agentRef      =   Auth::user()->id;
-        $history->agentName     =   Auth::user()->firstname;
+        $history->agentName     =   Auth::user()->firstname.' '.Auth::user()->lastname;
         $history->agentPhone    =   Auth::user()->phone;
         $history->userId        =   $User->id;
         $history->save();
@@ -301,12 +301,11 @@ class EnrollController extends Controller
                                            ->first();
 
         if ($account_type === "usager")
-            return redirect()->route('enrollStepTwo', $user)->with('success', 'Enrollement partie 1 effectué avec succès!')
-            ->with('error', 'Completer l\'enrollement a sur cette page!');
-        
-        dd(":)");
-        return redirect()->route('enrollStepTwo', $user)->with('success', 'Enrollement partie 1 effectué avec succès!')
-        ->with('error', 'Completer l\'enrollement a sur cette page!'); 
+            return redirect()->route('enrollStepTwo', $user)->with('success', 'enrôlement partie 1 effectué avec succès!')
+            ->with('error', 'Completer l\'enrôlement a sur cette page!');
+            
+        return redirect()->route('enrollStepTwo', $user)->with('success', 'enrôlement partie 1 effectué avec succès!')
+        ->with('error', 'Completer l\'enrôlement a sur cette page!'); 
         
     }
 
@@ -320,7 +319,7 @@ class EnrollController extends Controller
         // $OTP = Nexmo::message()->send([
         //                                 'to'   => '+223'.$phone,
         //                                 'from' => '+22369141418',
-        //                                 'text' => "ikaVignetti, l\'enrollement de votre engin est effectif\n\n\
+        //                                 'text' => "ikaVignetti, l\'enrôlement de votre engin est effectif\n\n\
         //                                             Marque: ".$marque."\n
         //                                             Modele: ".$modele."\n
         //                                             Chassie: ".$chassie."\n",
@@ -333,7 +332,7 @@ class EnrollController extends Controller
         $enrollHistory->save();
 
 
-        return redirect()->route('enroll.index')->with('success', 'Enrollement partie 2 effectué avec succès!');
+        return redirect()->route('enroll.index')->with('success', 'Enrôlement partie 2 effectué avec succès!');
     }
 
     private function storeIdCard($user)

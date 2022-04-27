@@ -8,12 +8,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Enrollement Usager</h1>
+            <h1>Enrôlement Usager</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="admin-dashboard">Accueil</a></li>
-              <li class="breadcrumb-item active">Enrollement</li>
+              <li class="breadcrumb-item active">Enrôlement</li>
             </ol>
           </div>
         </div>
@@ -94,7 +94,7 @@
                     <input required name="address" type="text" class="form-control" id="address" placeholder="Adresse complet">
                   </div>
                   <div class="form-group">
-                    <label for="idCard">Piece d\'identité</label>
+                    <label for="idCard">Piece d'identité</label>
                     <div class="input-group">
                       <div class="custom-file">
                         <input required name="idCard" type="file" class="custom-file-input" id="idCard">
