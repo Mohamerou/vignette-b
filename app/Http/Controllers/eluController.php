@@ -9,7 +9,7 @@ class eluController extends Controller
     public function eluIndex()
     {
 
-        return view('elu.eluDash');
+        // return view('elu.eluDash');
 
     }
 }

@@ -41,7 +41,7 @@
 		    </select>
 		  </div>
 		  <div class="mb-3">
-		    <label for="modele" class="form-label font-weight-bold">Modèle</label>
+		    <label for="modele" class="form-label font-weight-bold">Type</label>
 		    <input required name="modele" type="modele" class="form-control" id="modele">
 		  </div>
 		  <div class="mb-3">
@@ -53,7 +53,7 @@
 		    <input disabled value="51-125 CM3" name="uiDescription" type="text" class="form-control" id="disabledTextInput">
 		  </div>
 
-		  <input hidden value="125" name="puissanceFiscale" type="text" class="form-control">
+		  <input hidden value="125" name="cylindre" type="text" class="form-control">
 
 		  <div class="mb-3">
 		    <label for="Tarif" class="form-label font-weight-bold">Tarif</label>

@@ -1,3 +1,6 @@
+
+
+
 <script src="{{ asset('js/chart/chart.min.js') }}"></script>
 
 @extends('layouts.admin')
@@ -172,38 +175,88 @@
 
       <!-- Action Row -->
       <div class="shadow p-3 mb-5 bg-body rounded row">
-          <div class="col-md-12">
-          <div class="card card-primary card-outline">
+        <div class="col-md-12">
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+            <h3 class="card-title">
+                <i class="fas fa-edit"></i>
+                Pallette de commande
+            </h3>
+            </div>
+            <div class="card-body pad table-responsive">
+            <table class="table table-bordered text-center">
+                <tbody><tr>
+                <th></th>
+                <th></th>
+                </tr>
+                <tr>
+                <td>
+                    <button type="button" class="btn btn-block btn-primary btn-lg"><i class="fa fa-book" aria-hidden="true"></i>
+    Rapports Ventes</button>
+                </td>
+                <td>
+                <a href="{{ route('salesHistory') }}" class="btn btn-block btn-primary btn-lg"><i class="fa fa-book" aria-hidden="true"></i>
+              HISTORIQUE VENTE</a>
+                </td>
+                </tr>
+            </tbody></table>
+            </div>
+            <!-- /.card -->
+        </div>
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- End Action Row -->
+      <!-- Action Row -->
+      <div class="shadow p-3 mb-5 bg-body rounded row">
+        <div class="col-md-12">
+          <!-- Main row -->
+      <div id="printChart">
+        <div class="row">
+          <!-- Left col -->
+          <section class="col-md-12 connectedSortable">
+            <!-- Custom tabs (Charts with tabs)-->
+            <div class="card  " >
               <div class="card-header">
-              <h3 class="card-title">
-                  <i class="fas fa-edit"></i>
-                  Pallette de commande
-              </h3>
+                <h3 class="card-title">
+                  <i class="fas fa-chart-pie mr-1"></i>
+                  Ventes
+                </h3>
+                <div class="card-tools">
+                  <ul class="nav nav-pills ml-auto">
+                    <li class="nav-item">
+                      <a class="nav-link active" href="#revenue-chart" >Area</a>
+                    </li>
+                  </ul>
+                </div>
               </div>
-              <div class="card-body pad table-responsive">
-              <table class="table table-bordered text-center">
-                  <tbody><tr>
-                  <th></th>
-                  <th></th>
-                  </tr>
-                  <tr>
-                  <td>
-                      <button type="button" class="btn btn-block btn-primary btn-lg"><i class="fa fa-book" aria-hidden="true"></i>
-      Rapports Ventes</button>
-                  </td>
-                  <td>
-                  <a href="{{ route('salesHistory') }}" class="btn btn-block btn-primary btn-lg"><i class="fa fa-book" aria-hidden="true"></i>
-                HISTORIQUE VENTE</a>
-                  </td>
-                  </tr>
-              </tbody></table>
+              
+              <!-- /.card-header -->
+              <div class="card-body">
+                <div class="tab-content p-0">
+                  <!-- Morris chart - Sales -->
+                    <div class="chart tab-pane active" id="revenue-chart"
+                      style="position: relative;  ">
+                      <!-- <canvas id="myChart"></canvas> -->
+                      <canvas id="canvas" height="280" width="600"></canvas>
+                    </div>
+                  </div>
               </div>
-              <!-- /.card -->
-          </div>
-          </div>
-          <!-- /.col -->
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </section>
+
+        </div>
       </div>
-      <!-- End Action Row -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- End Action Row -->
+
+
+      
+  
     @endcan
 
     
@@ -568,9 +621,19 @@
   Enrollements Recents</a>
               </td>
               </tr>
+              <tr>
+              <td>
+                  <a href="{{ route('guichet.user.index') }}" class="btn btn-block btn-primary btn-lg"><i class="fa fa-book" aria-hidden="true"></i>
+  Liste des usagers</a>
+              </td>
+              <td>
+                <a href="{{ route('guichet.entreprise.index') }}" class="btn btn-block btn-primary btn-lg"><i class="fa fa-book" aria-hidden="true"></i>
+Liste des Entreprises</a>
+            </td>
+              </tr>
               <td>
                   <a href="{{ route('enroll.index') }}" class="btn btn-block btn-primary btn-lg"><i class="fa fa-book" aria-hidden="true"></i>
-  Historique</button>
+  Historique Enrollement</button>
               </td>
               </tr>
           </tbody></table>
@@ -627,234 +690,12 @@
   <!-- End Action Row -->
 @endcan
 
+     
 
-
-@if(Gate::check('elu') || Gate::check('regisseur'))
-
-      <!-- Main row -->
-      <div id="printChart">
-        <div class="row">
-          <!-- Left col -->
-          <section class="col-md-12 connectedSortable">
-            <!-- Custom tabs (Charts with tabs)-->
-            <div class="card  " >
-              <div class="card-header">
-                <h3 class="card-title">
-                  <i class="fas fa-chart-pie mr-1"></i>
-                  Ventes
-                </h3>
-                <div class="card-tools">
-                  <ul class="nav nav-pills ml-auto">
-                    <li class="nav-item">
-                      <a class="nav-link active" href="#revenue-chart" >Area</a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-              
-              <!-- /.card-header -->
-              <div class="card-body">
-                <div class="tab-content p-0">
-                  <!-- Morris chart - Sales -->
-                    <div class="chart tab-pane active" id="revenue-chart"
-                      style="position: relative;  ">
-                      <!-- <canvas id="myChart"></canvas> -->
-                      <canvas id="canvas" height="280" width="600"></canvas>
-                    </div>
-                  </div>
-              </div>
-              <!-- /.card-body -->
-            </div>
-            <!-- /.card -->
-          </section>
-
-
-
-          
-
-
-
-          <!-- /.Left col -->
-
-
-
-          <!-- right col (We are only adding the ID to make the widgets sortable)-->
-          
-          <!-- right col -->
-        </div>
-      </div>
-  
-  @endif
-      <!-- /.row (main row) -->
-    </div><!-- /.container-fluid -->
-  </section>
-  <!-- /.content -->
-</div>
-
-
-
-<!-- <script>
-<<<<<<< HEAD
-  const labels = [
-    'Janvier',
-    'Février',
-    'Mars',
-    'Avril',
-    'Mai',
-    'ecembre',
-    'Juillet',
-    'Août',
-    'Septembre',
-    'Octobre',
-    'Novembre',
-    'Decembre',
-  ];
-
-  const data = {
-    labels: [
-      'Jan',
-      'Fev',
-      'Mars',
-      'Avr',
-      'Mai',
-      'Juin',
-      'Jul',
-      'Aout',
-      'Sept',
-      'Oct',
-      'Nov',
-      'Dec'
-    ]
-    datasets: [{
-      label: 'Statistique des ventes',
-      borderColor: 'rgb(255, 99, 132)',
-      data: [0, 10, 5, 2, 20, 30, 45,60,30,20,80,70,40],
-      backgroundColor: [
-        'rgb(255,99,132)',
-        'rgb(54,162,235)',
-        'rgb(155,205,89)',
-        'rgb(74,89,23)',
-        'rgb(233,99,87)',
-        'rgb(25,198,132)',
-        'rgb(255,199,132)',
-        'rgb(98,199,12)',
-        'rgb(156,99,126)',
-        'rgb(234,25,65)',
-        'rgb(144,36,132)',
-        'rgb(255,78,67)'
-      ],
-    }]
-  };
-
-  const config = {
-    type: 'doughnut',
-    data: data,
-    options: {}
-  };
-</script>
-<script>
-  const myChart = new Chart(
-    document.getElementById('donutChart'),
-    config
-  );
-</script> -->
-
-
-<!-- Line Chart Representation -->
-<script>
-  const labels = [
-    'Janvier',
-    'Février',
-    'Mars',
-    'Avril',
-    'Mai',
-    'ecembre',
-    'Juillet',
-    'Août',
-    'Septembre',
-    'Octobre',
-    'Novembre',
-    'Decembre',
-  ];
-
-  const data = {
-    labels: labels,
-    datasets: [{
-      label: 'Statistique des ventes',
-      backgroundColor: 'rgb(255, 99, 132)',
-      borderColor: 'rgb(255, 99, 132)',
-      data: [0, 10, 5, 2, 20, 30, 45,60,30,20,80,70,40],
-    }]
-  };
-
-  const config_line = {
-    type: 'line',
-    data: data,
-    options: {}
-  };
-
-
-</script>
-
-
-<!-- Doughnut Chart Representation -->
-<script>
-// <block:setup:1>
-const data_doughnut = {
-  labels: [
-    'Red',
-    'Blue',
-    'Yellow'
-  ],
-  datasets: [{
-    label: 'My First Dataset',
-    data: [300, 50, 100],
-    backgroundColor: [
-      'rgb(255, 99, 132)',
-      'rgb(54, 162, 235)',
-      'rgb(255, 205, 86)'
-    ],
-    hoverOffset: 4
-  }]
-};
-// </block:setup>
-
-// <block:config:0>
-const config_donut = {
-  type: 'doughnut',
-  data: data_doughnut,
-  options: {}
-};
-// </block:config>
-
-// module.exports = {
-//   actions: [],
-//   config: config_donut,
-// };
-</script>
 
 
 
 <script>
-  const myChart = new Chart(
-    document.getElementById('myChart'),
-    config_line
-  );
-
-  const donoughtChart = new Chart(
-    document.getElementById('donoughtChart'),
-    config_donut
-  );
-</script>
-<<<<<<< HEAD
- 
-=======
-
-
-
-<script>
-=======
->>>>>>> af2d8799dfab851770c946042e747f6afd532542
 function imprimer(printChart) {
    var printContents = document.getElementById(printChart).innerHTML;
    var originalContents = document.body.innerHTML;
@@ -862,7 +703,7 @@ function imprimer(printChart) {
    window.print();
    document.body.innerHTML = originalContents;
    }
-</script> -->
+</script>
 
 
 
@@ -875,9 +716,6 @@ function imprimer(printChart) {
   var _ydata = {!! json_encode($months) !!};
 </script>
 
-<<<<<<< HEAD
->>>>>>> 64cc5e1ad934c284ed0425871937102210367c62
-=======
 <script>
 const ctx = document.getElementById('canvas').getContext('2d');
 const myChart = new Chart(ctx, {
@@ -935,7 +773,5 @@ const myChart = new Chart(ctx, {
     var ctx = document.getElementById('canvas').getContext('2d');
     new Chart(ctx, chartdata);
   </script> -->
-
->>>>>>> af2d8799dfab851770c946042e747f6afd532542
 <!-- /.content-wrapper -->
 @endsection

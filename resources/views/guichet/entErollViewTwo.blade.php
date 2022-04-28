@@ -8,7 +8,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Enrollement Usager</h1>
+            <h1>Enrollement Engin</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -60,51 +60,47 @@
             <!-- general form elements -->
             <div class="card card-primary">
               <div class="card-header">
-                <h3 class="card-title">Infos Usagers</h3>
+                <h3 class="card-title">Infos Engin</h3>
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form method="POST" action="{{ route('postStepOne') }}" enctype="multipart/form-data">
+              <form method="POST" action="{{ route('postStepTwo') }}" enctype="multipart/form-data">
                 @csrf
                 <div class="card-body">
                   <div class="form-group">
-                    <label for="lastname">Nom</label>
-                    <input required name="lastname" type="text" class="form-control" id="lastname" placeholder="Nom">
+                    <label for="marque">Marque</label>
+                    <input name="marque" type="text" class="form-control" id="marque" placeholder="Marque">
+                    <input name="user_id" type="hidden" value="{{ $user_id }}">
                   </div>
                   <div class="form-group">
-                    <label for="firstname">Prénom</label>
-                    <input required name="firstname" type="text" class="form-control" id="firstname" placeholder="Prénom">
+                    <label for="modele">Type</label>
+                    <input name="modele" type="text" class="form-control" id="modele" placeholder="Modele">
                   </div>
                   <div class="form-group">
-                    <label for="phone">Contact</label>
-                    <input required name="phone" type="text" class="form-control" id="phone" placeholder="Telephone">
+                    <input name="mairie" type="hidden" class="form-control" id="mairie" value="bko">
+                  </div>
+                  <div class="form-group">
+                    <label for="chassie">chassie</label>
+                    <input name="chassie" type="text" class="form-control" id="chassie" placeholder="No Chassie">
                   </div>
 
-                  {{-- <div class="form-group">
-                    <label for="account_type" class="form-label font-weight-bold">Type de compte</label>
-                    <select name="account_type" id="account_type" class="form-control" required id="account_type">
+                  <div class="form-group">
+                    <label for="cylindre" class="form-label font-weight-bold">Cylindre</label>
+                    <select name="cylindre" id="cylindre" class="form-control" required id="cylindre">
                         <option value="">Selectionner</option>
-                            <option value="usager">Usager</option>
-                            <option value="entreprise">Entreprise</option>
+                            <option value="+125">+125 cm<sup>3</sup> (12 000 FCFA)</option>
+                            <option value="125">51  -  125 cm<sup>3</sup> (6 000 FCFA)</option>
+                            <option value="50">1  -  50 cm<sup>3</sup> (3 000 FCFA)</option>
+                            <option value="0">0 cm<sup>3</sup> (1 500 FCFA)</option>
                     </select>
-                  </div> --}}
-
-                  <input required name="account_type" value="usager" type="hidden" class="form-control" id="address" placeholder="Adresse complet">
-
-
-                  <div class="form-group">
-                    <label for="address">Adresse</label>
-                    <input required name="address" type="text" class="form-control" id="address" placeholder="Adresse complet">
                   </div>
+                  
                   <div class="form-group">
-                    <label for="idCard">Piece d\'identité</label>
+                    <label for="documentJustificatif">Facture / Ancienne vignette</label>
                     <div class="input-group">
                       <div class="custom-file">
-                        <input required name="idCard" type="file" class="custom-file-input" id="idCard">
-                        <label  class="custom-file-label" for="idCard">Choisir un document</label>
-                      </div>
-                      <div class="input-group-append">
-                        <span class="input-group-text"></span>
+                        <input name="documentJustificatif" type="file" class="custom-file-input" id="documentJustificatif">
+                        <label  class="custom-file-label" for="documentJustificatif">Choisir un document</label>
                       </div>
                     </div>
                   </div>

@@ -13,66 +13,54 @@
     </div>
 
     <div class="row g-5 ">
-      <div class="col-md-5 col-md-4 order-md-last">
+      <div class="col-md-5 col-md-7 order-md-last">
         <h4 class="d-flex justify-content-between align-items-center mb-3">
-          <span class="text-primary">Infos Engin</span>
+          <span class="text-primary">Infos Engins</span>
         </h4>
-        <ul class="list-group mb-3">
-          <li class="list-group-item d-flex justify-content-between lh-sm">
-            <div>
-              <h6 class="my-0">Marque</h6>
-              <small class="text-muted"></small>
-            </div>
-            <span class="text-muted" style="text-trandform:uppercase;">{{ $data['marque'] }}</span>
-          </li>
-          <li class="list-group-item d-flex justify-content-between lh-sm">
-            <div>
-              <h6 class="my-0">Type</h6>
-              <small class="text-muted"></small>
-            </div>
-            <span class="text-muted">{{ $data['modele'] }}</span>
-          </li>
-          <li class="list-group-item d-flex justify-content-between lh-sm">
-            <div>
-              <h6 class="my-0">Chassie</h6>
-              <small class="text-muted"></small>
-            </div>
-            <span class="text-muted">{{ $data['chassie'] }}</span>
-          </li>
-          <li class="list-group-item d-flex justify-content-between lh-sm">
-            <div>
-              <h6 class="my-0">Cylindre</h6>
-              <small class="text-muted"></small>
-            </div>
-            <span class="text-muted">{{ $data['cylindre'] }} CM<sup>3</sup> </span>
-          </li>
-          <li class="list-group-item d-flex justify-content-between">
-            <h6>Montant</h6>
-            <strong class="text-danger">{{ $data['amount'] }} FCFA</strong>
-          </li>
-        </ul>
+        <div class="card">
+          
+          <!-- /.card-header -->
+          <div class="card-body table-responsive p-0 " >
+            <table class="table table-hover text-nowrap">
+              <thead>
+                <tr>
+                  <th>N°</th>
+                  <th>Marque</th>
+                  <th>Type</th>
+                  <th>Chassie</th>
+                  <th>Cylindre</th>
+                  <th>Montant</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>{{ $data['marque'] }}</td>
+                  <td>{{ $data['modele'] }}</td>
+                  <td><span class="tag tag-success">{{ $data['chassie'] }}</span></td>
+                  <td>{{ $data['cylindre'] }}</td>
+                  <td class="text-danger">{{ $data['amount'] }} FCFA</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <!-- /.card-body -->
+        </div>
 
       </div>
-      <div class="col-md-7 col-lg-8">
-        <h4 class="text-primary mb-3">Infos Usager</h4>
+      <div class="col-md-5 ">
+        <h4 class="text-primary mb-3">Infos Entreprise</h4>
         <form class="needs-validation" novalidate action="{{ route('salesStepTwo') }}" method="POST">
             @csrf
           <div class="row g-3">
-            <div class="col-sm-6">
-              <label for="firstName" class="form-label">Prenom</label>
+            <div class="col-12">
+              <label for="firstName" class="form-label">Nom</label>
               <input name="firstname" type="text" class="form-control" id="firstName" placeholder="" value="{{ $data['firstname'] }}" required>
               <div class="invalid-feedback">
                 Valid first name is required.
               </div>
             </div>
 
-            <div class="col-sm-6">
-              <label for="lastName" class="form-label">Nom</label>
-              <input name="lastname" type="text" class="form-control" id="lastName" placeholder="" value="{{ $data['lastname'] }}" required>
-              <div class="invalid-feedback">
-                Valid last name is required.
-              </div>
-            </div>
 
             <div class="col-12">
               <label for="phone" class="form-label">Telephone</label>
@@ -91,7 +79,7 @@
               <input name="cylindre" type="hidden" class="form-control" id="cylindre" value="{{ $data['cylindre'] }}">
               <input name="modele" type="hidden" class="form-control" id="modele" value="{{ $data['modele'] }}">
               <input name="marque" type="hidden" class="form-control" id="marque" value="{{ $data['marque'] }}">
-
+          </div>
 
               <hr class="my-4">
 
@@ -102,6 +90,7 @@
         </form>
       </div>
     </div>
+  
   </main>
 </div>
 </section>

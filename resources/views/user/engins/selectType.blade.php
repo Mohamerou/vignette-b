@@ -42,7 +42,37 @@
 		<div class="row row-cols-1 row-cols-md-3 g-4">
 		  <div class="col py-2">
 		    <div class="card h-100 text-center">
+		      <img src="{{ asset('engins/velo.jpg') }}" class="card-img-top img-thumbnail" alt="moto51-125">
+		      <div class="card-body">
+		        <h5 class="card-title font-weight-bold">0 CM<sup>3</sup></h5>
+		        <h5 class="card-title font-weight-bold">Tarif: 1 500 FCFA</h5>
+		      </div>
+		      <form method="GET" action="{{ route('user.createEngin',['type' => 'moto51-125']) }}">
+		      	@csrf
+		        <div class="card-footer">
+			        <button class="btn btn-success">ACHETER &#8594;</button>
+			     </div>
+		        </form>
+		    </div>
+		  </div>
+		  <div class="col py-2">
+		    <div class="card h-100 text-center">
 		      <img src="{{ asset('engins/moto51-125.png') }}" class="card-img-top img-thumbnail" alt="moto51-125">
+		      <div class="card-body">
+		        <h5 class="card-title font-weight-bold">1 - 50 CM<sup>3</sup></h5>
+		        <h5 class="card-title font-weight-bold">Tarif: 3 000 FCFA</h5>
+		      </div>
+		      <form method="GET" action="{{ route('user.createEngin',['type' => 'moto51-125']) }}">
+		      	@csrf
+		        <div class="card-footer">
+			        <button class="btn btn-success">ACHETER &#8594;</button>
+			     </div>
+		        </form>
+		    </div>
+		  </div>
+		  <div class="col py-2">
+		    <div class="card h-100 text-center">
+		      <img src="{{ asset('engins/51-125.png') }}" class="card-img-top img-thumbnail" alt="moto51-125">
 		      <div class="card-body">
 		        <h5 class="card-title font-weight-bold">51 - 125 CM<sup>3</sup></h5>
 		        <h5 class="card-title font-weight-bold">Tarif: 6 000 FCFA</h5>
@@ -59,38 +89,8 @@
 		    <div class="card h-100 text-center">
 		      <img src="{{ asset('engins/moto125plus.png') }}" class="card-img-top img-thumbnail" alt="moto51-125">
 		      <div class="card-body">
-		        <h5 class="card-title font-weight-bold">125 CM<sup>3</sup> - PLUS</h5>
+		        <h5 class="card-title font-weight-bold">+125 CM<sup>3</sup></h5>
 		        <h5 class="card-title font-weight-bold">Tarif: 12 000 FCFA</h5>
-		      </div>
-		      <form method="GET" action="{{ route('user.createEngin',['type' => 'moto125plus']) }}">
-		      	@csrf
-		        <div class="card-footer">
-			        <button class="btn btn-success">ACHETER &#8594;</button>
-			     </div>
-		        </form>
-		    </div>
-		  </div>
-		  <div class="col py-2">
-		    <div class="card h-100 text-center">
-		      <img src="{{ asset('engins/tricycle125.png') }}" class="card-img-top img-thumbnail" alt="moto51-125">
-		      <div class="card-body">
-		        <h5 class="card-title font-weight-bold">125 CM<sup>3</sup></h5>
-		        <h5 class="card-title font-weight-bold">Tarif: 33 000 FCFA</h5>
-		      </div>
-		      <form method="GET" action="{{ route('user.createEngin',['type' => 'tricycle125']) }}">
-		      	@csrf
-		        <div class="card-footer">
-			        <button class="btn btn-success">ACHETER &#8594;</button>
-			     </div>
-		        </form>
-		    </div>
-		  </div>
-		  <div class="col py-2">
-		    <div class="card h-100 text-center">
-		      <img src="{{ asset('engins/tricycle150.png') }}" class="card-img-top img-thumbnail" alt="moto51-125">
-		      <div class="card-body">
-		        <h5 class="card-title font-weight-bold">150 CM<sup>3</sup></h5>
-		        <h5 class="card-title font-weight-bold">Tarif: 46 000 FCFA</h5>
 		      </div>
 		      <form method="GET" action="{{ route('user.createEngin',['type' => 'tricycle150']) }}">
 		      	@csrf
@@ -100,7 +100,7 @@
 		        </form>
 		    </div>
 		  </div>
-		  <div class="col py-2">
+		  {{-- <div class="col py-2">
 		    <div class="card h-100 text-center">
 		      <img src="{{ asset('engins/tricycle175-200.png') }}" class="card-img-top img-thumbnail" alt="moto51-125">
 		      <div class="card-body">
@@ -301,7 +301,7 @@
 			     </div>
 		        </form>
 		    </div>
-		  </div>
+		  </div> --}}
 		</div>
 	</div>
 @endsection

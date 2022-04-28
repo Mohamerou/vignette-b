@@ -272,9 +272,43 @@ class SuperAdminController extends Controller
             'role'                   => 'required|numeric',
         ]);
 
+        $double_check_user_new_phone_duplicate = False;
+        $double_check_user_new_email_duplicate = False;
+        $request_phone_user  = User::where('phone', $request->phone)->first();
+        $request_email_user  = User::where('email', $request->email)->first();
+
+        
+        if(!empty($request_phone_user))
+        {
+            if ($request_phone_user->id != $id)
+                $double_check_user_new_phone_duplicate = True;
+        }
+
+        if ($double_check_user_new_phone_duplicate) {
+            # code...
+            return redirect()->route('superadmin.index')
+                             ->with('error', 'Cet numero est attribue a un compte!')
+                             ->withInput();
+        }
+
+
+        if(!empty($request_email_user))
+        {
+            if ($request_email_user->id != $id)
+                $double_check_user_new_email_duplicate = True;
+        }
+
+
+        if ($double_check_user_new_email_duplicate) {
+            # code...
+            return redirect()->route('superadmin.index')
+                             ->with('error', 'Cette adresse email est attribue a un compte!')
+                             ->withInput();
+        }
+
         
         foreach ($roles as $role) {
-            if ($role->name === 'superadmin' || $role->name === 'user' || $role->name === 'agent') {
+            if ($role->name === 'superadmin' || $role->name === 'user' || $role->name === 'guichet') {
             }else {
                 if ($user->hasRole($role->name)) {
                     $user_current_role = $role->id;

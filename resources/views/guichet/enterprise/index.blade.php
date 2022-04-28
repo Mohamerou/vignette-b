@@ -41,7 +41,7 @@
     <div class="container-fluid">
     <div class="row mb-2">
     <div class="col-sm-6">
-        <h1>Historique des enrollements</h1>
+        <h1>Liste des Entreprises</h1>
     </div>
     </div>
     </div>
@@ -85,30 +85,31 @@
 
 <div class="card px-4">
     <div class="card-header">
-    <h3 class="card-title">Historiques des enrollements</h3>
+    <h3 class="card-title"></h3>
     </div>
 
     <div class="card-body p-0">
     <table id="example" class="table table-striped table-hover table-bordered">
     <thead>
     <tr>
-    <th>AGENT</th>
-    <th>USAGER</th>
-    <th>CONTACT USAGER</th>
+    <th>Entreprise</th>
+    <th>CONTACT Entreprise</th>
+    <th>ADRESSE</th>
     <th>DATE</th>
-    <th style="width: 40px">STATUS</th>
+    <th>DETAILS</th>
+    <th style="width: 40px">ACTIONS</th>
     </tr>
     </thead>
     <tbody>
 
-
-        @for($i=0; $i < count($histories); $i++)
+        @for($i=0; $i < count($user_list); $i++)
             <tr>
-                <td>{{ $histories[$i]['agent'] }}</td>
-                <td>{{ $histories[$i]['usager'] }}</td>
-                <td>{{ $histories[$i]['userphone'] }}</td>
-                <td>{{ $histories[$i]['date'] }}</td>
-                <td class="text-danger"><button disabled type="button" class="btn btn-success"><h4>&#x2611;</h4></button></td>
+                <td>{{ $user_list[$i]['firstname'] }} {{ $user_list[$i]['lastname'] }}</td>
+                <td>{{ $user_list[$i]['phone'] }}</td>
+                <td>{{ $user_list[$i]['address'] }}</td>
+                <td>{{ $date }}</td>
+                <td><a href="{{ route('guichet.user.show', $user_list[$i]) }}" class="btn btn-info">VOIR</a></td>
+                <td><a href="{{ route('enrollStepTwo', $user_list[$i]) }}" class="btn btn-warning">Ajouter Engin</a></td>
             </tr>
         @endfor
 

@@ -70,5 +70,69 @@ class AuthServiceProvider extends ServiceProvider
 
         });
 
+        
+
+        Gate::define('intern', function($user){
+            
+            if($user->hasRole('superadmin'))
+                return $user->hasRole('superadmin');
+
+            if($user->hasRole('elu'))
+                return $user->hasRole('elu');
+            
+            if($user->hasRole('dfm'))
+                return $user->hasRole('dfm');
+
+            if($user->hasRole('ordonateur'))
+                return $user->hasRole('ordonateur');
+
+            if($user->hasRole('controle-gestion'))
+                return $user->hasRole('controle-gestion');
+                
+            if($user->hasRole('superviseur'))
+                return $user->hasRole('superviseur');
+        
+            if($user->hasRole('comptable-public'))
+                return $user->hasRole('comptable-public');
+    
+            if($user->hasRole('regisseur-public'))
+                return $user->hasRole('regisseur-public');
+    
+            if($user->hasRole('guichet'))
+                return $user->hasRole('guichet');
+        });
+
+        
+
+        Gate::define('all', function($user){
+            
+            if($user->hasRole('superadmin'))
+                return $user->hasRole('superadmin');
+
+            if($user->hasRole('elu'))
+                return $user->hasRole('elu');
+            
+            if($user->hasRole('dfm'))
+                return $user->hasRole('dfm');
+
+            if($user->hasRole('ordonateur'))
+                return $user->hasRole('ordonateur');
+
+            if($user->hasRole('controle-gestion'))
+                return $user->hasRole('controle-gestion');
+                
+            if($user->hasRole('superviseur'))
+                return $user->hasRole('superviseur');
+        
+            if($user->hasRole('comptable-public'))
+            return $user->hasRole('comptable-public'); 
+        
+            if($user->hasRole('regisseur-public'))
+            return $user->hasRole('regisseur-public');  
+
+            if($user->hasRole('user'))
+                return $user->hasRole('user');
+        });
+
     }
 }

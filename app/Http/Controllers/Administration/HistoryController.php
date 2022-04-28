@@ -17,15 +17,25 @@ class HistoryController extends Controller
 {
     //
 
+    
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {        
+        $this->middleware('can:comptable-public');      
+    }
 
     public function enrollHistory()
     {
         
-        $enrollHistory      = EnrollHistory::where('townHallRef', Auth::user()->administration)
-                                           ->get();
+        // $enrollHistory      = EnrollHistory::where('townHallRef', Auth::user()->administration)
+        //                                    ->get();
        
 
-        return view('guichet.enrollHistory')->with('enrollHistories', $enrollHistory);
+        // return view('guichet.enrollHistory')->with('enrollHistories', $enrollHistory);
 
     }
 }

@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
 use Session;
 
-class EnrollController extends Controller
+class EntEnrollController extends Controller
 {
     
     /**
@@ -77,14 +77,14 @@ class EnrollController extends Controller
     public function stepOne()
     {        
         $this->middleware('can:guichet'); 
-        return view('guichet.enrollViewOne');
+        return view('guichet.entEnrollViewOne');
     }
 
     public function stepTwo(int $user_id)
     {        
         $this->middleware('can:guichet'); 
         // dd($user_id);
-        return view('guichet.enrollViewTwo')->with('user_id', $user_id)
+        return view('guichet.entEnrollViewTwo')->with('user_id', $user_id)
                                             ->with('success', 'Enrollement partie 1 effectué avec succès!');
     }
 
@@ -106,7 +106,7 @@ class EnrollController extends Controller
         $IfUserExist    = User::where('phone', $request->phone)->first();
         if ($IfUserExist) {
             # code...
-            return redirect()->route('enrollStepOne')
+            return redirect()->route('entEnrollStepOne')
                              ->with('error', 'Ce numéro est pris!')
                              ->withInput();
         }
@@ -127,7 +127,7 @@ class EnrollController extends Controller
         if($idCardLoaded == False){
 
             $User->delete();
-            return redirect()->route('enrollStepOne')
+            return redirect()->route('entEnrollStepOne')
                              ->with('error', 'Vérifier la connexion internet puis réessayer!.')
                              ->withInput();
         }

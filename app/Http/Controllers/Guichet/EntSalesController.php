@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Notifications\DemandeVignette;
 use App\Notifications\DemandeValider;
 use App\Models\TrackDemandeVignette;
+use App\Models\UsagerAccountType;
 use Nexmo;
 use Notifications;
 use Notification;
@@ -20,7 +21,7 @@ use PDF;
 use File;
 use RealRashid\SweetAlert\Facades\Alert;
 
-use App\Models\UsagerAccountType;
+
 use App\Models\User;
 use App\Models\Engins;
 use App\Models\Vignettes; 
@@ -29,7 +30,7 @@ use App\Models\SalesHistory;
 use App\Models\Payment;
 use Illuminate\Support\Facades\DB as FacadesDB;
 
-class SalesController extends Controller
+class EntSalesController extends Controller
 {
     
     /**
@@ -44,12 +45,13 @@ class SalesController extends Controller
 
     public function pendingSales()
     {
-        $pendingSales = EnrollHistory::where('status', '1')->orderBy('created_at', 'desc')->get();
+        $pendingSales  = EnrollHistory::where('status', '1')->orderBy('created_at', 'desc')->get();
+    
 
         // dd($pendingSales);
-
-
-
+       
+       
+  
         $user_list       = [];
         $engin_list      = [];
         foreach($pendingSales as $pendingSale){
@@ -59,7 +61,7 @@ class SalesController extends Controller
                 return redirect()->route('get-admin-dash')->with('error', 'Compte introuvable !');
             }
             // dd($account);
-            if($account->type==='usager'){
+            if($account->type==='entreprise'){
         
             $engin  = Engins::find($pendingSale->enginId);
             $vignette  = Vignettes::where('enginId', $pendingSale->enginId)
@@ -77,8 +79,8 @@ class SalesController extends Controller
                 ];
             } 
         }
-    }
 
+    }
         $pendingSales = $user_list;
  
         return view('guichet/salesIndex')

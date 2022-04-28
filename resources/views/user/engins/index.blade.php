@@ -68,7 +68,7 @@
 							      			<h5 class="card-title">{{ $up_todate_engin->chassie }}</h5>
 							      		</div>
 							      		<div class="card-footer">
-							      			@if($up_todate_engin->signaler_perdue != 0)
+							      			{{-- @if($up_todate_engin->signaler_perdue != 0)
 			                                  <form method="POST" action="{{ route('annuler_declaration', [$userId, $up_todate_vignette->id, $up_todate_engin->id]) }}">
 			                                    @csrf
 			                                    <button type="submit" class="btn btn-danger btn-lg btn-block py-2 my-2">&#9888; ANNULER LA DECLARATION</button>
@@ -78,7 +78,7 @@
 			                                    @csrf
 			                                    <button type="submit" class="btn btn-danger btn-lg btn-block py-2 my-2">DECLARER UN VOL D'ENGIN</button>
 			                                  </form>
-			                                @endif
+			                                @endif --}}
 								        	<form method="POST" action="{{ route('downloadQr', [$up_todate_vignette->id]) }}">
 								        		@csrf
 								        		<button class="btn btn-primary btn-lg btn-block py-2 my-2">Telecharger QR</button>
