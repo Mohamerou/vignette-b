@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
 use Session;
 
-class EnrollController extends Controller
+class EntEnrollController extends Controller
 {
     
     /**
@@ -77,15 +77,15 @@ class EnrollController extends Controller
     public function stepOne()
     {        
         $this->middleware('can:guichet'); 
-        return view('guichet.enrollViewOne');
+        return view('guichet.entEnrollViewOne');
     }
 
     public function stepTwo(int $user_id)
     {        
         $this->middleware('can:guichet'); 
         // dd($user_id);
-        return view('guichet.enrollViewTwo')->with('user_id', $user_id)
-                                            ->with('success', 'enrôlement partie 1 effectué avec succès!');
+        return view('guichet.entEnrollViewTwo')->with('user_id', $user_id)
+                                            ->with('success', 'Enrollement partie 1 effectué avec succès!');
     }
 
     public function postStepOne(Request $request)
@@ -106,7 +106,7 @@ class EnrollController extends Controller
         $IfUserExist    = User::where('phone', $request->phone)->first();
         if ($IfUserExist) {
             # code...
-            return redirect()->route('enrollStepOne')
+            return redirect()->route('entEnrollStepOne')
                              ->with('error', 'Ce numéro est pris!')
                              ->withInput();
         }
@@ -127,7 +127,7 @@ class EnrollController extends Controller
         if($idCardLoaded == False){
 
             $User->delete();
-            return redirect()->route('enrollStepOne')
+            return redirect()->route('entEnrollStepOne')
                              ->with('error', 'Vérifier la connexion internet puis réessayer!.')
                              ->withInput();
         }
@@ -153,7 +153,7 @@ class EnrollController extends Controller
         // Enroll History backUp
         $history = new EnrollHistory();
         $history->agentRef      =   Auth::user()->id;
-        $history->agentName     =   Auth::user()->firstname.' '.Auth::user()->lastname;
+        $history->agentName     =   Auth::user()->firstname;
         $history->agentPhone    =   Auth::user()->phone;
         $history->userId        =   $User->id;
         $history->save();
@@ -205,7 +205,7 @@ class EnrollController extends Controller
 
 
 
-    // List enrôlement for entreprise account 
+    // List enrollement for entreprise account 
 
     public function listEntreprise(){
 
@@ -351,11 +351,11 @@ class EnrollController extends Controller
                                            ->first();
 
         if ($account_type === "usager") {
-            return redirect()->route('enrollStepTwo', $user)->with('success', 'Enrôlement partie 1 effectué avec succès!')
-            ->with('error', 'Completer l\'enrôlement  sur cette page!');
+            return redirect()->route('enrollStepTwo', $user)->with('success', 'Enrollement partie 1 effectué avec succès!')
+            ->with('error', 'Completer l\'enrollement  sur cette page!');
         }else{
            
-            return redirect()->route('enrollStepTwo', $user)->with('success', 'Enrôlement partie 1 effectué avec succès!')
+            return redirect()->route('entenrollStepTwo', $user)->with('success', 'Enrollement partie 1 effectué avec succès!')
         ->with('error', 'Vous devez ajouter des engins');
         }
     }
@@ -370,7 +370,7 @@ class EnrollController extends Controller
         // $OTP = Nexmo::message()->send([
         //                                 'to'   => '+223'.$phone,
         //                                 'from' => '+22369141418',
-        //                                 'text' => "ikaVignetti, l\'enrôlement de votre engin est effectif\n\n\
+        //                                 'text' => "ikaVignetti, l\'enrollement de votre engin est effectif\n\n\
         //                                             Marque: ".$marque."\n
         //                                             Modele: ".$modele."\n
         //                                             Chassie: ".$chassie."\n",
@@ -383,9 +383,9 @@ class EnrollController extends Controller
         $enrollHistory->save();
 
         if ($account_type ==="usager") {
-            return redirect()->route('enroll.index')->with('success', 'Enrôlement partie 2 effectué avec succès!');
+            return redirect()->route('enroll.index')->with('success', 'Enrollement partie 2 effectué avec succès!');
         }else{
-            return redirect()->route('enrollStepTwo', $user->id)->with('success', 'Enrôlement partie 2 effectué avec succès!');
+            return redirect()->route('enrollStepTwo', $user->id)->with('success', 'Enrollement partie 2 effectué avec succès!');
 
         }
     }

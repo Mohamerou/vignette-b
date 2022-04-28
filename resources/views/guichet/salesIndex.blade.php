@@ -85,6 +85,7 @@
     <th>Agent</th>
     <th>Usager</th>
     <th>Contact Usager</th>
+    <th>Infos Engin</th>
     <th>Status</th>
     <th style="width: 40px">Actions</th>
     </tr>
@@ -101,6 +102,7 @@
                 </td>
                 <td>{{ $pendingSales[$i]['usager'] }}</td>
                 <td>{{ $pendingSales[$i]['userphone'] }}</td>
+                <td>{{ $pendingSales[$i]['chassie'] }}</td>
                 <td class="text-danger">Operation Caisse</td>    
                 <td class="text-danger">
                     <a href="{{ route('salesStepOne', $pendingSales[$i]['enginId']) }}" class="btn btn-success"><h4>CAISSE</h4></a>

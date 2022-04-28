@@ -8,6 +8,7 @@ use Illuminate\Contracts\Auth\Authenticatable;
 
 use Illuminate\Http\Request;
 use Validator,Redirect,Response;
+use DB;
 Use App\Models\User;
 use App\Models\Role;
 use App\Models\TempVerificationCode;
@@ -216,7 +217,12 @@ class AuthController extends Controller
         $engin_array = [];
         $vignetted_engin_count = 0;
         $total_sales = 0;
-        $user_count  = 0;
+        $total_users = 0;
+        $total_administrateurs = 0;
+        $total_users            = DB::table('users')->count();
+        $total_administrateurs  = DB::table('users')->where('administration', 'bko')
+                                                    ->count();
+        $user_count      = $total_users - $total_administrateurs;
 
 
        
@@ -243,7 +249,6 @@ class AuthController extends Controller
         $vignettes      = Vignettes::where('status', 1)->get();
         foreach ($vignettes as $vignette) {
             $engin          = Engins::find($vignette->enginId);
-            $user_count     += 1;
             $engin_array[]  = $engin;
             $vignetted_engin_count  +=1;
             $total_sales    += $engin->tarif;

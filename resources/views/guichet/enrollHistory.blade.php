@@ -100,7 +100,7 @@
                 <td>{{ $pendingEnrolls[$i]['guichet'] }}</td>
                 <td>{{ $pendingEnrolls[$i]['usager'] }}</td>
                 <td>{{ $pendingEnrolls[$i]['userphone'] }}</td>
-                <td>{{ $pendingEnrolls[$i]['date'] }}</td>
+                {{-- <td>{{ $pendingEnrolls[$i]['date'] }}</td> --}}
                 <td class="text-danger">Attente</td>
 
                 @can('guichet')    

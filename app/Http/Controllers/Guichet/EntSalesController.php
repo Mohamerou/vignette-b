@@ -5,10 +5,10 @@ namespace App\Http\Controllers\Guichet;
 use App\Http\Controllers\Controller;
 use App\Models\Agent;
 use Illuminate\Http\Request;
-use Response;
 use App\Notifications\DemandeVignette;
 use App\Notifications\DemandeValider;
 use App\Models\TrackDemandeVignette;
+use App\Models\UsagerAccountType;
 use Nexmo;
 use Notifications;
 use Notification;
@@ -21,19 +21,16 @@ use PDF;
 use File;
 use RealRashid\SweetAlert\Facades\Alert;
 
-use App\Models\Role;
-use App\Models\UsagerAccountType;
+
 use App\Models\User;
 use App\Models\Engins;
 use App\Models\Vignettes; 
 use App\Models\EnrollHistory; 
 use App\Models\SalesHistory;  
 use App\Models\Payment;
-use App\Models\Report;
-
 use Illuminate\Support\Facades\DB as FacadesDB;
 
-class SalesController extends Controller
+class EntSalesController extends Controller
 {
     
     /**
@@ -48,25 +45,26 @@ class SalesController extends Controller
 
     public function pendingSales()
     {
-        $pendingSales = EnrollHistory::where('status', '1')->orderBy('created_at', 'desc')->get();
+        $pendingSales  = EnrollHistory::where('status', '1')->orderBy('created_at', 'desc')->get();
+    
 
         // dd($pendingSales);
-
-
-
+       
+       
+  
         $user_list       = [];
         $engin_list      = [];
         foreach($pendingSales as $pendingSale){
             $user   = User::findOrfail($pendingSale->userId);
             $agent  = User::findOrfail($pendingSale->agentRef);
             $engin  = Engins::findOrfail($pendingSale->enginId);
-            
+
             $account   = UsagerAccountType::where('user_id',$user->id)->first();
             if(empty($account)){
                 return redirect()->route('get-admin-dash')->with('error', 'Compte introuvable !');
             }
             // dd($account);
-            if($account->type==='usager'){
+            if($account->type==='entreprise'){
         
             $engin  = Engins::find($pendingSale->enginId);
             $vignette  = Vignettes::where('enginId', $pendingSale->enginId)
@@ -75,18 +73,18 @@ class SalesController extends Controller
              if (!$vignette) {
                 $user_list[]    = [
                     'userId'    => $user->id,
-                    'usager'    => $user->firstname." ".$user->lastname,
+                    'usager'    => $user->lastname." ".$user->firstname,
                     'userphone' => $user->phone,
                     'chassie'   => $engin->chassie,
                     'agent'     => $agent->firstname." ".$agent->lastname,
-                    'agentphone' => $agent->phone,
+                    'agentphone' => $agent->phone, 
                     'enrollId'  => $pendingSale->id, 
                     'enginId'   => $pendingSale->enginId,
                 ];
             } 
         }
-    }
 
+    }
         $pendingSales = $user_list;
  
         return view('guichet/salesIndex')
@@ -476,7 +474,7 @@ class SalesController extends Controller
                     'marque'    => $engin->marque,
                     'modele'    => $engin->modele,
                     'chassie'   => $engin->chassie,
-                    'agent'     => $agent_vente->firstname.' - '.$agent_vente->lastname.' - '.$agent_vente->phone,
+                    'agent'     => $agent_vente->firstname.' - '.$agent_vente->phone,
                     'tarif'     => $engin->tarif,
                 ];
             } 
@@ -701,7 +699,7 @@ class SalesController extends Controller
                     'marque'    => $engin->marque,
                     'modele'    => $engin->modele,
                     'chassie'   => $engin->chassie,
-                    'agent'     => $agent_vente->firstname.' - '.$agent_vente->lastname.' - '.$agent_vente->phone,
+                    'agent'     => $agent_vente->firstname.' - '.$agent_vente->phone,
                     'tarif'     => $engin->tarif,
                 ];
             } 
@@ -723,28 +721,16 @@ class SalesController extends Controller
     
     $path = storage_path('reports');
 
+    // dd($path);
+    if(!File::exists($path)) {
+        File::makeDirectory($path, $mode = 0755, true, true);
 
-    $pdf = PDF::loadView('guichet.rapportVente',['data' => $data])
-                ->setOptions(['defaultFont' => 'sans-serif']);
+    } 
+    else {}
 
-    $report_storage_path    = 'reports/'.$fileName.'.pdf';
 
-    
-    $report_storage = \Storage::disk('public')
-                ->put($report_storage_path, $pdf->output());
-
-    // dd($report_storage);
-    // Update report if existing track 
-    $report_check = Report::where('report_name', $fileName)
-                            ->first();
-
-    if (empty($report_check)) {
-        $report_track = Report::create([
-            'user_id'       => Auth::user()->id,
-            'report_name'   => $fileName
-        ]);
-    }
-
+    $pdf = PDF::loadView('guichet.rapportVente',['data' => $data])->setOptions(['defaultFont' => 'sans-serif'])
+              ->save(''.$path.'/'.$fileName.'.pdf');
 
     $pdf->getDomPDF()->setHttpContext(
         stream_context_create([
@@ -762,69 +748,6 @@ class SalesController extends Controller
     public function salesReportFilter(Request $request)
     {
        
-    }
-
-
-    public function salesReportList()
-    {
-        $date = Carbon::now();
-        $date = Carbon::parse($date);
-        $date = $date->format('Y');
-        
-        
-        $reports = Report::whereYear('created_at', $date)->get();
-        $roles   = Role::get();
-        $user_role = '';
-
-        $report_datas = [];
-
-        foreach ($reports as $report) {
-            $user = User::findOrfail($report->user_id);
-
-            foreach ($roles as $role) {
-                if (Auth::user()->hasRole('$role->name')) {
-
-                dd($role);
-                   $user_role = $role->name;
-                   dd($user_role);
-                }
-            }
-
-            $report_datas [] = [
-                'report'    => $report,
-                'user_name' => $user->firstname.' '.$user->lastname,
-                'user_phone' => $user->phone,
-                'user_role' => $user_role
-            ];
-
-        }
-
-        return view('Rapports.index')
-        ->with('report_datas', $report_datas);
-    }
-
-
-    public function showReport($repot_name)
-    {
-        // file path
-       $path = public_path('storage/reports' . '/' . $repot_name);
-       $path = $path.'.pdf';
-
-       // dd($path);
-    if(!File::exists($path)) {
-        die();
-
-    } 
-    else {}
-
-        // header
-       $header = [
-         'Content-Type' => 'application/pdf',
-         'Content-Disposition' => 'inline; filename="' . $repot_name . '"'
-       ];
-
-      return response()->file($path, $header);
-    
     }
 
 

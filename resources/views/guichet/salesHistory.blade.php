@@ -34,22 +34,35 @@
     <h1>Historique Vente</h1>
 </div>
 <div class="row">
+    <div>
   <td>
     <form method="post" action="{{route('salesHistorypost')}}" class="form-group">
         @csrf
-        <select>
+        <select name="agent" id="agent">
             <option value="all">Tous Les Agents</option>
             
-            @foreach($allagent as $agent)
-            <option value="{{$agent->id}}">{{$agent->lastname}} {{$agent->firstname}} {{$agent->phone}}</option>
-            @endforeach
+            @for($i=0; $i < count($allagent); $i++)
+                <option value="{{$allagent[$i]->id}}">{{$allagent[$i]->lastname}} {{$allagent[$i]->firstname}} {{$allagent[$i]->phone}}</option>
+            @endfor
         </select>
-        <input class="mx-5" type="date" name="date" >
-        <input Class="btn btn-primary" type="submit" value="FILTRER LE RAPPORT">
+        <input type="date" name="date" id="date" >
+        <input class="btn btn-primary mx-3" type="submit" value="Filtrer" name="history">
+        <input class="btn btn-primary mx-5" type="submit" value="Génerer le rapport" name="report" id="envoi">
     </form>
     </td>
-
-                  </div>
+    </div>
+    @include('sweetalert::alert')
+         {{-- generate repport after filter
+         <script>
+         var btn = document.getElementById('envoi');
+         btn.addEventListener('click', function (e) {
+			e.preventDefault()
+			var nom = document.getElementById('agent').value;
+			var email = document.getElementById('date').value;
+        })
+    </script>
+ --}}
+    </div>
 <div class="col-sm-6">
     <div class="col-sm-3">
         <h1>Total Vente:</h1>

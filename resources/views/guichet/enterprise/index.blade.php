@@ -17,6 +17,16 @@
         });
     } );
 </script>
+<script src="{{ asset('html2pdf/dist/html2pdf.bundle.min.js') }}"></script>
+
+<script>
+    function generatePDF() {
+        // Choose the element that our invoice is rendered in.
+        const element = document.getElementById('printPdf');
+        // Choose the element and save the PDF for our user.
+        html2pdf().from(element).save();
+    }
+</script>
 <style>
     #modaldata tbody tr > td:last-of-type{display:none;}
 </style>
@@ -26,23 +36,15 @@
 @section('content')
 
 <div class="content-wrapper">
-
+<div id="printPdf" >
 <section class="content-header">
-<div class="container-fluid">
-<div class="row mb-2">
-<div class="col-sm-6">
-    <h1>Historique Vente</h1>
-</div>
-<div class="col-sm-6">
-    <div class="col-sm-3">
-        <h1>Total Vente:</h1>
+    <div class="container-fluid">
+    <div class="row mb-2">
+    <div class="col-sm-6">
+        <h1>Liste des Entreprises</h1>
     </div>
-    <div class="col-sm-3">
-        <h1 class="text-danger">{{ $totalSales }} FCFA</h1>
     </div>
-</div>
-</div>
-</div>
+    </div>
 </section>
 
 <section class="content">
@@ -83,28 +85,26 @@
 
 <div class="card px-4">
     <div class="card-header">
-    <h3 class="card-title">Panel de Vente</h3>
+    <h3 class="card-title"></h3>
     </div>
 
     <div class="card-body p-0">
     <table id="example" class="table table-striped table-hover table-bordered">
     <thead>
     <tr>
-    <th>Agent</th>
-    <th>Usager</th>
-    <th>Contact Usager</th>
-    <th>Marque</th>
-    <th>Modele</th>
-    <th>Chassie</th>
-    <th>Tarif</th>
-    <th style="width: 40px">Actions</th>
+    <th>Entreprise</th>
+    <th>CONTACT Entreprise</th>
+    <th>ADRESSE</th>
+    <th>DATE</th>
+    <th>DETAILS</th>
+    <th style="width: 40px">ACTIONS</th>
     </tr>
     </thead>
     <tbody>
 
-
-        @for($i=0; $i < count($SalesHistories); $i++)
+        @for($i=0; $i < count($user_list); $i++)
             <tr>
+<<<<<<< HEAD:resources/views/guichet/salesHistoryFilter.blade.php
                 <td>{{ $SalesHistories[$i]['agent'] }}</td>
                 <td>{{ $SalesHistories[$i]['usager'] }}</td>
                 <td>{{ $SalesHistories[$i]['userphone'] }}</td>
@@ -119,6 +119,14 @@
                 <td>
                 <button disabled type="button" class="btn btn-success"><h4>&#x2611;</h4></button>
                 </td>
+=======
+                <td>{{ $user_list[$i]['firstname'] }} {{ $user_list[$i]['lastname'] }}</td>
+                <td>{{ $user_list[$i]['phone'] }}</td>
+                <td>{{ $user_list[$i]['address'] }}</td>
+                <td>{{ $date }}</td>
+                <td><a href="{{ route('guichet.user.show', $user_list[$i]) }}" class="btn btn-info">VOIR</a></td>
+                <td><a href="{{ route('enrollStepTwo', $user_list[$i]) }}" class="btn btn-warning">Ajouter Engin</a></td>
+>>>>>>> 07c9ed991c6523d44b441abfa72a38a418869af0:resources/views/guichet/enterprise/index.blade.php
             </tr>
         @endfor
 
@@ -126,9 +134,8 @@
     </tbody>
     </table>
     </div>
-
     </div>
-
+    <!-- <button class="btn btn-primary" onclick="generatePDF()">Generer un Rapport</button> -->
     </div>
 
 </div>
@@ -138,10 +145,11 @@
 
 </div>
 </section>
+</div>
+
 
 </div>
 @endsection 
 
 
 
-    

@@ -8,12 +8,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Enrôlement Usager</h1>
+            <h1>Enrollement Entreprise</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="admin-dashboard">Accueil</a></li>
-              <li class="breadcrumb-item active">Enrôlement</li>
+              <li class="breadcrumb-item active">Enrollement</li>
             </ol>
           </div>
         </div>
@@ -60,7 +60,7 @@
             <!-- general form elements -->
             <div class="card card-primary">
               <div class="card-header">
-                <h3 class="card-title">Infos Usagers</h3>
+                <h3 class="card-title">Infos Entreprise</h3>
               </div>
               <!-- /.card-header -->
               <!-- form start -->
@@ -68,12 +68,12 @@
                 @csrf
                 <div class="card-body">
                   <div class="form-group">
-                    <label for="lastname">Nom</label>
+                    <label for="lastname">Nom de l'entreprise</label>
                     <input required name="lastname" type="text" class="form-control" id="lastname" placeholder="Nom">
                   </div>
                   <div class="form-group">
-                    <label for="firstname">Prénom</label>
-                    <input required name="firstname" type="text" class="form-control" id="firstname" placeholder="Prénom">
+                    <label for="firstname">Status de l'entreprise</label>
+                    <input required name="firstname" type="text" class="form-control" id="firstname" placeholder="status">
                   </div>
                   <div class="form-group">
                     <label for="phone">Contact</label>
@@ -88,8 +88,7 @@
                             <option value="entreprise">Entreprise</option>
                     </select>
                   </div> --}}
-
-                  <input required name="account_type" value="usager" type="hidden" class="form-control" id="address" placeholder="Adresse complet">
+                  <input required name="account_type" value="entreprise" type="hidden" class="form-control" id="address" placeholder="Adresse complet">
 
 
                   <div class="form-group">
@@ -97,7 +96,7 @@
                     <input required name="address" type="text" class="form-control" id="address" placeholder="Adresse complet">
                   </div>
                   <div class="form-group">
-                    <label for="idCard">Piece d'identité</label>
+                    <label for="idCard">Document d'identification de l'entreprise</label>
                     <div class="input-group">
                       <div class="custom-file">
                         <input required name="idCard" type="file" class="custom-file-input" id="idCard">

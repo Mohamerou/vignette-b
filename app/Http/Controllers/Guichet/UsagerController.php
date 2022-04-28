@@ -58,6 +58,32 @@ class UsagerController extends Controller
 
     }
 
+
+
+    public function entreprise()
+    {
+
+        $currentDate = Carbon::now();
+        $currentDate = Carbon::parse($currentDate);
+        $currentDate = $currentDate->format('d-m-Y');
+
+        $users = User::get();
+        $user_list = [];
+        foreach ($users as $user) {
+            if(!($user->hasRole('user'))){
+
+            } else {
+                $user_list[] = $user;
+            }
+        }
+
+        // dd($user_list);
+        return view('guichet.enterprise.index')
+        ->with('user_list', $user_list)
+        ->with('date', $currentDate);
+
+
+    }
     /**
      * Show the form for creating a new resource.
      *

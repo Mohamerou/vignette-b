@@ -1,3 +1,6 @@
+
+
+
 <script src="{{ asset('js/chart/chart.min.js') }}"></script>
 
 @extends('layouts.admin')
@@ -628,6 +631,10 @@
                   <a href="{{ route('guichet.user.index') }}" class="btn btn-block btn-primary btn-lg"><i class="fa fa-book" aria-hidden="true"></i>
   Liste des usagers</a>
               </td>
+              <td>
+                <a href="{{ route('guichet.entreprise.index') }}" class="btn btn-block btn-primary btn-lg"><i class="fa fa-book" aria-hidden="true"></i>
+Liste des Entreprises</a>
+            </td>
               </tr>
               <td>
                   <a href="{{ route('enroll.index') }}" class="btn btn-block btn-primary btn-lg"><i class="fa fa-book" aria-hidden="true"></i>

@@ -204,9 +204,15 @@
                 <li class="nav-item">
                     <a href="/enrollement-1" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Nouvel Enrollement</p>
+                    <p>Enrollement Usager</p>
                     </a>
                 </li>
+                <li class="nav-item">
+                  <a href="/entEnrollement-1" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Enrollement Entreprise</p>
+                  </a>
+              </li>
                 <li class="nav-item">
                     <a href="{{ route('enrollList') }}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
@@ -224,9 +230,15 @@
                 <li class="nav-item">
                     <a href="{{ route('pendingSales') }}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Nouvel Vente</p>
+                    <p>Vente Usager</p>
                     </a>
                 </li>
+                <li class="nav-item">
+                  <a href="{{ route('entPendingSales') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Vente Entreprise</p>
+                  </a>
+              </li>
                 <li class="nav-item">
                     <a href="{{ route('salesHistory') }}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>

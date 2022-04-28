@@ -118,10 +118,28 @@ Route::get('/resend-code/{phone}', [App\Http\Controllers\VerificationController:
 	Route::get('csv-list', [App\Http\Controllers\Guichet\SalesController::class, 'csv_print_list'])->middleware('can:guichet')->name('csv.list');
 	Route::get('csv/{enginId}', [App\Http\Controllers\Guichet\SalesController::class, 'csv'])->middleware('can:guichet')->name('csv');
 
+	// Enroll routes for entreprise
+	Route::get('entEnrollement-1', [App\Http\Controllers\Guichet\EntEnrollController::class, 'stepOne'])->middleware('can:guichet')->name('entEnrollStepOne');
+	Route::post('entEnrollement-1', [App\Http\Controllers\Guichet\EntEnrollController::class, 'postStepOne'])->middleware('can:guichet')->name('entPostStepOne');
+	Route::get('entEnrollement-2/{user_id}', [App\Http\Controllers\Guichet\EntEnrollController::class, 'stepTwo'])->middleware('can:guichet')->name('entEnrollStepTwo');
+	Route::post('entEnrollement-2', [App\Http\Controllers\Guichet\EntEnrollController::class, 'postStepTwo'])->middleware('can:guichet')->name('entEostStepTwo');
+
+	Route::get('entEnrollList', [App\Http\Controllers\Guichet\EntEnrollController::class, 'enrollList'])->middleware('can:guichet')->name('entEnrollList');
+	Route::get('entEnrolls', [App\Http\Controllers\Guichet\EntEnrollController::class, 'index'])->middleware('can:intern')->name('entEnroll.index');
+	Route::get('entCsv-list', [App\Http\Controllers\Guichet\EntSalesController::class, 'csv_print_list'])->middleware('can:guichet')->name('entCsv.list');
+	Route::get('entCsv/{enginId}', [App\Http\Controllers\Guichet\EntSalesController::class, 'csv'])->middleware('can:guichet')->name('entCsv');
+
+
+
+
+	//enrollement for enterprise account
+	
+	Route::get('enterpriseList', [App\Http\Controllers\Guichet\UsagerController::class, 'entreprise'])->middleware('can:guichet')->name('guichet.entreprise.index');
 
 
 	// Sales routes
 	Route::get('sales/index', [App\Http\Controllers\Guichet\SalesController::class, 'pendingSales'])->middleware('can:guichet')->name('pendingSales');
+	// Route::get('sales/ent', [App\Http\Controllers\Guichet\SalesController::class, 'EntpendingSales'])->middleware('can:guichet')->name('pendingSales');
 	Route::get('sales/checkout/{enginId}', [App\Http\Controllers\Guichet\SalesController::class, 'stepOne'])->middleware('can:guichet')->name('salesStepOne');
 	Route::post('sales/checkout/process', [App\Http\Controllers\Guichet\SalesController::class, 'stepTwo'])->middleware('can:guichet')->name('salesStepTwo');
 	Route::get('sales/history', [App\Http\Controllers\Guichet\SalesController::class, 'salesHistory'])->middleware('can:intern')->name('salesHistory');
@@ -132,6 +150,18 @@ Route::get('/resend-code/{phone}', [App\Http\Controllers\VerificationController:
 	Route::get('sales/reportFilter/{}', [App\Http\Controllers\Guichet\SalesController::class, 'salesReportFilter'])->middleware('can:intern')->name('salesReportFilter');
 	Route::any('sales/checkout/notify', [App\Http\Controllers\PaymentController::class, 'notify'])->name('salesCheckoutNotify');
 	Route::get('sales/checkout/return', [App\Http\Controllers\PaymentController::class, 'return'])->name('salesCheckoutReturn');
+	
+	//Entreprise  Sales routes
+	Route::get('entSales/index', [App\Http\Controllers\Guichet\EntSalesController::class, 'pendingSales'])->middleware('can:guichet')->name('entPendingSales');
+	// Route::get('sales/ent', [App\Http\Controllers\Guichet\EntSalesController::class, 'EntpendingSales'])->middleware('can:guichet')->name('pendingSales');
+	Route::get('entSales/checkout/{enginId}', [App\Http\Controllers\Guichet\EntSalesController::class, 'stepOne'])->middleware('can:guichet')->name('entsalesStepOne');
+	Route::post('entSales/checkout/process', [App\Http\Controllers\Guichet\EntSalesController::class, 'stepTwo'])->middleware('can:guichet')->name('entsalesStepTwo');
+	Route::get('entSales/history', [App\Http\Controllers\Guichet\EntSalesController::class, 'salesHistory'])->middleware('can:intern')->name('entsalesHistory');
+	Route::post('entSales/history', [App\Http\Controllers\Guichet\EntSalesController::class, 'salesHistoryPost'])->middleware('can:intern')->name('entsalesHistorypost');
+	Route::get('entSales/report', [App\Http\Controllers\Guichet\EntSalesController::class, 'salesReport'])->middleware('can:regisseur-public')->name('entsalesReport');
+	Route::get('entSales/reportFilter/{}', [App\Http\Controllers\Guichet\EntSalesController::class, 'salesReportFilter'])->middleware('can:intern')->name('entsalesReportFilter');
+	Route::any('entSales/checkout/notify', [App\Http\Controllers\PaymentController::class, 'notify'])->name('salesCheckoutNotify');
+	Route::get('entSales/checkout/return', [App\Http\Controllers\PaymentController::class, 'return'])->name('salesCheckoutReturn');
 	
 
 // Vignette verification routes
