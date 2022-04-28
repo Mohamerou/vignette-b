@@ -4,6 +4,11 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use Auth;
+use Notification;
+use App\Notifications\TransfertEnginNotification;
+
+use App\Models\User;
+use App\Models\TransfertTrack;
 use App\Models\Engins;
 use Illuminate\Http\Request;
 use App\Models\Marque;
@@ -330,5 +335,150 @@ class EnginsController extends Controller
     //         ]);
     //     }
     // }
+
+
+
+    public function initiateTransfert(int $enginId)
+    {
+
+        $engin = Engins::findOrfail($enginId);
+        $data  = [
+            'marque'    => $engin->marque,
+            'type'      => $engin->modele,
+            'chassie'   => $engin->chassie,
+            'enginId'   => $engin->id,
+        ];
+
+        return view('user.engins.initiateTransfert')->with('data', $data);
+    }
+
+
+    public function pendingTransfert()
+    {
+        $notifications  = Auth::user()->unreadNotifications;
+        $data           = [];
+
+        foreach ($notifications as $notification) {
+            
+            $oldOwner           = User::findOrfail($notification->data['oldOwnerId']);
+            $oldOwnerPhone      = $oldOwner->phone;
+            $oldOwner           = $oldOwner->firstname.' '.$oldOwner->lastname;
+            $newOwner           = User::find($notification->data['newOwnerId']);
+            $newOwnerPhone      = $newOwner->phone;
+            $newOwner           = $newOwner->firstname.' '.$newOwner->lastname;
+
+            $data [] = [
+                'oldOwner'          => $oldOwner,
+                'newOwner'          => $newOwner,
+                'newOwnerPhone'     => $newOwnerPhone,
+                'oldOwnerPhone'     => $oldOwnerPhone,
+                'notificationId'    => $notification->id,
+            ];
+
+        }
+
+        return view('user.engins.transfertownership')
+               ->with('Approbations', $data);
+    }
+
+
+    public function transfertOwnership(Request $request)
+    {
+
+        request()->validate([
+            'newOwnerPhone' 	=> 'required|regex:/^[0-9]{8}$/|digits:8',
+            'enginId'           => 'required|numeric',
+        ]);
+
+
+        $validatedData  = request()->all();
+
+        $check_new_owner_exists  = User::where('phone', $validatedData['newOwnerPhone'])->first();
+        if ($check_new_owner_exists->id === Auth::user()->id) {
+            return redirect()->route('engins.index')->with('error', 'Numero non valide !');
+        }
+
+        $check_new_owner_exists  = User::where('phone', $validatedData['newOwnerPhone'])->first();
+        if (empty($check_new_owner_exists)) {
+            return redirect()->route('engins.index')->with('error', 'Aucun compte trouve !');
+        }
+
+        $engin      = Engins::find($validatedData['enginId']);
+        
+
+
+
+        if (empty($engin)) {
+            return redirect()->route('engins.index')->with('error', 'Aucun engin !');
+        }
+
+        $oldOwner   = User::findOrfail($engin->userId);
+        if($oldOwner->id != Auth::user()->id)
+        {
+            return redirect()->route('engins.index')->with('error', 'Aucun droit d\'acces !');
+        }
+
+        
+        $newOwner           = User::where('phone', $validatedData['newOwnerPhone'])->first();        
+
+
+        $ifTrackingExists  = TransfertTrack::where('chassie', $engin->chassie)
+                                             ->first();
+
+        if (!empty($ifTrackingExists)) {
+            return redirect()->route('engins.index')->with('error', 'Transfert en cours, attente de confirmation !');
+        }
+        
+        $TranfertTrack     = TranfertTrack::create([
+            'newOwnerPhone' => $validatedData['newOwnerPhone'],
+            'oldOwnerPhone' => Auth::user()->phone,
+            'chassie'       => $engin->chassie,
+        ]);
+
+        $demande = [
+            'demande'               => 'Nouveau Transfert de propriete d\'engin !',
+            'oldOwnerId'            => $oldOwner->id,
+            'enginid'               => $engin->id,
+            
+        ];
+
+        Notification::send($newOwner, new TransfertEnginNotification($demande));
+
+        return redirect()->route('engins.index')->with('success', 'Transfert initier avec succes !');
+
+
+    }
+
+    public function validateTransfert(string $notificationId)
+    {
+        $userNotifications = Auth::user()->unreadNotifications;
+        $newOwner          = Auth::user();
+        $toBeMarkedRead    = '';
+
+        foreach ($userUnReadNotifications as $userUnReadNotification) {
+            if ($userUnReadNotification->id === $notificationId) 
+            {
+                $toBeMarkedRead     = $userUnReadNotification;
+                $engin              = Engins::findOrfail($notification->data['enginId']);
+                $oldOwner           = User::findOrfail($notification->data['oldOwnerId']);
+
+                $engin->userId      =  $newOwner->id;
+                $vignette           = Vignettes::where('enginId', $engin->id)->first();
+
+                if (!empty($vignette)) {
+                    $vignette->userId       =  $newOwner->id;
+                }
+
+            }
+        }
+
+
+        $toBeMarkedRead->markAsRead();
+        return redirect()->route('engins.index')
+        ->with('success', 'transfert valide avec succes !');
+
+
+
+    }
 
 }

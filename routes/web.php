@@ -20,6 +20,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->middleware('can:all')->name('home');
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->middleware('can:all')->name('home');
 
 Route::get('/connexion', [App\Http\Controllers\AuthController::class, 'index'])->name('connexion');
 Route::post('/connexion', [App\Http\Controllers\AuthController::class, 'postLogin'])->name('postLogin');
@@ -39,8 +40,7 @@ Route::get('/resend-code/{phone}', [App\Http\Controllers\VerificationController:
 
 
 //User actions
-	Route::get('/mesengins', [App\Http\Controllers\User\EnginsController::class, 'index'])->middleware('can:user')->name('engins.index');
-
+	Route::get('/mesengins', [App\Http\Controllers\User\EnginsController::class, 'index'])->middleware('can:user')->name('engins.index');\
 	Route::get('/nouvelle/vignette', [App\Http\Controllers\User\EnginsController::class, 'selectEnginType'])->middleware('can:user')->name('user.selectEnginType');
 	Route::get('/nouvelle/vignette/{type}', [App\Http\Controllers\User\EnginsController::class, 'create'])->middleware('can:user')->name('user.createEngin');
 	Route::post('/nouvelle/vignette', [App\Http\Controllers\User\EnginsController::class, 'store'])->middleware('can:user')->name('user.storeEngin');
@@ -51,6 +51,11 @@ Route::get('/resend-code/{phone}', [App\Http\Controllers\VerificationController:
 	Route::get('/notifications/{notification}', [App\Http\Controllers\User\VignettesController::class,'notificationShow'])->middleware('can:user')->name('notification.show');
 
 	Route::post('qrvignette/{qr_path}', [App\Http\Controllers\User\VignettesController::class, 'downloadQr'])->middleware('can:user')->name('downloadQr');
+	// Transfert de propriete
+	Route::get('/initiate/tranfert/{enginId}', [App\Http\Controllers\User\EnginsController::class,'initiateTransfert'])->middleware('can:user')->name('initiate.Transfert');
+	Route::POST('/new/tranfert', [App\Http\Controllers\User\EnginsController::class,'transfertOwnership'])->middleware('can:user')->name('newTransfert');
+	Route::get('/pending/tranfert', [App\Http\Controllers\User\EnginsController::class,'pendingTransfert'])->middleware('can:user')->name('pendingTransfert');
+	Route::POST('/pending/tranfert/validate', [App\Http\Controllers\User\EnginsController::class,'validateTransfert'])->middleware('can:user')->name('validateTransfert');
 
 	// Route::post('/declaration/{user}/{vignette}/{engin}', [App\Http\Controllers\User\VignettesController::class,  'declaration_de_perte'])->middleware('auth')->name('declaration_de_perte');
 
@@ -70,7 +75,7 @@ Route::get('/resend-code/{phone}', [App\Http\Controllers\VerificationController:
 	Route::delete('/super/delete/{id}', [App\Http\Controllers\Administration\SuperAdminController::class, 'destroy'])->middleware('can:superadmin')->name("superadmin.destroy");
 
 	Route::get('/adminsh', [App\Http\Controllers\AuthController::class, 'admin_login'])->name("get_admin_login");
-	Route::get('/admin-dashboard', [App\Http\Controllers\AuthController::class, 'adminDashboard'])->middleware('auth')->name("get_admin_dash");
+	Route::get('/admin-dashboard', [App\Http\Controllers\AuthController::class, 'adminDashboard'])->middleware('can:intern')->name("get_admin_dash");
 	Route::get('/examiner/{usagerId}/{enginId}/{notificationId}/{demandeTrackId}', [App\Http\Controllers\Administration\GestionVignettesController::class, 'examinerDemande'])->middleware('can:guichet')->name('examinerDemande');
 	Route::post('/ikvUE-validation/{enginId}/{notificationId}/{usager}/{demandeTrackId}', [App\Http\Controllers\Administration\GestionVignettesController::class, 'demandeValidation'])->middleware('can:guichet')->name('validerDemande');
 
@@ -148,3 +153,8 @@ Route::get('/resend-code/{phone}', [App\Http\Controllers\VerificationController:
    Route::post('prevision', [App\Http\Controllers\PrevisionController::class, 'store'])->middleware('can:comptable-public')->name('prevision.store');
    Route::get('prevision/edit/{id}',[App\Http\Controllers\PrevisionController::class, 'edit'])->middleware('can:comptable-public')->name('prevision.edit');
    Route::put('prevision/update/{id}', [App\Http\Controllers\PrevisionController::class, 'update'])->middleware('can:comptable-public')->name('prevision.update');
+
+   // Approbation approve
+   Route::get('approbations', [App\Http\Controllers\ApprobationController::class, 'index'])->middleware('can:comptable-public')->name('approve.index');
+   Route::get('approbation/{id}/{notificationId}', [App\Http\Controllers\ApprobationController::class, 'approve'])->middleware('can:comptable-public')->name('approve');
+   

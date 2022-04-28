@@ -384,7 +384,7 @@
               </tr>
               <tr>
               <td>
-                <a class="btn btn-block btn-primary btn-lg" href="{{ route('salesReport') }}"><i class="fa fa-book" aria-hidden="true"></i>Generer un rapports</a>
+                <a class="btn btn-block btn-primary btn-lg" href="{{ route('salesReport') }}"><i class="fa fa-book" aria-hidden="true"></i>Generer un rapport journalier</a>
   </button>
               </td>
               <td>

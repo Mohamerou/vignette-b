@@ -55,8 +55,9 @@ class SalesController extends Controller
         $user_list       = [];
         $engin_list      = [];
         foreach($pendingSales as $pendingSale){
-            $user   = User::find($pendingSale->userId);
-            $engin  = Engins::find($pendingSale->enginId);
+            $user   = User::findOrfail($pendingSale->userId);
+            $agent  = User::findOrfail($pendingSale->agentRef);
+            $engin  = Engins::findOrfail($pendingSale->enginId);
             $vignette  = Vignettes::where('enginId', $pendingSale->enginId)
                                   ->first();
 
@@ -66,7 +67,8 @@ class SalesController extends Controller
                     'usager'    => $user->firstname." ".$user->lastname,
                     'userphone' => $user->phone,
                     'chassie'   => $engin->chassie,
-                    'agent'     => $pendingSale->agentName.' - '.$pendingSale->agentPhone, 
+                    'agent'     => $agent->firstname." ".$agent->lastname,
+                    'agentphone' => $agent->phone,
                     'enrollId'  => $pendingSale->id, 
                     'enginId'   => $pendingSale->enginId,
                 ];
@@ -558,13 +560,6 @@ class SalesController extends Controller
     
     $path = storage_path('reports');
 
-    // dd($path);
-    if(!File::exists($path)) {
-        File::makeDirectory($path, $mode = 0755, true, true);
-
-    } 
-    else {}
-
 
     $pdf = PDF::loadView('guichet.rapportVente',['data' => $data])
                 ->setOptions(['defaultFont' => 'sans-serif']);
@@ -630,6 +625,7 @@ class SalesController extends Controller
             $report_datas [] = [
                 'report'    => $report,
                 'user_name' => $user->firstname.' '.$user->lastname,
+                'user_phone' => $user->phone,
                 'user_role' => $user_role
             ];
 
@@ -642,16 +638,26 @@ class SalesController extends Controller
 
     public function showReport($repot_name)
     {
-        
-        $path = storage_path('reports/'.$repot_name);
-        $path = $path.'.pdf';
+        // file path
+       $path = public_path('storage/reports' . '/' . $repot_name);
+       $path = $path.'.pdf';
 
-        return response()->file($path);
-        return Response::make(file_get_contents($path), 200, [
-            'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'inline; filename='.$repot_name.'.pdf'
-        ]);
-            }
+       // dd($path);
+    if(!File::exists($path)) {
+        die();
+
+    } 
+    else {}
+
+        // header
+       $header = [
+         'Content-Type' => 'application/pdf',
+         'Content-Disposition' => 'inline; filename="' . $repot_name . '"'
+       ];
+
+      return response()->file($path, $header);
+    
+    }
 
 
     

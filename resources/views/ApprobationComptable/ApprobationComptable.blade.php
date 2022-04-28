@@ -10,7 +10,7 @@
     jQuery(document).ready(function($) {
         //jQuery Functionality
         $('#example').DataTable();
-        $(document).on('click', '#example tbody tr button', function() {       
+        $(document).on('click', '#example tbody tr button', function() {
         $("#modaldata tbody tr").html("");
         $("#modaldata tbody tr").html($(this).closest("tr").html());
         $("#exampleModal").modal("show");
@@ -31,7 +31,7 @@
 <div class="container-fluid">
 <div class="row mb-2">
 <div class="col-sm-6">
-    <h1>Panel de Vente</h1>
+    <h1>Approbation de creation de comptes agent</h1>
 </div>
 </div>
 </div>
@@ -75,35 +75,35 @@
 
 <div class="card px-4">
     <div class="card-header">
-    <h3 class="card-title">Panel de Vente</h3>
+    <h3 class="card-title">Approbation</h3>
     </div>
 
     <div class="card-body p-0">
     <table id="example" class="table table-striped table-hover table-bordered">
     <thead>
     <tr>
-    <th>Agent</th>
-    <th>Usager</th>
-    <th>Contact Usager</th>
-    <th>Status</th>
-    <th style="width: 40px">Actions</th>
+    <th>SUPERVISEUR</th>
+    <th>NOUVEAU AGENT</th>
+    <th style="width: 40px">ACTION</th>
     </tr>
     </thead>
     <tbody>
 
 
-        @for($i=0; $i < count($pendingSales); $i++)
+        @for($i=0; $i < count($Approbations); $i++)
             <tr>
                 <td>
-                    {{ $pendingSales[$i]['agent'] }}
-                    <br>
-                    {{ $pendingSales[$i]['agentphone'] }}
+                    {{ $Approbations[$i]['superviseur'] }} 
+                    <br> 
+                    {{ $Approbations[$i]['superviseurPhone'] }}
                 </td>
-                <td>{{ $pendingSales[$i]['usager'] }}</td>
-                <td>{{ $pendingSales[$i]['userphone'] }}</td>
-                <td class="text-danger">Operation Caisse</td>    
-                <td class="text-danger">
-                    <a href="{{ route('salesStepOne', $pendingSales[$i]['enginId']) }}" class="btn btn-success"><h4>CAISSE</h4></a>
+                <td>
+                    {{ $Approbations[$i]['newAgent'] }}
+                    <br>
+                    {{ $Approbations[$i]['newAgentPhone'] }}
+                </td>
+                <td>
+                <a href="{{ route('approve', [$Approbations[$i]['newAgentId'], $Approbations[$i]['notificationId']]) }}" class="btn btn-success"><h4>&#x2611; VALIDER</h4></a>
                 </td>
             </tr>
         @endfor
@@ -126,7 +126,4 @@
 </section>
 
 </div>
-@endsection 
-
-
-
+@endsection

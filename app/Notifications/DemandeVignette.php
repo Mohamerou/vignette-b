@@ -8,9 +8,11 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use App\Models\User;
 
-class DemandeVignette extends Notification
+class DemandeVignette extends Notification implements ShouldQueue
 {
     use Queueable;
+
+    public $demande;
 
     /**
      * Create a new notification instance.

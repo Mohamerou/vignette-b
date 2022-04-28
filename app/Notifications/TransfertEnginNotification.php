@@ -7,18 +7,19 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class DemandeRejeter extends Notification implements ShouldQueue
+class TransfertEnginNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
+    public $demande;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($demande)
     {
-        //
+        $this->demande  = $demande;
     }
 
     /**
@@ -29,7 +30,7 @@ class DemandeRejeter extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['database'];
     }
 
     /**
@@ -45,6 +46,18 @@ class DemandeRejeter extends Notification implements ShouldQueue
                     ->action('Notification Action', url('/'))
                     ->line('Thank you for using our application!');
     }
+
+    public function toDatabase($notifiable)
+    {
+        // dd($this->demande);
+        return [
+            'subject'           => $this->demande['demande'],
+            'oldOwnerId'        => $this->demande['oldOwnerId'],
+            'enginId'           => $this->demande['enginId'],
+        ];
+    }
+
+
 
     /**
      * Get the array representation of the notification.

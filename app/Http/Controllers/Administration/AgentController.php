@@ -11,11 +11,14 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Jobs\ProcessAgentCreate;
 use App\Mail\AgentCreateMail;
+use App\Notifications\ComptablePublicNotification;
+use Notification;
 
 use Auth;
 use Session;
 
 use App\Models\User;
+use App\Models\AbrobationComptableSuperviseur;
 use App\Models\TownHall;
 use App\Models\AgentRef;
 use App\Models\Guichet;
@@ -276,6 +279,47 @@ class AgentController extends Controller
 
         // Email send
         ProcessAgentCreate::dispatch($agent_data);
+
+        if(Auth::user()->hasRole('superviseur'))
+        {
+            $User->isverified = 0;
+            $User->save();
+
+            $approbation = AbrobationComptableSuperviseur::create([
+                'superviseurId' => Auth::user()->id,
+                'newAgentId'    => $User->id,
+            ]);
+
+            $demande = [
+                'demande'               => 'Demande d\'pprobation, nouvel agent cree !',
+                'superviseurId'         => $approbation->superviseurId,
+                'newAgentId'            => $approbation->newAgentId,
+                
+            ];
+            
+            $comptable_public_list  = [];
+            $users                  = User::get();
+
+            foreach ($users as $user) {
+                if(!$user->hasRole('comptable-public'))
+                {
+
+                } else {
+                    $comptable_public_list[] = $user;
+                }
+            }
+
+            for ($i=0; $i < count($comptable_public_list); $i++) 
+            { 
+                Notification::send($comptable_public_list[$i], new ComptablePublicNotification($demande));
+            }
+            
+
+        
+            return redirect()->route('agent.create')
+            ->with('success', 'Compte agent cree avec succes, NB: Attente d\'activation !!');
+
+        }
         
         return redirect()->route('agent.create')
                          ->with('success', 'Agent cree avec succes!');

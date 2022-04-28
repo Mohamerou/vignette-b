@@ -132,6 +132,10 @@ class AuthServiceProvider extends ServiceProvider
 
             if($user->hasRole('user'))
                 return $user->hasRole('user');
+                
+            if($user->hasRole('guichet'))
+                return $user->hasRole('guichet');
+
         });
 
     }

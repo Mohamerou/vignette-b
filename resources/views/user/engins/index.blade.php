@@ -2,6 +2,36 @@
 
 @section('content')
 
+<div class="row justify-content-center">
+	@if($errors->any())
+		@foreach($errors->all() as $error)
+			<div class="alert alert-class alert-danger text-center col-6">
+
+			{{$error}}<br>
+		</div>
+		@endforeach
+	@endif
+	@if(Session::has('success'))
+
+		<div class="alert
+		{{ Session::get('alert-class', 'alert-success') }} text-center col-md-8">
+
+				{{Session::get('success') }}
+		</div>
+
+	@endif
+
+	@if(Session::has('error'))
+
+		<div class="alert
+		{{ Session::get('alert-class', 'alert-danger') }} text-center col-8">
+
+			{{Session::get('error') }}
+		</div>
+
+	@endif
+</div>
+
 	<section class="py-2 text-center container">
 	    <div class="row py-lg-3">
 	      <div class="col-lg-6 col-md-8 mx-auto">
@@ -15,13 +45,6 @@
 
 	            <p class="alert
 	            {{ Session::get('alert-class', 'alert-info') }} tex-center">{{Session::get('declared') }}</p>
-
-	         @endif
-
-	         @if(Session::has('error'))
-
-	            <p class="alert
-	            {{ Session::get('alert-class', 'alert-danger') }} tex-center">{{Session::get('error') }}</p>
 
 	         @endif
 
@@ -83,6 +106,9 @@
 								        		@csrf
 								        		<button class="btn btn-primary btn-lg btn-block py-2 my-2">Telecharger QR</button>
 								        	</form>
+								        		<a href="{{ route('initiate.Transfert', $up_todate_engin->id) }}" class="btn btn-danger btn-lg btn-block py-2 my-2">
+													Tranferer la propriete
+												</a>
 								      	</div>
 							    	</div>
 							    </div>

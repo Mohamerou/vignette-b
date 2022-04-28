@@ -29,9 +29,32 @@ class HomeController extends Controller
         $notifications  = Auth::user()->notifications();
         $user           = Auth::user();
 
-        if($user->hasRole('user'))
-            return redirect()->route('home');
-        
+        if($user->hasRole('user')){
+            return view('home')->with('user', $user)
+                               ->with('notifications', $notifications);
+        } else {
+            # code...
         return redirect()->route('get_admin_dash');
+        }
+        
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function userHome()
+    {
+        $notifications  = Auth::user()->notifications();
+        $user           = Auth::user();
+
+        if($user->hasRole('user')){
+            return redirect()->route('home');
+        } else {
+            # code...
+        return redirect()->route('get_admin_dash');
+        }
+        
     }
 }

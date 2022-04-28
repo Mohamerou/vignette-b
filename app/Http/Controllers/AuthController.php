@@ -94,9 +94,16 @@ class AuthController extends Controller
             // dd($user);
             if ($user->isverified != 1) 
             {
+                if (!($user->hasRole('guichet'))) {
+                    Session::flush();
+                    Auth::logout();
+                    return redirect()->route('resend_code',['phone' => $phone]);
+                }
+
+
                 Session::flush();
                 Auth::logout();
-                return redirect()->route('resend_code',['phone' => $phone]);
+                return redirect()->route('connexion')->with('error', "Compte inactif !");
             }
 
             if($user->hasRole('superadmin') || $user->hasRole('elu') || $user->hasRole('comptable-public')){
