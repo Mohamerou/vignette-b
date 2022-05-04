@@ -27,6 +27,23 @@ class AuthServiceProvider extends ServiceProvider
 
         //
 
+        Gate::define('prevision', function($user){
+            if($user->hasRole('elu'))
+                return $user->hasRole('elu');
+            
+            if($user->hasRole('comptable-public'))
+                return $user->hasRole('comptable-public');
+
+            if($user->hasRole('dfm'))
+                return $user->hasRole('dfm');
+
+            if($user->hasRole('ordonnateur'))
+                return $user->hasRole('ordonnateur');
+                
+            if($user->hasRole('controle-gestion'))
+                return $user->hasRole('controle-gestion');
+        });
+
         Gate::define('superadmin', function($user){
             return $user->hasRole('superadmin');
         });
@@ -53,17 +70,17 @@ class AuthServiceProvider extends ServiceProvider
                 return $user->hasRole('controle-gestion');
         });
 
-        Gate::define('regisseur-public', function($user){
-            return $user->hasRole('regisseur-public');
+        Gate::define('regisseur', function($user){
+            return $user->hasRole('regisseur');
         });
 
-        Gate::define('superviseur', function($user){
-            return $user->hasRole('superviseur');
+        Gate::define('caissier-en-chef', function($user){
+            return $user->hasRole('caissier-en-chef');
         });
 
         Gate::define('comptable-public', function($user){
-            if($user->hasRole('superviseur'))
-                return $user->hasRole('superviseur');
+            if($user->hasRole('caissier-en-chef'))
+                return $user->hasRole('caissier-en-chef');
             
             if($user->hasRole('comptable-public'))
                 return $user->hasRole('comptable-public');
@@ -89,17 +106,40 @@ class AuthServiceProvider extends ServiceProvider
             if($user->hasRole('controle-gestion'))
                 return $user->hasRole('controle-gestion');
                 
-            if($user->hasRole('superviseur'))
-                return $user->hasRole('superviseur');
+            if($user->hasRole('caissier-en-chef'))
+                return $user->hasRole('caissier-en-chef');
         
             if($user->hasRole('comptable-public'))
                 return $user->hasRole('comptable-public');
     
-            if($user->hasRole('regisseur-public'))
-                return $user->hasRole('regisseur-public');
+            if($user->hasRole('regisseur'))
+                return $user->hasRole('regisseur');
     
             if($user->hasRole('guichet'))
                 return $user->hasRole('guichet');
+        });
+
+        
+
+        Gate::define('read-report', function($user){
+            
+            if($user->hasRole('elu'))
+                return $user->hasRole('elu');
+            
+            if($user->hasRole('dfm'))
+                return $user->hasRole('dfm');
+
+            if($user->hasRole('ordonateur'))
+                return $user->hasRole('ordonateur');
+
+            if($user->hasRole('controle-gestion'))
+                return $user->hasRole('controle-gestion');
+                
+            if($user->hasRole('caissier-en-chef'))
+                return $user->hasRole('caissier-en-chef');
+    
+            if($user->hasRole('regisseur'))
+                return $user->hasRole('regisseur');
         });
 
         
@@ -121,14 +161,14 @@ class AuthServiceProvider extends ServiceProvider
             if($user->hasRole('controle-gestion'))
                 return $user->hasRole('controle-gestion');
                 
-            if($user->hasRole('superviseur'))
-                return $user->hasRole('superviseur');
+            if($user->hasRole('caissier-en-chef'))
+                return $user->hasRole('caissier-en-chef');
         
             if($user->hasRole('comptable-public'))
             return $user->hasRole('comptable-public'); 
         
-            if($user->hasRole('regisseur-public'))
-            return $user->hasRole('regisseur-public');  
+            if($user->hasRole('regisseur'))
+            return $user->hasRole('regisseur');  
 
             if($user->hasRole('user'))
                 return $user->hasRole('user');

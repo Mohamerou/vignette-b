@@ -298,7 +298,7 @@ class AgentController extends Controller
             ];
             
             $comptable_public_list  = [];
-            $users                  = User::get();
+            $users                  = User::where('administration', 'bko')->get();
 
             foreach ($users as $user) {
                 if(!$user->hasRole('comptable-public'))

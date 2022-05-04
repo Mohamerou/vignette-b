@@ -106,9 +106,6 @@
 								        		@csrf
 								        		<button class="btn btn-primary btn-lg btn-block py-2 my-2">Telecharger QR</button>
 								        	</form>
-								        		<a href="{{ route('initiate.Transfert', $up_todate_engin->id) }}" class="btn btn-danger btn-lg btn-block py-2 my-2">
-													Tranferer la propriete
-												</a>
 								      	</div>
 							    	</div>
 							    </div>

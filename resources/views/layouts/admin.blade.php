@@ -33,9 +33,31 @@
       <li class="nav-item">
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
-      <li class="nav-item d-none d-sm-inline-block">
-        <a href="{{ route('get_admin_dash') }}" class="nav-link">Accuiel</a>
-      </li>
+      @can('regisseur')
+        <li class="nav-item d-none d-sm-inline-block">
+          <a href="{{ route('get_regisseur_dash') }}" class="nav-link">Accuiel</a>
+        </li>
+      @endcan
+      @can('elu')
+        <li class="nav-item d-none d-sm-inline-block">
+          <a href="{{ route('get_elu_dash') }}" class="nav-link">Accuiel</a>
+        </li>
+      @endcan
+      @can('comptable-public')
+        <li class="nav-item d-none d-sm-inline-block">
+          <a href="{{ route('get_comptable_dash') }}" class="nav-link">Accuiel</a>
+        </li>
+      @endcan
+      @can('guichet')
+        <li class="nav-item d-none d-sm-inline-block">
+          <a href="{{ route('get_guichet_dash') }}" class="nav-link">Accuiel</a>
+        </li>
+      @endcan
+      @can('superadmin')
+        <li class="nav-item d-none d-sm-inline-block">
+          <a href="{{ route('get_superadmin_dash') }}" class="nav-link">Accuiel</a>
+        </li>
+      @endcan
     </ul>
 
     <!-- Right navbar links -->
@@ -141,10 +163,36 @@
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="{{ route('get_admin_dash') }}" class="brand-link">
+    @can('regisseur')
+    <a href="{{ route('get_regisseur_dash') }}" class="brand-link">
       <img src="{{ asset('images/logo.png') }}" alt="ikaVignetti LOGO" class="brand-image img-circle elevation-3" style="opacity: .8">
       <span class="brand-text font-weight-light">ikaVignetti</span>
     </a>
+  @endcan
+  @can('elu')
+    <a href="{{ route('get_elu_dash') }}" class="brand-link">
+      <img src="{{ asset('images/logo.png') }}" alt="ikaVignetti LOGO" class="brand-image img-circle elevation-3" style="opacity: .8">
+      <span class="brand-text font-weight-light">ikaVignetti</span>
+    </a>
+  @endcan
+    @can('comptable-public')
+      <a href="{{ route('get_comptable_dash') }}" class="brand-link">
+        <img src="{{ asset('images/logo.png') }}" alt="ikaVignetti LOGO" class="brand-image img-circle elevation-3" style="opacity: .8">
+        <span class="brand-text font-weight-light">ikaVignetti</span>
+      </a>
+    @endcan
+    @can('guichet')
+      <a href="{{ route('get_guichet_dash') }}" class="brand-link">
+        <img src="{{ asset('images/logo.png') }}" alt="ikaVignetti LOGO" class="brand-image img-circle elevation-3" style="opacity: .8">
+        <span class="brand-text font-weight-light">ikaVignetti</span>
+      </a>
+    @endcan
+    @can('superadmin')
+      <a href="{{ route('get_superadmin_dash') }}" class="brand-link">
+        <img src="{{ asset('images/logo.png') }}" alt="ikaVignetti LOGO" class="brand-image img-circle elevation-3" style="opacity: .8">
+        <span class="brand-text font-weight-light">ikaVignetti</span>
+      </a>
+    @endcan
 
     <!-- Sidebar -->
     <div class="sidebar">
@@ -153,9 +201,31 @@
         <div class="image">
           <img src="{{ asset('images/avatar.png') }}" class="img-circle elevation-2" alt="User Image">
         </div>
-        <div class="info">
-          <a href="{{ route('get_admin_dash') }}" class="d-block">{{ Auth::user()->firstname }} {{ Auth::user()->lastname }}</a>
-        </div>
+        @can('regisseur')
+          <div class="info">
+            <a href="{{ route('get_regisseur_dash') }}" class="d-block">{{ Auth::user()->firstname }} {{ Auth::user()->lastname }}</a>
+          </div>
+        @endcan
+        @can('elu')
+          <div class="info">
+            <a href="{{ route('get_elu_dash') }}" class="d-block">{{ Auth::user()->firstname }} {{ Auth::user()->lastname }}</a>
+          </div>
+        @endcan
+        @can('comptable-public')
+          <div class="info">
+            <a href="{{ route('get_comptable_dash') }}" class="d-block">{{ Auth::user()->firstname }} {{ Auth::user()->lastname }}</a>
+          </div>
+        @endcan
+        @can('superadmin')
+          <div class="info">
+            <a href="{{ route('get_superadmin_dash') }}" class="d-block">{{ Auth::user()->firstname }} {{ Auth::user()->lastname }}</a>
+          </div>
+        @endcan
+        @can('guichet')
+          <div class="info">
+            <a href="{{ route('get_guichet_dash') }}" class="d-block">{{ Auth::user()->firstname }} {{ Auth::user()->lastname }}</a>
+          </div>
+        @endcan
       </div>
 
       <!-- SidebarSearch Form -->
@@ -254,7 +324,7 @@
                 </ul>
           </li>
           @endcan
-          @can('regisseur-public')
+          @can('regisseur')
           <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-copy"></i>

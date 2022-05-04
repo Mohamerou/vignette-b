@@ -7,19 +7,21 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class DemandeValider extends Notification implements ShouldQueue
+class ApproveTransfertEnginNotification extends Notification
 {
     use Queueable;
+
+    public $demandeValidated;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($demande)
+    public function __construct($demandeValidated)
     {
         //
-        $this->demande  = $demande;
+        $this->demandeValidated = $demandeValidated;
     }
 
     /**
@@ -36,12 +38,12 @@ class DemandeValider extends Notification implements ShouldQueue
 
     public function toDatabase($notifiable)
     {
+        // dd($this->demande);
         return [
-            'subject'           => "Demande de vignette vaidée",
-            'from'              => "ikaVignetti",
-            'demandeTrackId'    => $this->demande->id,
-            'enginId'           => $this->demande['enginId'],
-            'note'              => $this->demande['note'],
+            'subject'           => $this->demandeValidated['subject'],
+            'type'              => $this->demandeValidated['type'],
+            'oldOwnerPhone'     => $this->demandeValidated['oldOwnerPhone'],
+            'chassie'           => $this->demandeValidated['chassie'],
         ];
     }
 

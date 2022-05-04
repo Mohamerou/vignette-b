@@ -33,11 +33,8 @@
 </div>
 
 	<div class="container col-8 border-top border-primary py-3">
-		<div class="alert alert-warning" role="alert">
-		  <h4>Notice:</h4> Vous allez initier un transfert de propriete sur l'engin aux caracteristiques suivants
-		  <p>Marque: <span class="font-weight-bold">{{ $data['marque'] }}</span></p> 
-		  <p>Type:  <span class="font-weight-bold">{{ $data['type'] }}</span></p> 
-		  <p>CHASSIE: <span class="font-weight-bold">{{ $data['chassie'] }}</span></p> 
+		<div class="alert alert-info" role="alert">
+		  <h4>Notice:</h4> Vous allez initier une demande de transfert de propriete d'engin !
 		</div>
 		@if(Session::has('error'))
 
@@ -63,13 +60,14 @@
                 {{ Session::get('alert-class', 'alert-danger') }}">{{Session::get('error') }}</p>
 
             @endif
-		  <div class="mb-3">
-		    <label for="newOwnerPhone" class="form-label font-weight-bold">Contact du nouveau Proprietaire</label>
-		    <input required name="newOwnerPhone" type="number" class="form-control" id="newOwnerPhone">
-		  </div>
-
-		  <input hidden value="{{ $data['enginId'] }}" name="enginId" type="text" class="form-control">
-
+			<div class="mb-3">
+			  <label for="oldOwnerPhone" class="form-label font-weight-bold">Contact de l'ancien Proprietaire</label>
+			  <input required name="oldOwnerPhone" type="number" class="form-control" id="oldOwnerPhone">
+			</div>
+			<div class="mb-3">
+			  <label for="chassie" class="form-label font-weight-bold">N<sup>o</sup> de CHASSIE</label>
+			  <input required name="chassie" type="text" class="form-control" id="chassie">
+			</div>
 
 		  <div class="text-center">
 		  	<button type="submit" class="btn btn-primary">VALIDER&#8594;</button>

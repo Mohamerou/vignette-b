@@ -33,23 +33,9 @@ class DemandeVignette extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        return ['mail', 'database'];
+        return ['database'];
     }
 
-    /**
-     * Get the mail representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
-     */
-    public function toMail($notifiable)
-    {
-        return (new MailMessage)
-                    ->greeting($this->demande['greeting'])
-                    ->line($this->demande['body'])
-                    ->action($this->demande['actionText'], $this->demande['actionURL'])
-                    ->line($this->demande['thanks']);
-    }
 
 
 

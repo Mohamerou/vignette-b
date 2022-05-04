@@ -48,14 +48,16 @@ Route::get('/resend-code/{phone}', [App\Http\Controllers\VerificationController:
 
 	Route::get('/notifications', [App\Http\Controllers\User\VignettesController::class,'notificationListing'])->middleware('can:user')->name('notification.list');
 
-	Route::get('/notifications/{notification}', [App\Http\Controllers\User\VignettesController::class,'notificationShow'])->middleware('can:user')->name('notification.show');
+	// Route::get('/notifications/{notification}', [App\Http\Controllers\User\VignettesController::class,'notificationShow'])->middleware('can:user')->name('notification.show');
 
 	Route::post('qrvignette/{qr_path}', [App\Http\Controllers\User\VignettesController::class, 'downloadQr'])->middleware('can:user')->name('downloadQr');
 	// Transfert de propriete
-	Route::get('/initiate/tranfert/{enginId}', [App\Http\Controllers\User\EnginsController::class,'initiateTransfert'])->middleware('can:user')->name('initiate.Transfert');
+	Route::get('/initiate/tranfert', [App\Http\Controllers\User\EnginsController::class,'initiateTransfert'])->middleware('can:user')->name('initiateTransfert');
 	Route::POST('/new/tranfert', [App\Http\Controllers\User\EnginsController::class,'transfertOwnership'])->middleware('can:user')->name('newTransfert');
 	Route::get('/pending/tranfert', [App\Http\Controllers\User\EnginsController::class,'pendingTransfert'])->middleware('can:user')->name('pendingTransfert');
-	Route::POST('/pending/tranfert/validate', [App\Http\Controllers\User\EnginsController::class,'validateTransfert'])->middleware('can:user')->name('validateTransfert');
+	Route::get('/pending/tranfert/validate/{notificationId}', [App\Http\Controllers\User\EnginsController::class,'validateTransfert'])->middleware('can:user')->name('validateTransfert');
+	Route::get('/confirmednotification/type/{id}', [App\Http\Controllers\User\EnginsController::class,'notificationType'])->middleware('can:user')->name('engin.notification.type');
+	Route::get('/notification/show/{notificationId}', [App\Http\Controllers\User\EnginsController::class,'showTransfert'])->middleware('can:user')->name('showTransfert.notification');
 
 	// Route::post('/declaration/{user}/{vignette}/{engin}', [App\Http\Controllers\User\VignettesController::class,  'declaration_de_perte'])->middleware('auth')->name('declaration_de_perte');
 
@@ -75,7 +77,11 @@ Route::get('/resend-code/{phone}', [App\Http\Controllers\VerificationController:
 	Route::delete('/super/delete/{id}', [App\Http\Controllers\Administration\SuperAdminController::class, 'destroy'])->middleware('can:superadmin')->name("superadmin.destroy");
 
 	Route::get('/adminsh', [App\Http\Controllers\AuthController::class, 'admin_login'])->name("get_admin_login");
-	Route::get('/admin-dashboard', [App\Http\Controllers\AuthController::class, 'adminDashboard'])->middleware('can:intern')->name("get_admin_dash");
+	Route::get('/guichet-dashboard', [App\Http\Controllers\AuthController::class, 'guichetDashboard'])->middleware('can:guichet')->name("get_guichet_dash");
+	Route::get('/comptable-dashboard', [App\Http\Controllers\AuthController::class, 'comptableDashboard'])->middleware('can:comptable-public')->name("get_comptable_dash");
+	Route::get('/regisseur-dashboard', [App\Http\Controllers\AuthController::class, 'regisseurDashboard'])->middleware('can:regisseur')->name("get_regisseur_dash");
+	Route::get('/elu-dashboard', [App\Http\Controllers\AuthController::class, 'eluDashboard'])->middleware('can:read-report')->name("get_elu_dash");
+	Route::get('/super-dashboard', [App\Http\Controllers\AuthController::class, 'superadminDashboard'])->middleware('can:superadmin')->name("get_superadmin_dash");
 	Route::get('/examiner/{usagerId}/{enginId}/{notificationId}/{demandeTrackId}', [App\Http\Controllers\Administration\GestionVignettesController::class, 'examinerDemande'])->middleware('can:guichet')->name('examinerDemande');
 	Route::post('/ikvUE-validation/{enginId}/{notificationId}/{usager}/{demandeTrackId}', [App\Http\Controllers\Administration\GestionVignettesController::class, 'demandeValidation'])->middleware('can:guichet')->name('validerDemande');
 
@@ -144,9 +150,9 @@ Route::get('/resend-code/{phone}', [App\Http\Controllers\VerificationController:
 	Route::post('sales/checkout/process', [App\Http\Controllers\Guichet\SalesController::class, 'stepTwo'])->middleware('can:guichet')->name('salesStepTwo');
 	Route::get('sales/history', [App\Http\Controllers\Guichet\SalesController::class, 'salesHistory'])->middleware('can:intern')->name('salesHistory');
 	Route::post('sales/history', [App\Http\Controllers\Guichet\SalesController::class, 'salesHistoryPost'])->middleware('can:intern')->name('salesHistorypost');
-	Route::get('sales/report', [App\Http\Controllers\Guichet\SalesController::class, 'salesReport'])->middleware('can:regisseur-public')->name('salesReport');
-	Route::get('sales/reports', [App\Http\Controllers\Guichet\SalesController::class, 'salesReportList'])->middleware('can:regisseur-public')->name('sales.report.index');
-	Route::get('sales/report/{report_name}', [App\Http\Controllers\Guichet\SalesController::class, 'showReport'])->middleware('can:regisseur-public')->name('sales.report.show');
+	Route::get('sales/report', [App\Http\Controllers\Guichet\SalesController::class, 'salesReport'])->middleware('can:regisseur')->name('salesReport');
+	Route::get('sales/reports', [App\Http\Controllers\Guichet\SalesController::class, 'salesReportList'])->middleware('can:intern')->name('sales.report.index');
+	Route::get('sales/report/{report_name}', [App\Http\Controllers\Guichet\SalesController::class, 'showReport'])->middleware('can:read-report')->name('sales.report.show');
 	Route::get('sales/reportFilter/{}', [App\Http\Controllers\Guichet\SalesController::class, 'salesReportFilter'])->middleware('can:intern')->name('salesReportFilter');
 	Route::any('sales/checkout/notify', [App\Http\Controllers\PaymentController::class, 'notify'])->name('salesCheckoutNotify');
 	Route::get('sales/checkout/return', [App\Http\Controllers\PaymentController::class, 'return'])->name('salesCheckoutReturn');
@@ -158,7 +164,7 @@ Route::get('/resend-code/{phone}', [App\Http\Controllers\VerificationController:
 	Route::post('entSales/checkout/process', [App\Http\Controllers\Guichet\EntSalesController::class, 'stepTwo'])->middleware('can:guichet')->name('entsalesStepTwo');
 	Route::get('entSales/history', [App\Http\Controllers\Guichet\EntSalesController::class, 'salesHistory'])->middleware('can:intern')->name('entsalesHistory');
 	Route::post('entSales/history', [App\Http\Controllers\Guichet\EntSalesController::class, 'salesHistoryPost'])->middleware('can:intern')->name('entsalesHistorypost');
-	Route::get('entSales/report', [App\Http\Controllers\Guichet\EntSalesController::class, 'salesReport'])->middleware('can:regisseur-public')->name('entsalesReport');
+	Route::get('entSales/report', [App\Http\Controllers\Guichet\EntSalesController::class, 'salesReport'])->middleware('can:regisseur')->name('entsalesReport');
 	Route::get('entSales/reportFilter/{}', [App\Http\Controllers\Guichet\EntSalesController::class, 'salesReportFilter'])->middleware('can:intern')->name('entsalesReportFilter');
 	Route::any('entSales/checkout/notify', [App\Http\Controllers\PaymentController::class, 'notify'])->name('salesCheckoutNotify');
 	Route::get('entSales/checkout/return', [App\Http\Controllers\PaymentController::class, 'return'])->name('salesCheckoutReturn');

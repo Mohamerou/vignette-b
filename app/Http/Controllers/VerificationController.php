@@ -20,6 +20,12 @@ class VerificationController extends Controller
     //
     public function registration(Request $request)
     {
+        // request()->validate([
+        //     'phone' => 'required|regex:/^[0-9]{8}$/|digits:8',
+        //     'code'  => 'required|regex:/^[0-9]{8}$/|digits:6',
+        // ]);
+
+
         $userPhone      =  $request->phone;
         $userInputCode  =  $request->code;
 
@@ -54,40 +60,53 @@ class VerificationController extends Controller
 
     public function resend_code($phone)
     {
-    	$code           = rand(100000, 999999);
-        $user           = User::where('phone', $phone)->first();
+        $validatedData = request()->validate([
+            'phone' => 'required|regex:/^[0-9]{8}$/|digits:8',
+        ]);
 
-        if (is_null($user)) {
-            return redirect()->route('verify');
-        }
+        $phone          = User::where('phone', $validatedData->phone)->first();
+        $compareCode    =  TempVerificationCode::where('phone', $userPhone)->first();
 
-        $userId         = $user->id;
-        $user->code     = $code;
-        $user->save();
-
-        $oldTempVerificationCode       = TempVerificationCode::where('userId', $userId)
-                                                               ->first();
-
-        if(!is_null($oldTempVerificationCode))
+        if(!empty($phone))
         {
-            $oldTempVerificationCode->delete();
-        }
+            $code           = rand(100000, 999999);
+            $user           = User::where('phone', $phone)->first();
 
+            if (is_null($user)) {
+                return redirect()->route('verify');
+            }
+
+            $userId         = $user->id;
+            $user->code     = $code;
+            $user->save();
+
+            $oldTempVerificationCode       = TempVerificationCode::where('userId', $userId)
+                                                                ->first();
+
+            if(!is_null($oldTempVerificationCode))
+            {
+                $oldTempVerificationCode->delete();
+            }
+
+            
+
+            $newTempVerificationCode          = new TempVerificationCode;
+            $newTempVerificationCode->userId  = $userId;
+            $newTempVerificationCode->code    = $code;
+            $newTempVerificationCode->phone   = $phone;
+            $newTempVerificationCode->save();
+
+            $sentCode       = Nexmo::message()->send([
+                            'to'   => '+223'.$phone,
+                            'from' => '+22389699245',
+                            'text' => 'ikV, code de vérification: '.$code.' \n',
+                        ]);
+
+
+            return redirect()->route('verify',$phone);
+            }
         
-
-        $newTempVerificationCode          = new TempVerificationCode;
-        $newTempVerificationCode->userId  = $userId;
-        $newTempVerificationCode->code    = $code;
-        $newTempVerificationCode->phone   = $phone;
-        $newTempVerificationCode->save();
-
-        $sentCode       = Nexmo::message()->send([
-                        'to'   => '+223'.$phone,
-                        'from' => '+22389699245',
-                        'text' => 'ikV, code de vérification: '.$code.' \n',
-                    ]);
-
-
-        return redirect()->route('verify',$phone);
+        return redirect()->route('connexion')->with('warning', "Numero inconnu! Creer un nouveau compte.");
+    	
     }
 }

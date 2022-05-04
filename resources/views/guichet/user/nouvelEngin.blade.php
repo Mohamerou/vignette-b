@@ -88,7 +88,7 @@
                     <label for="cylindre" class="form-label font-weight-bold">Cylindre</label>
                     <select name="cylindre" id="cylindre" class="form-control" required id="cylindre">
                         <option value="">Selectionner</option>
-                            <option value="+125">+125 cm<sup>3</sup> (12 000 FCFA)</option>
+                            <option value="+125">&gt; 125 cm<sup>3</sup> (12 000 FCFA)</option>
                             <option value="125">51  -  125 cm<sup>3</sup> (6 000 FCFA)</option>
                             <option value="50">1  -  50 cm<sup>3</sup> (3 000 FCFA)</option>
                             <option value="0">0 cm<sup>3</sup> (1 500 FCFA)</option>

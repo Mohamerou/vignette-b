@@ -144,6 +144,7 @@
 
                             <div class="col-md-6">
                                 <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
+                                <input value="usager" id="account_type" type="hidden" class="form-control" name="account_type">
                             </div>
                         </div>
 

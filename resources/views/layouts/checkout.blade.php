@@ -54,7 +54,7 @@
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="/admin-dashboard" class="nav-link">Accueil</a>
+        <a href="{{ route('get_guichet_dash') }}" class="nav-link">Accueil</a>
       </li>
     </ul>
 
@@ -92,7 +92,7 @@
           <a href="#" class="dropdown-item"> -->
             <!-- Message Start -->
             <!-- <div class="media">
-              <img src="{{ asset('admindash/dist/img/user1-128x128.jpg') }}" alt="User Avatar" class="img-size-50 mr-3 img-circle">
+              {{-- <img src="{{ asset('admindash/dist/img/user1-128x128.jpg') }}" alt="User Avatar" class="img-size-50 mr-3 img-circle"> --}}
               <div class="media-body">
                 <h3 class="dropdown-item-title">
                   Brad Diesel
@@ -151,7 +151,7 @@
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="admin-dashboard" class="brand-link">
+    <a href="{{ route('get_guichet_dash') }}" class="brand-link">
       <img src="{{ asset('images/logo.png') }}" alt="ikaVignetti LOGO" class="brand-image img-circle elevation-3" style="opacity: .8">
       <span class="brand-text font-weight-light">ikaVignetti</span>
     </a>
@@ -291,7 +291,7 @@
             </ul>
           </li>
           @endcan
-          @can('superviseur')
+          @can('caissier-en-chef')
 
           <li class="nav-item">
             <a href="#" class="nav-link">
