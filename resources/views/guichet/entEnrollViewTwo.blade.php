@@ -64,7 +64,7 @@
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form method="POST" action="{{ route('postStepTwo') }}" enctype="multipart/form-data">
+              <form method="POST" action="{{ route('entPostStepTwo') }}" enctype="multipart/form-data">
                 @csrf
                 <div class="card-body">
                   <div class="form-group">

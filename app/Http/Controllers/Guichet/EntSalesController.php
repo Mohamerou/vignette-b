@@ -52,13 +52,15 @@ class EntSalesController extends Controller
        
        
   
-        $user_list       = [];
+        $user_list       = [
+            'userId'    =>'',
+        ];
         $engin_list      = [];
         foreach($pendingSales as $pendingSale){
             $user   = User::findOrfail($pendingSale->userId);
             $agent  = User::findOrfail($pendingSale->agentRef);
             $engin  = Engins::findOrfail($pendingSale->enginId);
-
+            if($user_list['userId'] != $user->id){
             $account   = UsagerAccountType::where('user_id',$user->id)->first();
             if(empty($account)){
                 return redirect()->route('get-admin-dash')->with('error', 'Compte introuvable !');
@@ -84,10 +86,10 @@ class EntSalesController extends Controller
             } 
         }
 
-    }
+    } }
         $pendingSales = $user_list;
- 
-        return view('guichet/salesIndex')
+   
+        return view('guichet/entSalesIndex')
                 ->with('pendingSales', $pendingSales);
     }
 
@@ -144,8 +146,21 @@ class EntSalesController extends Controller
 
         $history    = EnrollHistory::where('enginId', $enginId)->first();
         $user       = User::findOrfail($history->userId);
-        $engin      = Engins::findOrfail($enginId);
+        $allEngins   = DB::table('enroll_histories')->where('userId',$history->userId)
+                                                   ->where('status', 1)->get();
+        // dd($allEngins);
 
+        $data =[
+            'userId'             =>     $history->userId,
+            'firstname'          =>     $user->firstname,
+            'lastname'           =>     $user->lastname,
+            'phone'              =>     $user->phone,
+            'address'            =>     $user->address,
+        ];
+        $engin_lists =[];
+        $total_amount = 0;
+        foreach($allEngins as $allEngin){
+        $engin      = Engins::findOrfail($allEngin->enginId);
         $cylindre   = $engin->cylindre;
         $chassie            = $engin->chassie;
 
@@ -162,11 +177,7 @@ class EntSalesController extends Controller
             $amount     = 12000;
 
 
-        $data = [
-            'firstname'          =>     $user->firstname,
-            'lastname'           =>     $user->lastname,
-            'phone'              =>     $user->phone,
-            'address'            =>     $user->address,
+            $engin_lists[]       = [
             'marque'             =>     $engin->marque,
             'modele'             =>     $engin->modele,
             'cylindre'           =>     $engin->cylindre,
@@ -174,25 +185,68 @@ class EntSalesController extends Controller
             
             'chassie'            =>     $chassie,
         ];
-        
-
-        return view('payment')->with('data',$data);
+        $total_amount += $amount;
+    }        
+        // dd($data,$engin_lists);
+        return view('guichet/entreprise/sales')->with('data',$data)
+                                               ->with('enginDatas',$engin_lists)
+                                               ->with('total_amount',$total_amount);
     }
 
-    public function stepTwo(Request $request) 
+    public function stepTwo(int $enginId) 
     {
-        $data   = $request->validate([
-            'firstname'         => 'required|string|max:255',
-            'lastname'          => 'required|string|max:255',
-            'phone'             => 'required|string|max:255',
-            'address'           => 'required|string|max:255',
-            'marque'            => 'required|string|max:255',
-            'modele'            => 'required|string|max:255',
-            'cylindre'           => 'required|string|max:255',
-            'amount'            => 'required|string|max:255',
-            'chassie'           => 'required|string|max:255',
+        
+        $request = new Request([
+            'enginId' => $enginId,
         ]);
 
+        $data = $request->validate([
+            'enginId'    => 'required|numeric',
+        ]);
+
+        $history    = EnrollHistory::where('enginId', $enginId)->first();
+        $user       = User::findOrfail($history->userId);
+        $allEngins   = DB::table('enroll_histories')->where('userId',$history->userId)
+                                                   ->where('status', 1)->get();
+        // dd($allEngins);
+
+        $data =[
+            'userId'             =>     $history->userId,
+            'firstname'          =>     $user->firstname,
+            'lastname'           =>     $user->lastname,
+            'phone'              =>     $user->phone,
+            'address'            =>     $user->address,
+        ];
+        $engin_lists =[];
+        $total_amount = 0;
+        foreach($allEngins as $allEngin){
+        $engin      = Engins::findOrfail($allEngin->enginId);
+        $cylindre   = $engin->cylindre;
+        $chassie            = $engin->chassie;
+
+        if($cylindre === "0")
+            $amount     = 1500;
+        
+        if($cylindre === "50")
+            $amount     = 3000;
+
+        if($cylindre === "125")
+            $amount     = 6000;
+        
+        if($cylindre === "+125")
+            $amount     = 12000;
+
+
+            $engin_lists[]       = [
+            'marque'             =>     $engin->marque,
+            'modele'             =>     $engin->modele,
+            'cylindre'           =>     $engin->cylindre,
+            'amount'             =>     $amount,
+            
+            'chassie'            =>     $chassie,
+        ];
+        $total_amount += $amount;
+   
 
         // dd($request->all());
 
@@ -201,18 +255,18 @@ class EntSalesController extends Controller
         $payment->lastname          = $data['lastname'];
         $payment->phone             = $data['phone'];
         $payment->address           = $data['address'];
-        $payment->marque            = $data['marque'];
-        $payment->modele            = $data['modele'];
-        $payment->cylindre          = $data['cylindre'];
-        $payment->amount            = $data['amount'];
-        $payment->chassie           = $data['chassie'];
+        $payment->marque            = $engin->marque;
+        $payment->modele            = $engin->modele;
+        $payment->cylindre          = $cylindre;
+        $payment->amount            = $amount;
+        $payment->chassie           = $chassie;
         $payment->save();
 
 
         ////// ikvUE(User Engin)
-        $engin                      = Engins::where('chassie', $data['chassie'])->first();
+        $engin                      = Engins::where('chassie', $engin_lists['chassie'])->first();
         $usager                     = User::where('phone', $data['phone'])->first();
-
+   
 
 
 
@@ -288,9 +342,10 @@ class EntSalesController extends Controller
                 //                             'text' => "ikV, La demande de vignette pour votre ".$engin->modele." est validée avec succès. Retrouver votre code QR sur le menu ikaVignetti.   ",
                 //                             ]);
                 //dd($vignette);
-
+            }  
                 return redirect()->route('csv.list')->with('success', 'Achat effectue avec succes!');
-            }
+            } 
+       
             else
             {
                 Session::flash('error','Une erreur est surveu lors de la validation!\n Veillez réessayer'); 
@@ -298,9 +353,7 @@ class EntSalesController extends Controller
 
                 return back()->with('error','Une erreur est surveu lors de la validation!\n Veillez réessayer');       
             }
-        }
-        else{
-            return ridirect()->route('home')->with("error", "Cette demande a déjà fait l'objet de vérification.");
+          
         }
 
     }

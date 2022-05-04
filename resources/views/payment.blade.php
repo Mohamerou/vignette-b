@@ -13,7 +13,7 @@
     </div>
 
     <div class="row g-5 ">
-      <div class="col-md-5 col-md-4 order-md-last">
+      <div class="col-md-4 col-md-4 order-md-last">
         <h4 class="d-flex justify-content-between align-items-center mb-3">
           <span class="text-primary">Infos Engin</span>
         </h4>
@@ -92,7 +92,7 @@
               <input name="modele" type="hidden" class="form-control" id="modele" value="{{ $data['modele'] }}">
               <input name="marque" type="hidden" class="form-control" id="marque" value="{{ $data['marque'] }}">
 
-
+          </div>
               <hr class="my-4">
 
             <button class="w-100 btn btn-primary btn-lg" type="submit">PAYER CACHE</button>

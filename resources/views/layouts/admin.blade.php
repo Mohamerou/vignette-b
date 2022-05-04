@@ -216,9 +216,15 @@
                 <li class="nav-item">
                     <a href="{{ route('enrollList') }}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Enrollements Récents</p>
+                    <p>Enrollements Usager Récents</p>
                     </a>
                 </li>
+                <li class="nav-item">
+                  <a href="{{ route('entEnrollList') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Enrollements Entreprise Récents</p>
+                  </a>
+              </li>
                 <li class="nav-item">
                     <a href="{{ route('enroll.index') }}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>

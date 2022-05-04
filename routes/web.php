@@ -122,7 +122,7 @@ Route::get('/resend-code/{phone}', [App\Http\Controllers\VerificationController:
 	Route::get('entEnrollement-1', [App\Http\Controllers\Guichet\EntEnrollController::class, 'stepOne'])->middleware('can:guichet')->name('entEnrollStepOne');
 	Route::post('entEnrollement-1', [App\Http\Controllers\Guichet\EntEnrollController::class, 'postStepOne'])->middleware('can:guichet')->name('entPostStepOne');
 	Route::get('entEnrollement-2/{user_id}', [App\Http\Controllers\Guichet\EntEnrollController::class, 'stepTwo'])->middleware('can:guichet')->name('entEnrollStepTwo');
-	Route::post('entEnrollement-2', [App\Http\Controllers\Guichet\EntEnrollController::class, 'postStepTwo'])->middleware('can:guichet')->name('entEostStepTwo');
+	Route::post('entEnrollement-2', [App\Http\Controllers\Guichet\EntEnrollController::class, 'postStepTwo'])->middleware('can:guichet')->name('entPostStepTwo');
 
 	Route::get('entEnrollList', [App\Http\Controllers\Guichet\EntEnrollController::class, 'enrollList'])->middleware('can:guichet')->name('entEnrollList');
 	Route::get('entEnrolls', [App\Http\Controllers\Guichet\EntEnrollController::class, 'index'])->middleware('can:intern')->name('entEnroll.index');
@@ -154,8 +154,8 @@ Route::get('/resend-code/{phone}', [App\Http\Controllers\VerificationController:
 	//Entreprise  Sales routes
 	Route::get('entSales/index', [App\Http\Controllers\Guichet\EntSalesController::class, 'pendingSales'])->middleware('can:guichet')->name('entPendingSales');
 	// Route::get('sales/ent', [App\Http\Controllers\Guichet\EntSalesController::class, 'EntpendingSales'])->middleware('can:guichet')->name('pendingSales');
-	Route::get('entSales/checkout/{enginId}', [App\Http\Controllers\Guichet\EntSalesController::class, 'stepOne'])->middleware('can:guichet')->name('entsalesStepOne');
-	Route::post('entSales/checkout/process', [App\Http\Controllers\Guichet\EntSalesController::class, 'stepTwo'])->middleware('can:guichet')->name('entsalesStepTwo');
+	Route::get('entSales/checkout/{enginId}', [App\Http\Controllers\Guichet\EntSalesController::class, 'stepOne'])->middleware('can:guichet')->name('entSalesStepOne');
+	Route::get('entSales/checkout/process/{enginId}', [App\Http\Controllers\Guichet\EntSalesController::class, 'stepTwo'])->middleware('can:guichet')->name('entSalesStepTwo');
 	Route::get('entSales/history', [App\Http\Controllers\Guichet\EntSalesController::class, 'salesHistory'])->middleware('can:intern')->name('entsalesHistory');
 	Route::post('entSales/history', [App\Http\Controllers\Guichet\EntSalesController::class, 'salesHistoryPost'])->middleware('can:intern')->name('entsalesHistorypost');
 	Route::get('entSales/report', [App\Http\Controllers\Guichet\EntSalesController::class, 'salesReport'])->middleware('can:regisseur-public')->name('entsalesReport');

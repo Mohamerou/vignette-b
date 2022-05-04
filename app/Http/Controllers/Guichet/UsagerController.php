@@ -73,12 +73,17 @@ class UsagerController extends Controller
             if(!($user->hasRole('user'))){
 
             } else {
+                $account   = UsagerAccountType::where('user_id',$user->id)->first();
+                if(empty($account)){
+                    return redirect()->route('get-admin-dash')->with('error', 'Compte introuvable !');
+                }
+                if($account->type==='entreprise'){
                 $user_list[] = $user;
             }
         }
-
+    }
         // dd($user_list);
-        return view('guichet.enterprise.index')
+        return view('guichet.entSalesIndex')
         ->with('user_list', $user_list)
         ->with('date', $currentDate);
 

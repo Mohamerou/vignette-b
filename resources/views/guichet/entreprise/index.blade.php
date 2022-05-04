@@ -1,6 +1,6 @@
 
   <!-- Template Main JS & CSSFile -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -17,6 +17,16 @@
         });
     } );
 </script>
+<script src="{{ asset('html2pdf/dist/html2pdf.bundle.min.js') }}"></script>
+
+<script>
+    function generatePDF() {
+        // Choose the element that our invoice is rendered in.
+        const element = document.getElementById('printPdf');
+        // Choose the element and save the PDF for our user.
+        html2pdf().from(element).save();
+    }
+</script>
 <style>
     #modaldata tbody tr > td:last-of-type{display:none;}
 </style>
@@ -26,15 +36,15 @@
 @section('content')
 
 <div class="content-wrapper">
-
+<div id="printPdf" >
 <section class="content-header">
-<div class="container-fluid">
-<div class="row mb-2">
-<div class="col-sm-6">
-    <h1>Enrollements Recent</h1>
-</div>
-</div>
-</div>
+    <div class="container-fluid">
+    <div class="row mb-2">
+    <div class="col-sm-6">
+        <h1>Liste des Entreprises</h1>
+    </div>
+    </div>
+    </div>
 </section>
 
 <section class="content">
@@ -75,39 +85,31 @@
 
 <div class="card px-4">
     <div class="card-header">
-    <h3 class="card-title">Enrollement Recent</h3>
+    <h3 class="card-title"></h3>
     </div>
 
     <div class="card-body p-0">
     <table id="example" class="table table-striped table-hover table-bordered">
     <thead>
     <tr>
-    <th>Guichet</th>
-    <th>Usager</th>
-    <th>Contact Usager</th>
-    <th>Date</th>
-    <th>Status</th>
-    @can('guichet')
-        <th style="width: 40px">Actions</th>
-    @endcan
+    <th>Entreprise</th>
+    <th>CONTACT Entreprise</th>
+    <th>ADRESSE</th>
+    <th>DATE</th>
+    <th>DETAILS</th>
+    <th style="width: 40px">ACTIONS</th>
     </tr>
     </thead>
     <tbody>
 
-
-        @for($i=0; $i < count($pendingEnrolls); $i++)
+        @for($i=0; $i < count($user_list); $i++)
             <tr>
-                <td>{{ $pendingEnrolls[$i]['guichet'] }}</td>
-                <td>{{ $pendingEnrolls[$i]['usager'] }}</td>
-                <td>{{ $pendingEnrolls[$i]['userphone'] }}</td>
-                <td>{{ $pendingEnrolls[$i]['date'] }}</td>
-                <td class="text-danger">Attente</td>
-
-                @can('guichet')    
-                    <td class="text-danger">
-                        <a href="{{ route('enrollStepTwo', $pendingEnrolls[$i]['userId']) }}" class="btn btn-warning"><h3>&#8594;</h3></a>
-                    </td>
-                @endcan
+                <td>{{ $user_list[$i]['firstname'] }} {{ $user_list[$i]['lastname'] }}</td>
+                <td>{{ $user_list[$i]['phone'] }}</td>
+                <td>{{ $user_list[$i]['address'] }}</td>
+                <td>{{ $date }}</td>
+                <td><a href="{{ route('guichet.user.show', $user_list[$i]) }}" class="btn btn-info">VOIR</a></td>
+                <td><a href="{{ route('enrollStepTwo', $user_list[$i]) }}" class="btn btn-warning">Ajouter Engin</a></td>
             </tr>
         @endfor
 
@@ -115,9 +117,8 @@
     </tbody>
     </table>
     </div>
-
     </div>
-
+    <!-- <button class="btn btn-primary" onclick="generatePDF()">Generer un Rapport</button> -->
     </div>
 
 </div>
@@ -127,6 +128,8 @@
 
 </div>
 </section>
+</div>
+
 
 </div>
 @endsection 

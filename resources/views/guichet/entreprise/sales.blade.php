@@ -33,25 +33,30 @@
                 </tr>
               </thead>
               <tbody>
+                @foreach ($enginDatas as $enginData)
+                
                 <tr>
                   <td>1</td>
-                  <td>{{ $data['marque'] }}</td>
-                  <td>{{ $data['modele'] }}</td>
-                  <td><span class="tag tag-success">{{ $data['chassie'] }}</span></td>
-                  <td>{{ $data['cylindre'] }}</td>
-                  <td class="text-danger">{{ $data['amount'] }} FCFA</td>
+                  <td>{{ $enginData['marque'] }}</td>
+                  <td>{{ $enginData['modele'] }}</td>
+                  <td><span class="tag tag-success">{{ $enginData['chassie'] }}</span></td>
+                  <td>{{ $enginData['cylindre'] }}</td>
+                  <td class="text-danger">{{ $enginData['amount'] }} FCFA</td>
                 </tr>
+                @endforeach
               </tbody>
-            </table>
+            <td class="text-danger"><h3>Total : <span >{{$total_amount}} F CFA</span></h3><td>
+            </table>  
           </div>
           <!-- /.card-body -->
         </div>
 
+
       </div>
       <div class="col-md-5 ">
         <h4 class="text-primary mb-3">Infos Entreprise</h4>
-        <form class="needs-validation" novalidate action="{{ route('salesStepTwo') }}" method="POST">
-            @csrf
+        {{-- <form class="needs-validation" novalidate action="{{ route('salesStepTwo') }}" method="POST">
+            @csrf --}}
           <div class="row g-3">
             <div class="col-12">
               <label for="firstName" class="form-label">Nom</label>
@@ -74,20 +79,21 @@
               <label for="address" class="form-label">Adresse</span></label>
               <input name="address" type="text" class="form-control" id="address" value="{{ $data['address'] }}" placeholder="Adresse">
             </div>
-              <input name="chassie" type="hidden" class="form-control" id="chassie" value="{{ $data['chassie'] }}">
+              {{-- <input name="chassie" type="hidden" class="form-control" id="chassie" value="{{ $data['chassie'] }}">
               <input name="amount" type="hidden" class="form-control" id="amount" value="{{ $data['amount'] }}">
               <input name="cylindre" type="hidden" class="form-control" id="cylindre" value="{{ $data['cylindre'] }}">
               <input name="modele" type="hidden" class="form-control" id="modele" value="{{ $data['modele'] }}">
-              <input name="marque" type="hidden" class="form-control" id="marque" value="{{ $data['marque'] }}">
+              <input name="marque" type="hidden" class="form-control" id="marque" value="{{ $data['marque'] }}"> --}}
           </div>
 
               <hr class="my-4">
 
-            <button class="w-100 btn btn-primary btn-lg" type="submit">PAYER CACHE</button>
-            <hr class="my-4">
+              {{-- <button class="w-100 btn btn-primary btn-lg" type="submit">PAYER CACHE</button> --}}
+              <a href="{{ route('entSalesStepTwo', $data['userId']) }}" class="btn btn-primary"><h4>PAYER CACHE</h4></a>
+              <hr class="my-4">
 
             <button class="w-100 btn btn-primary btn-lg" type="button">Payement OM</button>
-        </form>
+        {{-- </form> --}}
       </div>
     </div>
   
