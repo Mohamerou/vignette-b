@@ -122,7 +122,7 @@ class EnrollController extends Controller
         $telephone              = $User->phone;
         $userIdCardEtx          = $request->file('idCard')->getClientOriginalExtension(); 
         $idCard_storage_path    = 'idCard/idCard-' . time() . '.' .$userIdCardEtx;
-        $idCardLoaded           = \Storage::disk('public')->put($idCard_storage_path, file_get_contents($request->file('idCard')));
+        $idCardLoaded           = \Storage::disk('s3')->put($idCard_storage_path, file_get_contents($request->file('idCard')));
 
         $User->idCard           = $idCard_storage_path;
         $User->save();
@@ -294,7 +294,7 @@ class EnrollController extends Controller
 
         $documentJustificatifLoadedEtx              = $request->file('documentJustificatif')->getClientOriginalExtension();
         $documentJustificatifLoaded_storage_path    = 'DocumentsEngins/engin-' . time() . '.' .$documentJustificatifLoadedEtx;
-        $documentJustificatifLoaded                 = \Storage::disk('public')->put($documentJustificatifLoaded_storage_path, file_get_contents($request->file('documentJustificatif')));
+        $documentJustificatifLoaded                 = \Storage::disk('s3')->put($documentJustificatifLoaded_storage_path, file_get_contents($request->file('documentJustificatif')));
         $engin->documentJustificatif                = $documentJustificatifLoaded_storage_path;
         $engin->save();
         
