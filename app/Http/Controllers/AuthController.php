@@ -166,7 +166,8 @@ class AuthController extends Controller
 
         $userIdCardEtx          = $request->file('idCard')->getClientOriginalExtension(); 
         $idCard_storage_path    = 'idCard/idCard-' . time() . '.' .$userIdCardEtx;
-        $idCardLoaded           = \Storage::disk('public')->put($idCard_storage_path, file_get_contents($request->file('idCard')));
+        // $idCardLoaded           = \Storage::disk('public')->put($idCard_storage_path, file_get_contents($request->file('idCard')));
+        $idCardLoaded           = \Storage::disk('s3')->put($idCard_storage_path, file_get_contents($request->file('idCard')));
 
         $User->idCard           = $idCard_storage_path;
         $User->save();
