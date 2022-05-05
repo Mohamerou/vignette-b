@@ -87,7 +87,7 @@
 		  </div>
 		  <div class="col py-2">
 		    <div class="card h-100 text-center">
-		      <img src="{{ asset('engins/>125.png') }}" class="card-img-top img-thumbnail" alt="moto51-125">
+		      <img src="{{ asset('engins/sup125.png') }}" class="card-img-top img-thumbnail" alt="moto51-125">
 		      <div class="card-body">
 		        <h5 class="card-title font-weight-bold">+125 CM<sup>3</sup></h5>
 		        <h5 class="card-title font-weight-bold">Tarif: 12 000 FCFA</h5>

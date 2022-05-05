@@ -38,9 +38,8 @@ Route::get('/resend-code/{phone}', [App\Http\Controllers\VerificationController:
 
 
 
-
 //User actions
-	Route::get('/mesengins', [App\Http\Controllers\User\EnginsController::class, 'index'])->middleware('can:user')->name('engins.index');\
+	Route::get('/mesengins', [App\Http\Controllers\User\EnginsController::class, 'index'])->middleware('can:user')->name('engins.index');
 	Route::get('/nouvelle/vignette', [App\Http\Controllers\User\EnginsController::class, 'selectEnginType'])->middleware('can:user')->name('user.selectEnginType');
 	Route::get('/nouvelle/vignette/{type}', [App\Http\Controllers\User\EnginsController::class, 'create'])->middleware('can:user')->name('user.createEngin');
 	Route::post('/nouvelle/vignette', [App\Http\Controllers\User\EnginsController::class, 'store'])->middleware('can:user')->name('user.storeEngin');
