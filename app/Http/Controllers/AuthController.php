@@ -542,7 +542,7 @@ class AuthController extends Controller
         $current_year = Carbon::now()->format('Y');
         
         // dd(json_encoyears));
-        return view('dash')->with('today', $today)
+        return view('superadmin-dash')->with('today', $today)
                         ->with('current_month', $current_month)
                         ->with('current_year', $current_year);
             }
