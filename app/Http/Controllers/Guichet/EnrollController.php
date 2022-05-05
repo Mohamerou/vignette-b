@@ -147,7 +147,7 @@ class EnrollController extends Controller
         ]);
 
         $User->password = Hash::make($user_pass);
-        $User->isVerified = 1;
+        $User->isverified = 1;
         $User->save();
 
         // Agent Refs

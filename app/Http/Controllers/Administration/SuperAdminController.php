@@ -164,7 +164,7 @@ class SuperAdminController extends Controller
         $password           = Str::random(9);
         $User->password     = Hash::make($password);
         $User->email        = $data['email'];
-        $User->isVerified   = 1;
+        $User->isverified   = 1;
         $User->save();
         
 
