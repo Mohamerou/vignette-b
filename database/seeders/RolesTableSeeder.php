@@ -18,6 +18,10 @@ class RolesTableSeeder extends Seeder
         ]);
 
         Role::create([
+        	'name' => 'policier'
+        ]);
+
+        Role::create([
         	'name' => 'elu'
         ]);
 

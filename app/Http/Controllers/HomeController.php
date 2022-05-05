@@ -33,9 +33,24 @@ class HomeController extends Controller
         if($user->hasRole('user')){
             return view('home')->with('user', $user)
                                ->with('notifications', $notifications);
-        } else {
-            # code...
-        return redirect()->route('get_admin_dash');
+        } 
+        if($user->hasRole('elu')){
+            return redirect()->route('get_elu_dash');
+        }
+        if($user->hasRole('guichet')){
+            return redirect()->route('get_guichet_dash');
+        }
+        if($user->hasRole('superadmin')){
+            return redirect()->route('get_superadmin_dash');
+        }
+        if($user->hasRole('comptable-public')){
+            return redirect()->route('get_comptable_dash');
+        }
+        if($user->hasRole('caissier-en-chef')){
+            return redirect()->route('get_comptable_dash');
+        }
+        if($user->hasRole('regisseur')){
+            return redirect()->route('get_regisseur_dash');
         }
         
     }
@@ -52,10 +67,7 @@ class HomeController extends Controller
 
         if($user->hasRole('user')){
             return redirect()->route('home')->with('notifications', $notifications);
-        } else {
-            # code...
-        return redirect()->route('get_admin_dash');
-        }
+        } 
         
     }
 }

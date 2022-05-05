@@ -88,7 +88,14 @@ class SuperAdminController extends Controller
             if ($user->hasRole('regisseur')) {
                 $user_list[] = [
                     'user' => $user,
-                    'role' => 'Regisseur Public',
+                    'role' => 'Regisseur',
+                ];
+            }
+
+            if ($user->hasRole('policier')) {
+                $user_list[] = [
+                    'user' => $user,
+                    'role' => 'Policier',
                 ];
             }
         }
@@ -107,6 +114,7 @@ class SuperAdminController extends Controller
     {
         $role_list = [];
         $roles = Role::all();
+        // dd($roles);
 
         foreach ($roles as $role) {
             if ($role->name === 'superadmin' || $role->name === 'user' || $role->name === 'guichet') {
