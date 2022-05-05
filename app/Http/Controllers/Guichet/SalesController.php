@@ -242,7 +242,8 @@ class SalesController extends Controller
 
             $vignette_qr_access_path    = substr($vignette_qr_storage_path, 8);
 
-            $vignetteLoaded = \Storage::disk('public')->put($vignette_qr_storage_path, $qr_code); //storage/app/public/img/qr-code/img-1557309130.png
+            // $vignetteLoaded = \Storage::disk('public')->put($vignette_qr_storage_path, $qr_code); //storage/app/public/img/qr-code/img-1557309130.png
+            $vignetteLoaded = \Storage::disk('s3')->put($vignette_qr_storage_path, $qr_code); //storage/app/public/img/qr-code/img-1557309130.png
             // $vignetteLoaded = \Storage::disk('public')->put('vignettes', $qr_code);
             
 

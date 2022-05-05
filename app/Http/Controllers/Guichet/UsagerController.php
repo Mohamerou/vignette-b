@@ -370,7 +370,8 @@ class UsagerController extends Controller
 
         $documentJustificatifLoadedEtx              = $request->file('documentJustificatif')->getClientOriginalExtension();
         $documentJustificatifLoaded_storage_path    = 'DocumentsEngins/engin-' . time() . '.' .$documentJustificatifLoadedEtx;
-        $documentJustificatifLoaded                 = \Storage::disk('public')->put($documentJustificatifLoaded_storage_path, file_get_contents($request->file('documentJustificatif')));
+        // $documentJustificatifLoaded                 = \Storage::disk('public')->put($documentJustificatifLoaded_storage_path, file_get_contents($request->file('documentJustificatif')));
+        $documentJustificatifLoaded                 = \Storage::disk('s3')->put($documentJustificatifLoaded_storage_path, file_get_contents($request->file('documentJustificatif')));
         $engin->documentJustificatif                = $documentJustificatifLoaded_storage_path;
         $engin->save();
         
