@@ -30,7 +30,7 @@ use App\Models\EnrollHistory;
 use App\Models\SalesHistory;  
 use App\Models\Payment;
 use App\Models\Report;
-use QrCode;
+use SimpleSoftwareIO\QrCode\Generator;
 
 use Illuminate\Support\Facades\DB as FacadesDB;
 
@@ -226,13 +226,14 @@ class SalesController extends Controller
         if($usager && $engin){
                 // Vignette unique_token
             $unique_token   = md5(rand(1, 15) . microtime());
-            $qr_code        = QrCode::eye('circle')
-                                       ->style('round')
-                                       ->margin(3)
-                                       ->format('png')
-                                       ->encoding('UTF-8')
-                                       ->size(250)
-                                       ->generate($unique_token);
+            $qr_code        = new Generator;
+            $qr_code->eye('circle')
+                    ->style('round')
+                    ->margin(3)
+                    ->format('png')
+                    ->encoding('UTF-8')
+                    ->size(250)
+                    ->generate($unique_token);
 
             // dd($qr_code);
             $vignette_qr_storage_path   = 'vignettes/vignette-' . time() . '.png';
