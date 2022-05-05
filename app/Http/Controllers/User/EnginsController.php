@@ -275,6 +275,7 @@ class EnginsController extends Controller
         }
 
             // $history = EnrollHistory::where('userId', Auth::user()->id)->first();
+            $User = Auth::user();
             // Enroll History backUp
             $history = new EnrollHistory();
             $history->agentRef      =   $User->id;
