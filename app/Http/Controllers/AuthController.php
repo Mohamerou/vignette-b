@@ -216,7 +216,9 @@ class AuthController extends Controller
         
         $notifications =   $user->notifications;
         
+
         return view('dashboard')->with('notifications', $notifications);
+        
       }
        return Redirect::to("connexion")->withSuccess('Opps! You do not have access');
     }
