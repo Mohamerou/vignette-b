@@ -324,7 +324,8 @@ class SalesController extends Controller
                         
         $this->middleware('can:guichet');
 
-        $SalesHistories = SalesHistory::WhereYear('created_at', Date('Y-m-d'))
+
+        $SalesHistories = SalesHistory::WhereYear('created_at', Date('Y'))
                                       ->orderBy('updated_at', 'desc')
                                       ->get();
 
@@ -444,7 +445,7 @@ class SalesController extends Controller
         if (!empty($agent)) {
             if ($agent == 'all') {
                 if (empty($date)) {
-                    $SalesHistories = SalesHistory::whereYear('created_at', date('Y'))->orderBy('updated_at', 'desc')->get();
+                    $SalesHistories = SalesHistory::whereYear('created_at', Date('Y'))->orderBy('updated_at', 'desc')->get();
                 } else {
                     $SalesHistories = DB::table('SalesHistorys')
                                       ->whereDate('updated_at', '=', $date)
@@ -517,7 +518,7 @@ class SalesController extends Controller
                 if ($agent == 'all' && empty($date)) {
                     //   dd($agent);
                 
-                    $SalesHistories = SalesHistory::whereYear('created_at', $currentYear)->orderBy('updated_at', 'desc')->get();
+                    $SalesHistories = SalesHistory::whereYear('created_at', Date('Y'))->orderBy('updated_at', 'desc')->get();
                 } elseif ($agent == 'all' && !empty($date)) {
                     $SalesHistories = DB::table('sales_histories')
                                       ->WhereDate('created_at', '=', $date)
@@ -589,7 +590,7 @@ class SalesController extends Controller
             if ($agent == 'all' && empty($date)) {
                 //   dd($agent);
             
-                $SalesHistories = SalesHistory::whereYear('created_at', $currentYear)->orderBy('updated_at', 'desc')->get();
+                $SalesHistories = SalesHistory::whereYear('created_at', Date('Y'))->orderBy('updated_at', 'desc')->get();
             } elseif ($agent == 'all' && !empty($date)) {
                 $SalesHistories = DB::table('sales_histories')
                                   ->WhereDate('created_at', '=', $date)
@@ -779,7 +780,7 @@ class SalesController extends Controller
         $date = $date->format('Y');
         
         
-        $reports = Report::whereYear('created_at', $date)->get();
+        $reports = Report::whereYear('created_at', Date('Y'))->get();
         $roles   = Role::get();
         $user_role = '';
 
