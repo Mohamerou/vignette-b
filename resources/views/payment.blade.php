@@ -39,13 +39,15 @@
           <span class="text-primary">Facture / Vignette Engin</span>
         </h4>
         <div >
-        <img class="pieceStyle2" src="{{ asset('storage/'.$data['documentJustificatif']) }}" alt="">
+        {{-- <img class="pieceStyle2" src="{{ asset('storage/'.$data['documentJustificatif']) }}" alt=""> --}}
+        <img class="pieceStyle2" src="{{ 'https://ikavignetti-assets.s3.us-east-2.amazonaws.com/'.$data['documentJustificatif'] }}" alt="">
       </div>
       </div>
       <div class="col-md-5 col-lg-6">
         <h4 class="text-primary mb-3">Pièce d'identité Usager</h4>
         <div >
-          <img class="pieceStyle1" src="{{ asset('storage/'.$data['idcard']) }}" alt="">
+          {{-- <img class="pieceStyle1" src="{{ asset('storage/'.$data['idcard']) }}" alt=""> --}}
+          <img class="pieceStyle1" src="{{ 'https://ikavignetti-assets.s3.us-east-2.amazonaws.com/'.$data['idcard'] }}" alt="">
         </div>
       </div>
     </div>
