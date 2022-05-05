@@ -84,7 +84,7 @@
                   			@if($up_todate_vignette->enginId == $up_todate_engin->id)
 							  	<div class="col">
 							    	<div class="card mb-5 text-center" style="width: 16rem;">
-							      		<img src="{{ 'https://ikavignetti-assets.s3.us-east-2.amazonaws.com/'.$up_todate_vignette->qr) }}" alt="vignette QR Code" class="card-img-top">
+							      		<img src="{{ 'https://ikavignetti-assets.s3.us-east-2.amazonaws.com/'.$up_todate_vignette->qr }}" alt="vignette QR Code" class="card-img-top">
 							      		{{-- <img src="{{ asset('storage/'.$up_todate_vignette->qr) }}" alt="vignette QR Code" class="card-img-top"> --}}
 							      		<div class="card-body">
 							      			<h5 class="card-title">{{ $up_todate_engin->marque }}</h5>
