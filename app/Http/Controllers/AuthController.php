@@ -214,7 +214,7 @@ class AuthController extends Controller
       if(Auth::check()){
         $user = Auth::user();
         
-        $notifications = $user->notifications;
+        $notifications =   $user->notifications;
         
         return view('dashboard')->with('notifications', $notifications);
       }
