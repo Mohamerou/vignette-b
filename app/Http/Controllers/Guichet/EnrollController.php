@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 use Validator,Redirect,Response;
 use Auth;
 use Nexmo;
+use DB;
 Use App\Models\User;
 Use App\Models\UsagerAccountType;
 use App\Models\Engins;
@@ -42,17 +43,21 @@ class EnrollController extends Controller
         $currentYear = Carbon::parse($currentYear);
         $currentYear = $currentYear->format('Y');
 
+        $distinctUsers = DB::table('enroll_histories')->select('userId')->distinct()->get();
+        $distinctUsercount = $distinctUsers->count();
         $histories = EnrollHistory::where('status',1)
                                   ->whereYear('created_at', $currentYear)
                                   ->orderBy('updated_at')
                                   ->get();
 
         $histories_list       = [];
-        foreach($histories as $history){
+        foreach($distinctUsers as $distinctUser)
+        {
+            $user       = User::find($distinctUser->userId);
+            $history    = EnrollHistory::where('userId', $user->id)->first();
             $createdAt = Carbon::parse($history['created_at']);
             $date      = $createdAt->format('d-m-Y');
-            
-            $user   = User::find($history->userId);
+
             $histories_list[]  = [
                 'userId'    => $user->id,
                 'usager'    => $user->firstname." ".$user->lastname,
@@ -61,10 +66,8 @@ class EnrollController extends Controller
                 'enrollId'  => $history->id, 
                 'status'    => $history->status, 
                 'date'      => $date,
-            ]; 
+            ];
         }
-
-
 
         $histories = $histories_list;
 
@@ -274,7 +277,7 @@ class EnrollController extends Controller
 
        
         
-        if($limit === 4)
+        if($limit === 1000)
             $limit = true;
 
         if($account_type === "usager")

@@ -42,7 +42,7 @@
 		<div class="row row-cols-1 row-cols-md-3 g-4">
 		  <div class="col py-2">
 		    <div class="card h-100 text-center">
-		      <img src="{{ asset('engins/velo.jpg') }}" class="card-img-top img-thumbnail" alt="moto51-125">
+		      <img src="{{ asset('engins/0.png') }}" class="card-img-top img-thumbnail" alt="moto51-125">
 		      <div class="card-body">
 		        <h5 class="card-title font-weight-bold">0 CM<sup>3</sup></h5>
 		        <h5 class="card-title font-weight-bold">Tarif: 1 500 FCFA</h5>
@@ -57,7 +57,7 @@
 		  </div>
 		  <div class="col py-2">
 		    <div class="card h-100 text-center">
-		      <img src="{{ asset('engins/moto51-125.png') }}" class="card-img-top img-thumbnail" alt="moto51-125">
+		      <img src="{{ asset('engins/1-50.png') }}" class="card-img-top img-thumbnail" alt="moto51-125">
 		      <div class="card-body">
 		        <h5 class="card-title font-weight-bold">1 - 50 CM<sup>3</sup></h5>
 		        <h5 class="card-title font-weight-bold">Tarif: 3 000 FCFA</h5>
@@ -87,7 +87,7 @@
 		  </div>
 		  <div class="col py-2">
 		    <div class="card h-100 text-center">
-		      <img src="{{ asset('engins/moto125plus.png') }}" class="card-img-top img-thumbnail" alt="moto51-125">
+		      <img src="{{ asset('engins/>125.png') }}" class="card-img-top img-thumbnail" alt="moto51-125">
 		      <div class="card-body">
 		        <h5 class="card-title font-weight-bold">+125 CM<sup>3</sup></h5>
 		        <h5 class="card-title font-weight-bold">Tarif: 12 000 FCFA</h5>

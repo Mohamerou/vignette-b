@@ -35,34 +35,23 @@
 </div>
 <div class="row">
     <div>
-  <td>
-    <form method="post" action="{{route('salesHistorypost')}}" class="form-group">
-        @csrf
-        <select name="agent" id="agent">
-            <option value="all">Tous Les Agents</option>
-            
-            @for($i=0; $i < count($allagent); $i++)
-                <option value="{{$allagent[$i]->id}}">{{$allagent[$i]->lastname}} {{$allagent[$i]->firstname}} {{$allagent[$i]->phone}}</option>
-            @endfor
-        </select>
-        <input type="date" name="date" id="date" >
-        <input class="btn btn-primary mx-3" type="submit" value="Filtrer" name="history">
-        <input class="btn btn-primary mx-5" type="submit" value="Génerer le rapport" name="report" id="envoi">
-    </form>
-    </td>
+        <td>
+            <form method="post" action="{{route('salesHistorypost')}}" class="form-group">
+                @csrf
+                <select name="agent" id="agent">
+                    <option value="all">Tous Les Agents</option>
+                    
+                    @for($i=0; $i < count($allagent); $i++)
+                        <option value="{{$allagent[$i]->id}}">{{$allagent[$i]->lastname}} {{$allagent[$i]->firstname}} {{$allagent[$i]->phone}}</option>
+                    @endfor
+                </select>
+                <input type="date" name="date" id="date" >
+                <input class="btn btn-primary mx-3" type="submit" value="Filtrer" name="history">
+                <input class="btn btn-primary mx-5" type="submit" value="Génerer le rapport" name="report" id="envoi">
+            </form>
+        </td>
     </div>
-    @include('sweetalert::alert')
-         {{-- generate repport after filter
-         <script>
-         var btn = document.getElementById('envoi');
-         btn.addEventListener('click', function (e) {
-			e.preventDefault()
-			var nom = document.getElementById('agent').value;
-			var email = document.getElementById('date').value;
-        })
-    </script>
- --}}
-    </div>
+</div>
 <div class="col-sm-6">
     <div class="col-sm-3">
         <h1>Total Vente:</h1>
@@ -76,7 +65,6 @@
 </section>
 
 <section class="content">
-
     <div class="row justify-content-center">
         @if($errors->any())
             @foreach($errors->all() as $error)
@@ -106,63 +94,61 @@
 
         @endif
     </div>
-<div class="container-fluid">
-<div class="row" style="justify-content: center;">
+    <div class="container-fluid">
+        <div class="row" style="justify-content: center;">
 
-<div class="col-md-10 " style="justify-item: center;">
+            <div class="col-md-10 " style="justify-item: center;">
 
-<div class="card px-4">
-    <div class="card-header">
-    <h3 class="card-title">Panel de Vente</h3>
+                <div class="card px-4">
+                    <div class="card-header">
+                        <h3 class="card-title">Historiques</h3>
+                    </div>
+
+                        <div class="card-body p-0">
+                            <table id="example" class="table table-striped table-hover table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>Agent</th>
+                                    <th>Usager</th>
+                                    <th>Contact Usager</th>
+                                    <th>Marque</th>
+                                    <th>Type</th>
+                                    <th>Chassie</th>
+                                    <th>Tarif</th>
+                                    <th style="width: 40px">Status</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+
+                                    @for($i=0; $i < count($SalesHistories); $i++)
+                                        <tr>
+                                            <td>{{ $SalesHistories[$i]['agent'] }}</td>
+                                            <td>{{ $SalesHistories[$i]['usager'] }}</td>
+                                            <td>{{ $SalesHistories[$i]['userphone'] }}</td>
+                                            <td>{{ $SalesHistories[$i]['marque'] }}</td>
+                                            <td>{{ $SalesHistories[$i]['modele'] }}</td>
+                                            <td>{{ $SalesHistories[$i]['chassie'] }}</td>
+                                            <td class="text-danger">{{ $SalesHistories[$i]['tarif'] }}</td>
+                                            <td>
+                                            <button disabled type="button" class="btn btn-success"><h4>&#x2611;</h4></button>
+                                            </td>
+                                        </tr>
+                                    @endfor
+
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                </div>
+
+            
+
+            </div>
+
+        </div>
     </div>
-
-    <div class="card-body p-0">
-    <table id="example" class="table table-striped table-hover table-bordered">
-    <thead>
-    <tr>
-    <th>Agent</th>
-    <th>Usager</th>
-    <th>Contact Usager</th>
-    <th>Marque</th>
-    <th>Type</th>
-    <th>Chassie</th>
-    <th>Tarif</th>
-    <th style="width: 40px">Status</th>
-    </tr>
-    </thead>
-    <tbody>
-
-
-        @for($i=0; $i < count($SalesHistories); $i++)
-            <tr>
-                <td>{{ $SalesHistories[$i]['agent'] }}</td>
-                <td>{{ $SalesHistories[$i]['usager'] }}</td>
-                <td>{{ $SalesHistories[$i]['userphone'] }}</td>
-                <td>{{ $SalesHistories[$i]['marque'] }}</td>
-                <td>{{ $SalesHistories[$i]['modele'] }}</td>
-                <td>{{ $SalesHistories[$i]['chassie'] }}</td>
-                <td class="text-danger">{{ $SalesHistories[$i]['tarif'] }}</td>
-                <td>
-                <button disabled type="button" class="btn btn-success"><h4>&#x2611;</h4></button>
-                </td>
-            </tr>
-        @endfor
-
-
-    </tbody>
-    </table>
-    </div>
-
-    </div>
-
-    </div>
-
-</div>
-
-</div>
-</div>
-
-</div>
 </section>
 
 </div>

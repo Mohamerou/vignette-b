@@ -96,8 +96,7 @@
     <th>CONTACT USAGER</th>
     <th>ADRESSE</th>
     <th>DATE</th>
-    <th>DETAILS</th>
-    <th style="width: 40px">ACTIONS</th>
+    <th style="width: 170px">ACTIONS</th>
     </tr>
     </thead>
     <tbody>
@@ -108,8 +107,10 @@
                 <td>{{ $user_list[$i]['phone'] }}</td>
                 <td>{{ $user_list[$i]['address'] }}</td>
                 <td>{{ $date }}</td>
-                <td><a href="{{ route('guichet.user.show', $user_list[$i]) }}" class="btn btn-info">VOIR</a></td>
-                <td><a href="{{ route('guichet.user.edit', $user_list[$i]) }}" class="btn btn-warning">METTRE A JOUR</a></td>
+                <td>
+                    <a href="{{ route('guichet.user.show', $user_list[$i]) }}" class="btn btn-info mr-1">DETAILS</a>
+                    <a href="{{ route('guichet.user.edit', $user_list[$i]) }}" class="btn btn-warning">EDITER</a>
+                </td>
             </tr>
         @endfor
 

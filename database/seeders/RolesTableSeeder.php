@@ -38,11 +38,11 @@ class RolesTableSeeder extends Seeder
         ]);
 
         Role::create([
-        	'name' => 'superviseur'
+        	'name' => 'caissier-en-chef'
         ]);
 
         Role::create([
-        	'name' => 'regisseur-public'
+        	'name' => 'regisseur'
         ]);
 
         Role::create([

@@ -1,3 +1,25 @@
+<style>
+  .pieceStyle1{
+    width: 200px;
+  }
+
+  .pieceStyle2{
+    width: 200px;
+  }
+  .pieceStyle1:hover{
+  transform: translateX(50px) !important;
+  width: 600px;
+  position: relative;
+  z-index: 1000;
+  }
+  .pieceStyle2:hover{
+  transform: translateX(-350px) !important;
+  width: 600px;
+  position: relative;
+  z-index: 1000;
+  }
+  
+</style>
 @extends('layouts.checkout')
 
 @section('content')
@@ -11,7 +33,22 @@
       <h2>OPERATION CAISSE</h2>
       <p class="lead"></p>
     </div>
-
+    <div class="row g-5 mb-5 justify-content-center">
+      <div class="col-md-5 col-md-4 order-md-last">
+        <h4 class="d-flex justify-content-between align-items-center mb-3">
+          <span class="text-primary">Facture / Vignette Engin</span>
+        </h4>
+        <div >
+        <img class="pieceStyle2" src="{{ asset('storage/'.$data['documentJustificatif']) }}" alt="">
+      </div>
+      </div>
+      <div class="col-md-5 col-lg-6">
+        <h4 class="text-primary mb-3">Pièce d'identité Usager</h4>
+        <div >
+          <img class="pieceStyle1" src="{{ asset('storage/'.$data['idcard']) }}" alt="">
+        </div>
+      </div>
+    </div>
     <div class="row g-5 ">
       <div class="col-md-4 col-md-4 order-md-last">
         <h4 class="d-flex justify-content-between align-items-center mb-3">
@@ -92,13 +129,14 @@
               <input name="modele" type="hidden" class="form-control" id="modele" value="{{ $data['modele'] }}">
               <input name="marque" type="hidden" class="form-control" id="marque" value="{{ $data['marque'] }}">
 
-          </div>
+         
               <hr class="my-4">
 
             <button class="w-100 btn btn-primary btn-lg" type="submit">PAYER CACHE</button>
             <hr class="my-4">
 
             <button class="w-100 btn btn-primary btn-lg" type="button">Payement OM</button>
+
         </form>
       </div>
     </div>

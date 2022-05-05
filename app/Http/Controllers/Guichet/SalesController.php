@@ -47,7 +47,8 @@ class SalesController extends Controller
     }
 
     public function pendingSales()
-    {
+    {        
+        $this->middleware('can:guichet');
         $pendingSales = EnrollHistory::where('status', '1')->orderBy('created_at', 'desc')->get();
 
         // dd($pendingSales);
@@ -94,7 +95,8 @@ class SalesController extends Controller
     }
 
     public function EntpendingSales()
-    {
+    {        
+        $this->middleware('can:guichet');
         $pendingSales = EnrollHistory::where('status', '1')->orderBy('created_at', 'desc')->get();
 
         $     
@@ -165,16 +167,17 @@ class SalesController extends Controller
 
 
         $data = [
-            'firstname'          =>     $user->firstname,
-            'lastname'           =>     $user->lastname,
-            'phone'              =>     $user->phone,
-            'address'            =>     $user->address,
-            'marque'             =>     $engin->marque,
-            'modele'             =>     $engin->modele,
-            'cylindre'           =>     $engin->cylindre,
-            'amount'             =>     $amount,
-            
-            'chassie'            =>     $chassie,
+            'firstname'                     =>     $user->firstname,
+            'lastname'                      =>     $user->lastname,
+            'phone'                         =>     $user->phone,
+            'idcard'                        =>     $user->idCard,
+            'address'                       =>     $user->address,
+            'marque'                        =>     $engin->marque,
+            'modele'                        =>     $engin->modele,
+            'cylindre'                      =>     $engin->cylindre,
+            'documentJustificatif'          =>     $engin->documentJustificatif,
+            'amount'                        =>     $amount,
+            'chassie'                       =>     $chassie,
         ];
         
 
@@ -182,7 +185,8 @@ class SalesController extends Controller
     }
 
     public function stepTwo(Request $request) 
-    {
+    {        
+        $this->middleware('can:guichet');
         $data   = $request->validate([
             'firstname'         => 'required|string|max:255',
             'lastname'          => 'required|string|max:255',
@@ -677,7 +681,7 @@ class SalesController extends Controller
         $today      = $today->format('d-m-Y');
         $fileName   = 'Rapport Vente'.' - '.$today;
 
-        $SalesHistories = SalesHistory::take(30)->orderBy('updated_at', 'desc')->get();
+        $SalesHistories = SalesHistory::WhereDay('created_at', Date('d'))->orderBy('updated_at', 'desc')->get();
 
         $user_list       = [];
         $engin_list      = [];
@@ -766,7 +770,8 @@ class SalesController extends Controller
 
 
     public function salesReportList()
-    {
+    {        
+        $this->middleware('can:read-report');
         $date = Carbon::now();
         $date = Carbon::parse($date);
         $date = $date->format('Y');
@@ -806,7 +811,8 @@ class SalesController extends Controller
 
     public function showReport($repot_name)
     {
-        // file path
+        // file path        
+        $this->middleware('can:read-report');
        $path = public_path('storage/reports' . '/' . $repot_name);
        $path = $path.'.pdf';
 

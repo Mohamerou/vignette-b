@@ -107,19 +107,23 @@ class AuthController extends Controller
                 return redirect()->route('connexion')->with('error', "Compte inactif !");
             }
 
-            if($user->hasRole('superadmin') || $user->hasRole('elu') || $user->hasRole('comptable-public')){
-                return redirect()->route('get_admin_dash');
+            if($user->hasRole('superadmin')){
+                return redirect()->route('get_superadmin_dash');
             }
-            if($user->hasRole('ordonateur') || $user->hasRole('control-gestion') || $user->hasRole('dfm')){
-                return redirect()->route('get_admin_dash');
+            if($user->hasRole('ordonateur') || $user->hasRole('control-gestion') || $user->hasRole('dfm') || $user->hasRole('elu')){
+                return redirect()->route('get_elu_dash');
             }
 
-            if($user->hasRole('regisseur-public') || $user->hasRole('superviseur')){
-                return redirect()->route('get_admin_dash');
+            if($user->hasRole('comptable-public') || $user->hasRole('caissier-en-chef')){
+                return redirect()->route('get_comptable_dash');
             }
 
             if($user->hasRole('guichet')){
-                return redirect()->route('get_admin_dash');
+                return redirect()->route('get_guichet_dash');
+            }
+
+            if($user->hasRole('regisseur')){
+                return redirect()->route('get_regisseur_dash');
             }
 
             return redirect()->route('home');
@@ -141,6 +145,7 @@ class AuthController extends Controller
             'phone' 	             => 'required|regex:/^[0-9]{8}$/|digits:8',
             'password' 	             => 'required|min:8',
             'password_confirmation'  => 'required|min:8',
+            'account_type'           => 'required|string|max:15',
         ]);
          
         //dd($key);
@@ -158,7 +163,13 @@ class AuthController extends Controller
         $id                 = $User->id;
         $code               = $User->code;
         $telephone          = $User->phone;
-        $idCardLoaded       = $this->storeIdCard($User);
+
+        $userIdCardEtx          = $request->file('idCard')->getClientOriginalExtension(); 
+        $idCard_storage_path    = 'idCard/idCard-' . time() . '.' .$userIdCardEtx;
+        $idCardLoaded           = \Storage::disk('public')->put($idCard_storage_path, file_get_contents($request->file('idCard')));
+
+        $User->idCard           = $idCard_storage_path;
+        $User->save();
        
         if($idCardLoaded == False){
 
@@ -180,12 +191,12 @@ class AuthController extends Controller
         ]);
 
         // Enroll History backUp
-        $history = new EnrollHistory();
-        $history->agentRef      =   $User->id;
-        $history->agentName     =   $User->firstname;
-        $history->agentPhone    =   $User->phone;
-        $history->userId        =   $User->id;
-        $history->save();
+        // $history = new EnrollHistory();
+        // $history->agentRef      =   $User->id;
+        // $history->agentName     =   $User->firstname;
+        // $history->agentPhone    =   $User->phone;
+        // $history->userId        =   $User->id;
+        // $history->save();
 
         return $this->sendOPT($telephone, $code);
     
@@ -210,13 +221,146 @@ class AuthController extends Controller
     }
 
 
-    public function adminDashboard()
+    public function guichetDashboard()
     {
       if(Auth::check()){  
         // Array of engins
         $engin_array = [];
         $vignetted_engin_count = 0;
+        $engin_count = 0;
+        $day_agent_engin_count = 0;
+        $month_agent_engin_count = 0;
+        $year_agent_engin_count = 0;
+        $day_agent_usager_count = 0;
+        $month_agent_usager_count = 0;
+        $year_agent_usager_count = 0;
         $total_sales = 0;
+        $day_sales = 0;
+        $month_sales = 0;
+        $year_sales = 0;
+        $total_users = 0;
+        $total_administrateurs = 0;
+        $total_users            = DB::table('users')->count();
+        $total_administrateurs  = DB::table('users')->where('administration', 'bko')
+                                                    ->count();
+        $user_count      = $total_users - $total_administrateurs;
+        
+
+        //------------------------------------------------------------------//
+            // Count engins with vignette a jour and the overall total sales
+        $vignettes      = Vignettes::where('status', 1)->get();
+        foreach ($vignettes as $vignette) {
+            $engin          = Engins::find($vignette->enginId);
+            $engin_array[]  = $engin;
+            $vignetted_engin_count  +=1;
+            $total_sales    += $engin->tarif;
+        }
+
+
+        // Dayly sales by aagent 
+            $agent_day_sales = DB::table('sales_histories')->select('enrollId')->where('agentRef', Auth::user()->id)->WhereDay('created_at', Date('d'))->get();
+        // dd($agent_sales);  
+            for ($i=0; $i < count($agent_day_sales); $i++) { 
+                // $mountBenefit[] = $agent_sales[$i]->tarif;
+                $enginL = DB::table('enroll_histories')->select('enginId')->where('id',$agent_day_sales[$i]->enrollId)->first();
+                $engin          = Engins::find($enginL->enginId);
+                $engin_array[]  = $engin;
+                $day_agent_engin_count  +=1;
+                $day_agent_usager_count  +=1;
+                $day_sales    += $engin->tarif;
+            // dd($day_sales);  
+
+            }
+
+        // ------------------------------------------------------------------------//
+
+                    //Get Monthly sales by agent
+
+                    $agent_month_sales = DB::table('sales_histories')->select('enrollId')
+                                                                     ->where('agentRef', Auth::user()->id)
+                                                                     ->WhereMonth('created_at', Date('m'))
+                                                                     ->get();
+                    // dd($agent_sales);  
+                    for ($i=0; $i < count($agent_month_sales); $i++) { 
+                        // $mountBenefit[] = $agent_sales[$i]->tarif;
+                        $enginL = DB::table('enroll_histories')->select('enginId','userId')
+                                                               ->where('id',$agent_month_sales[$i]->enrollId)
+                                                               ->first();
+                        $engin          = Engins::find($enginL->enginId);
+                        $usager          = User::find($enginL->userId);
+                        $month_agent_engin_count  +=1;
+                        $month_agent_usager_count  +=1;
+                        $month_sales    += $engin->tarif;
+                        // dd($day_sales);  
+            
+                    }
+
+                    // ----------------------------------------------------------------------//
+
+                    //Get Year sales by agent
+                    $yearly_sales = 0;
+                    $year_sales = DB::table('sales_histories')->select('enrollId')
+                                                            ->where('agentRef', Auth::user()->id)
+                                                            ->WhereYear('created_at', Date('Y'))
+                                                            ->get();
+
+                    // dd($agent_sales);  
+                    for ($i=0; $i < count($year_sales); $i++) { 
+                        // $mountBenefit[] = $agent_sales[$i]->tarif;
+                        $enginL = DB::table('enroll_histories')->select('enginId','userId')
+                                                               ->where('id',$year_sales[$i]->enrollId)
+                                                               ->first();
+                      
+                        $engin          = Engins::find($enginL->enginId);
+                        $usager          = User::find($enginL->userId);
+
+                        $engin_array[]  = $engin;
+                        $year_agent_engin_count  +=1;
+                        $year_agent_usager_count  +=1;
+                        $yearly_sales    += $engin->tarif;
+                        // dd($day_sales);  
+            
+                    }
+
+                $user           = Auth::user();
+                $notifications = $user->notifications;
+                $today = Carbon::now()->format('d-m-Y');
+                $current_month = Carbon::now()->format('m-Y');
+                $current_year = Carbon::now()->format('Y');
+                
+                // dd(json_encoyears));
+                return view('guichet-dash')->with('today', $today)
+                                ->with('current_month', $current_month)
+                                ->with('current_year', $current_year)
+                                ->with('total_sales', $total_sales)
+                                ->with('day_sales', $day_sales)
+                                ->with('month_sales', $month_sales)
+                                ->with('year_sales', $yearly_sales)
+                                ->with('day_agent_engin_count', $day_agent_engin_count)
+                                ->with('day_agent_usager_count', $day_agent_usager_count)
+                                ->with('month_agent_engin_count', $month_agent_engin_count)
+                                ->with('month_agent_usager_count', $month_agent_usager_count)
+                                ->with('year_agent_engin_count', $year_agent_engin_count)
+                                ->with('year_agent_usager_count', $year_agent_usager_count)
+                                ->with('vignetted_engin_count', $vignetted_engin_count);
+            }
+            return redirect()->route("get_admin_login")->withSuccess('Opps! You do not have access');
+    }
+
+    public function eluDashboard()
+    {
+      if(Auth::check()){  
+        // Array of engins
+        $engin_array = [];
+        $vignetted_engin_count = 0;
+        $engin_count = 0;
+        $day_engin_count = 0;
+        $month_engin_count = 0;
+        $year_engin_count = 0;
+        $total_sales = 0;
+        $day_sales = 0;
+        $month_sales = 0;
+        $year_sales = 0;
         $total_users = 0;
         $total_administrateurs = 0;
         $total_users            = DB::table('users')->count();
@@ -233,19 +377,38 @@ class AuthController extends Controller
         // });
 
         $data = Vignettes::join('engins', 'vignettes.enginId', '=', 'engins.id')
-                             ->get(['engins.id', 'vignettes.created_at'])
+                             ->where('vignettes.status', 1)
+                             ->get(['engins.id', 'engins.tarif', 'vignettes.created_at'])
                              ->groupBy(function($data){
                                 return Carbon::parse($data->created_at)->format('M');
                              });
+        
+        $data1 = Vignettes::join('engins', 'vignettes.enginId', '=', 'engins.id')
+                            ->where('vignettes.status', 1)
+                            ->get(['engins.tarif'])
+                            ->groupBy(function($data){
+                                return Carbon::parse($data->created_at)->format('M');
+                            });
+
 
         // Counting Engin per month
         $months = [];
         $monthCountEngins = [];
+        $monthCountBenefit = [];
+        $mountBenefit = array();
+
         foreach ($data as $month => $value) {
             $months[]   = $month;
-            $monthCountEngins = count($value);
+            $monthCountEngins[] = count($value);
+            for ($i=0; $i < count($value); $i++) { 
+                $mountBenefit[] = $value[$i]->tarif;
+            }
+
+            $monthCountBenefit[] = array_sum($mountBenefit);
+            $mountBenefit= [];            
         }
 
+        
         $vignettes      = Vignettes::where('status', 1)->get();
         foreach ($vignettes as $vignette) {
             $engin          = Engins::find($vignette->enginId);
@@ -253,45 +416,377 @@ class AuthController extends Controller
             $vignetted_engin_count  +=1;
             $total_sales    += $engin->tarif;
         }
-        
-        $prevision = Prevision::orderBy('updated_at', 'desc')->first();
-        if(!empty($prevision)){
-            $previsionMontant = $prevision->montant;
-            $poucentage = 0;
 
-        if($previsionMontant > 0)
-            $poucentage = ($total_sales/$previsionMontant)*100;
-        
 
+
+         //----------------------------------------------------------------------------------------//
+            //Get Daily sales 
+            $day_sales = 0;
+            $daily_sales = DB::table('sales_histories')->select('enrollId')
+                                                    ->WhereDay('created_at', Date('d'))
+                                                    ->get();
+   
+            for ($i=0; $i < count($daily_sales); $i++) { 
+                // $mountBenefit[] = $agent_sales[$i]->tarif;
+                $enginL = DB::table('enroll_histories')->select('enginId')
+                                                       ->where('id',$daily_sales[$i]->enrollId)
+                                                       ->first();
+                $engin          = Engins::find($enginL->enginId);
+                $day_engin_count  += 1;
+                $day_sales        += $engin->tarif;
+            // dd($day_sales);  
+
+            }
+
+        // ------------------------------------------------------------------------//
+
+                    //Get Monthly sales
+
+                    $monthly_sales = DB::table('sales_histories')->select('enrollId')
+                                                                     ->WhereMonth('created_at', Date('m'))
+                                                                     ->get();
+                    // dd($monthly_sales);  
+                    for ($i=0; $i < count($monthly_sales); $i++) { 
+                        // $mountBenefit[] = $agent_sales[$i]->tarif;
+                        $enginL = DB::table('enroll_histories')->select('enginId')
+                                                               ->where('id',$monthly_sales[$i]->enrollId)
+                                                               ->first();
+                        $engin          = Engins::find($enginL->enginId);
+                        $month_engin_count  += 1;
+                        $month_sales        += $engin->tarif;
+                        // dd($day_sales);  
+            
+                    }
+
+                    // ----------------------------------------------------------------------//
+
+                    //Get Yearly sales
+
+                    $yearly_sales = DB::table('sales_histories')->select('enrollId')
+                                                                    ->WhereYear('created_at', Date('Y'))
+                                                                    ->get();
+                    // // dd($agent_sales);  
+                    for ($i=0; $i < count($yearly_sales); $i++) { 
+                        // $mountBenefit[] = $agent_sales[$i]->tarif;
+                        $enginL = DB::table('enroll_histories')->select('enginId')
+                                                               ->where('id',$yearly_sales[$i]->enrollId)
+                                                               ->first();
+
+                        $engin                      = Engins::find($enginL->enginId);
+                        $engin_array[]              = $engin;
+                        $year_engin_count           +=1;
+                        $year_sales                 += $engin->tarif;
+                        // dd($day_sales);  
+            
+                    }
+
+                
+                    // ----------------------------------------------------------------------/
+
+                $total_sales = $year_sales;
+                
+                $prevision = Prevision::orderBy('updated_at', 'desc')->first();
+                if(!empty($prevision)){
+                    $previsionMontant = $prevision->montant;
+                    $pourcentage = 0;
+
+                if($previsionMontant > 0)
+                    $pourcentage = ($total_sales/$previsionMontant)*100;
+                }
+                else{
+                    $previsionMontant =0;  
+                    $pourcentage = 0;
+                }
+            
+                
+
+
+
+
+                $user           = Auth::user();
+                $notifications = $user->notifications;
+                $today = Carbon::now()->format('d-m-Y');
+                $current_month = Carbon::now()->format('m-Y');
+                $current_year = Carbon::now()->format('Y');
+                
+                // dd(json_encoyears));
+                return view('elu-dash')->with('today', $today)
+                                ->with('current_month', $current_month)
+                                ->with('current_year', $current_year)
+                                ->with('months', $months)
+                                ->with('monthCountBenefit', json_encode($monthCountBenefit, JSON_NUMERIC_CHECK))
+                                ->with('monthCountEngins', json_encode($monthCountEngins, JSON_NUMERIC_CHECK))
+                                ->with('data', $data)
+                                ->with('previsionMontant', $previsionMontant)
+                                ->with('pourcentage', $pourcentage)
+                                ->with('total_sales', $total_sales)
+                                ->with('day_sales', $day_sales)
+                                ->with('month_sales', $month_sales)
+                                ->with('year_sales', $year_sales)
+                                ->with('day_engin_count', $day_engin_count)
+                                ->with('month_engin_count', $month_engin_count)
+                                ->with('year_engin_count', $year_engin_count)
+                                ->with('vignetted_engin_count', $vignetted_engin_count)
+                                ->with('user_count', $user_count);
+            }
+            return redirect()->route("get_admin_login")->withSuccess('Opps! You do not have access');
     }
-    else{
-        $previsionMontant =0;  
-        $poucentage = 0;
-    }
-      
-        
 
-
-
-
+    public function superadminDashboard()
+    {
+      if(Auth::check()){  
         $user           = Auth::user();
         $notifications = $user->notifications;
         $today = Carbon::now()->format('d-m-Y');
         $current_month = Carbon::now()->format('m-Y');
+        $current_year = Carbon::now()->format('Y');
         
-        // dd(json_encode($months));
+        // dd(json_encoyears));
         return view('dash')->with('today', $today)
-                           ->with('current_month', $current_month)
-                           ->with('months', $months)
-                           ->with('monthCountEngins', json_encode($monthCountEngins, JSON_NUMERIC_CHECK))
-                           ->with('data', $data)
-                           ->with('previsionMontant', $previsionMontant)
-                           ->with('poucentage', $poucentage)
-                           ->with('total_sales', $total_sales)
-                           ->with('vignetted_engin_count', $vignetted_engin_count)
-                           ->with('user_count', $user_count);
-      }
-       return redirect()->route("get_admin_login")->withSuccess('Opps! You do not have access');
+                        ->with('current_month', $current_month)
+                        ->with('current_year', $current_year);
+            }
+            return redirect()->route("get_admin_login")->withSuccess('Opps! You do not have access');
+    }
+
+    public function comptableDashboard()
+    {
+      if(Auth::check()){  
+        // Array of engins
+        $engin_array = [];
+        $vignetted_engin_count = 0;
+        $day_engin_count = 0;
+        $month_engin_count = 0;
+        $year_engin_count = 0;
+        $engin_count = 0;
+        $total_sales = 0;
+        $daly_sales = 0;
+        $month_sales = 0;
+        $year_sales = 0;
+
+
+        //----------------------------------------------------------------------------------------//
+            //Get Daily sales 
+            $day_sales = 0;
+            $daily_sales = DB::table('sales_histories')->select('enrollId')
+                                                    ->WhereDay('created_at', Date('d'))
+                                                    ->get();
+   
+            for ($i=0; $i < count($daily_sales); $i++) { 
+                // $mountBenefit[] = $agent_sales[$i]->tarif;
+                $enginL = DB::table('enroll_histories')->select('enginId')
+                                                       ->where('id',$daily_sales[$i]->enrollId)
+                                                       ->first();
+                $engin          = Engins::find($enginL->enginId);
+                $day_engin_count  += 1;
+                $day_sales        += $engin->tarif;
+            // dd($day_sales);  
+
+            }
+
+        // ------------------------------------------------------------------------//
+
+                    //Get Monthly sales
+
+                    $monthly_sales = DB::table('sales_histories')->select('enrollId')
+                                                                     ->WhereMonth('created_at', Date('m'))
+                                                                     ->get();
+                    // dd($monthly_sales);  
+                    for ($i=0; $i < count($monthly_sales); $i++) { 
+                        // $mountBenefit[] = $agent_sales[$i]->tarif;
+                        $enginL = DB::table('enroll_histories')->select('enginId')
+                                                               ->where('id',$monthly_sales[$i]->enrollId)
+                                                               ->first();
+                        $engin          = Engins::find($enginL->enginId);
+                        $month_engin_count  += 1;
+                        $month_sales        += $engin->tarif;
+                        // dd($day_sales);  
+            
+                    }
+
+                    // ----------------------------------------------------------------------//
+
+                    //Get Yearly sales
+
+                    $yearly_sales = DB::table('sales_histories')->select('enrollId')
+                                                                    ->WhereYear('created_at', Date('Y'))
+                                                                    ->get();
+                    // // dd($agent_sales);  
+                    for ($i=0; $i < count($yearly_sales); $i++) { 
+                        // $mountBenefit[] = $agent_sales[$i]->tarif;
+                        $enginL = DB::table('enroll_histories')->select('enginId')
+                                                               ->where('id',$yearly_sales[$i]->enrollId)
+                                                               ->first();
+
+                        $engin                      = Engins::find($enginL->enginId);
+                        $engin_array[]              = $engin;
+                        $year_engin_count           +=1;
+                        $year_sales                 += $engin->tarif;
+                        // dd($day_sales);  
+            
+                    }
+
+                
+                    // ----------------------------------------------------------------------/
+
+                $total_sales = $year_sales;
+                $prevision = Prevision::orderBy('updated_at', 'desc')->first();
+                if(!empty($prevision)){
+                    $previsionMontant = $prevision->montant;
+                    $pourcentage = 0;
+
+                if($previsionMontant > 0)
+                    $pourcentage = ($total_sales/$previsionMontant)*100;
+                }
+                else{
+                    $previsionMontant =0;  
+                    $pourcentage = 0;
+                }
+
+
+
+
+
+                $user               = Auth::user();
+                $notifications      = $user->notifications;
+                $today              = Carbon::now()->format('d-m-Y');
+                $current_month      = Carbon::now()->format('m-Y');
+                $current_year       = Carbon::now()->format('Y');
+                
+                return view('comptable-dash')->with('today', $today)
+                                ->with('previsionMontant', $previsionMontant)
+                                ->with('total_sales', $total_sales)
+                                ->with('pourcentage', $pourcentage)
+                                ->with('current_month', $current_month)
+                                ->with('current_year', $current_year)
+                                ->with('day_engin_count', $day_engin_count)
+                                ->with('month_engin_count', $month_engin_count)
+                                ->with('year_engin_count', $year_engin_count)
+                                ->with('day_sales', $day_sales)
+                                ->with('month_sales', $month_sales)
+                                ->with('year_sales', $year_sales);
+            }
+            return redirect()->route("get_admin_login")->withSuccess('Opps! You do not have access');
+    }
+
+    public function regisseurDashboard()
+    {
+      if(Auth::check()){  
+        // Array of engins
+        $engin_array = [];
+        $vignetted_engin_count = 0;
+        $day_engin_count = 0;
+        $month_engin_count = 0;
+        $year_engin_count = 0;
+        $engin_count = 0;
+        $total_sales = 0;
+        $daly_sales = 0;
+        $month_sales = 0;
+        $year_sales = 0;
+
+
+        //----------------------------------------------------------------------------------------//
+            //Get Daily sales 
+            $day_sales = 0;
+            $daily_sales = DB::table('sales_histories')->select('enrollId')
+                                                    ->WhereDay('created_at', Date('d'))
+                                                    ->get();
+   
+            for ($i=0; $i < count($daily_sales); $i++) { 
+                // $mountBenefit[] = $agent_sales[$i]->tarif;
+                $enginL = DB::table('enroll_histories')->select('enginId')
+                                                       ->where('id',$daily_sales[$i]->enrollId)
+                                                       ->first();
+                $engin          = Engins::find($enginL->enginId);
+                $day_engin_count  += 1;
+                $day_sales        += $engin->tarif;
+            // dd($day_sales);  
+
+            }
+
+        // ------------------------------------------------------------------------//
+
+                    //Get Monthly sales
+
+                    $monthly_sales = DB::table('sales_histories')->select('enrollId')
+                                                                     ->WhereMonth('created_at', Date('m'))
+                                                                     ->get();
+                    // dd($monthly_sales);  
+                    for ($i=0; $i < count($monthly_sales); $i++) { 
+                        // $mountBenefit[] = $agent_sales[$i]->tarif;
+                        $enginL = DB::table('enroll_histories')->select('enginId')
+                                                               ->where('id',$monthly_sales[$i]->enrollId)
+                                                               ->first();
+                        $engin          = Engins::find($enginL->enginId);
+                        $month_engin_count  += 1;
+                        $month_sales        += $engin->tarif;
+                        // dd($day_sales);  
+            
+                    }
+
+                    // ----------------------------------------------------------------------//
+
+                    //Get Yearly sales
+
+                    $yearly_sales = DB::table('sales_histories')->select('enrollId')
+                                                                    ->WhereYear('created_at', Date('Y'))
+                                                                    ->get();
+                    // // dd($agent_sales);  
+                    for ($i=0; $i < count($yearly_sales); $i++) { 
+                        // $mountBenefit[] = $agent_sales[$i]->tarif;
+                        $enginL = DB::table('enroll_histories')->select('enginId')
+                                                               ->where('id',$yearly_sales[$i]->enrollId)
+                                                               ->first();
+
+                        $engin                      = Engins::find($enginL->enginId);
+                        $engin_array[]              = $engin;
+                        $year_engin_count           +=1;
+                        $year_sales                 += $engin->tarif;
+                        // dd($day_sales);  
+            
+                    }
+
+                
+                    // ----------------------------------------------------------------------/
+
+                $total_sales = $year_sales;
+                $prevision = Prevision::orderBy('updated_at', 'desc')->first();
+                if(!empty($prevision)){
+                    $previsionMontant = $prevision->montant;
+                    $pourcentage = 0;
+
+                if($previsionMontant > 0)
+                    $pourcentage = ($total_sales/$previsionMontant)*100;
+                }
+                else{
+                    $previsionMontant =0;  
+                    $pourcentage = 0;
+                }
+
+
+
+
+
+                $user               = Auth::user();
+                $notifications      = $user->notifications;
+                $today              = Carbon::now()->format('d-m-Y');
+                $current_month      = Carbon::now()->format('m-Y');
+                $current_year       = Carbon::now()->format('Y');
+                
+                return view('regisseur-dash')->with('today', $today)
+                                ->with('previsionMontant', $previsionMontant)
+                                ->with('total_sales', $total_sales)
+                                ->with('pourcentage', $pourcentage)
+                                ->with('current_month', $current_month)
+                                ->with('current_year', $current_year)
+                                ->with('day_engin_count', $day_engin_count)
+                                ->with('month_engin_count', $month_engin_count)
+                                ->with('year_engin_count', $year_engin_count)
+                                ->with('day_sales', $day_sales)
+                                ->with('month_sales', $month_sales)
+                                ->with('year_sales', $year_sales);
+            }
+            return redirect()->route("get_admin_login")->withSuccess('Opps! You do not have access');
     }
 
 

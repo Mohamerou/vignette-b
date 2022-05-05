@@ -26,8 +26,9 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $notifications  = Auth::user()->notifications();
+        $notifications  = Auth::user()->unreadNotifications;
         $user           = Auth::user();
+        // dd($notifications);
 
         if($user->hasRole('user')){
             return view('home')->with('user', $user)
@@ -50,7 +51,7 @@ class HomeController extends Controller
         $user           = Auth::user();
 
         if($user->hasRole('user')){
-            return redirect()->route('home');
+            return redirect()->route('home')->with('notifications', $notifications);
         } else {
             # code...
         return redirect()->route('get_admin_dash');

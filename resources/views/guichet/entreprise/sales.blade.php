@@ -13,7 +13,7 @@
     </div>
 
     <div class="row g-5 ">
-      <div class="col-md-5 col-md-7 order-md-last">
+      <div class="col-md-7 col-md-8 order-md-last">
         <h4 class="d-flex justify-content-between align-items-center mb-3">
           <span class="text-primary">Infos Engins</span>
         </h4>
@@ -24,7 +24,7 @@
             <table class="table table-hover text-nowrap">
               <thead>
                 <tr>
-                  <th>N°</th>
+                  <th style="max-width:10px">N°</th>
                   <th>Marque</th>
                   <th>Type</th>
                   <th>Chassie</th>
@@ -53,7 +53,7 @@
 
 
       </div>
-      <div class="col-md-5 ">
+      <div class="col-md-4 ">
         <h4 class="text-primary mb-3">Infos Entreprise</h4>
         {{-- <form class="needs-validation" novalidate action="{{ route('salesStepTwo') }}" method="POST">
             @csrf --}}

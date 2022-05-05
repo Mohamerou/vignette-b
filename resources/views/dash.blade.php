@@ -57,31 +57,33 @@
   </div>
   <!-- /.content-header -->
   <!-- Content Header (Page header) -->
-  <div class="content-header">
-    <div class="container-fluid">
-      <div class="row mb-2">
-        <div class="col-md-12">
-          <h1 class="m-0">Progression par rapport a la prevision</h1>
-        </div><!-- /.col -->
-        <div class="col-md-8">
-          <p class="text-center">
-            <strong></strong>
-          </p>
+@can('prevision')
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-md-12">
+        <h1 class="m-0">Progression par rapport a la prevision</h1>
+      </div><!-- /.col -->
+      <div class="col-md-8">
+        <p class="text-center">
+          <strong></strong>
+        </p>
 
 
 
-          <div class="progress-group">
-            <span class="h5">Total des ventes / Prevision</span>
-            <span class="h4 mx-5 text-danger">{{ $poucentage }} %</span><span class="h4 mx-3 float-right"><b>{{ $total_sales }}</b>/{{ $previsionMontant }}</span>
-            <div class="progress">
-              <div class="progress-bar bg-danger" style="width: {{ $poucentage }}%"></div>
-            </div>
+        <div class="progress-group">
+          <span class="h5">Total des ventes / Prevision</span>
+          <span class="h4 mx-5 text-danger">{{ $pourcentage }} %</span><span class="h4 mx-3 float-right"><b>{{ $total_sales }}</b>/{{ $previsionMontant }}</span>
+          <div class="progress">
+            <div class="progress-bar bg-danger" style="width: {{ $pourcentage }}%"></div>
           </div>
-          <!-- /.progress-group -->
         </div>
-      </div><!-- /.row -->
-    </div><!-- /.container-fluid -->
-  </div>
+        <!-- /.progress-group -->
+      </div>
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
+@endcan
   <!-- /.content-header -->
   <!-- Main content -->
   <section class="content">
@@ -95,7 +97,7 @@
           <div class="shadow-lg p-3 mb-5 bg-body rounded small-box bg-info">
             <div class="inner">
               <h3>{{ $total_sales }} FCFA<h3>
-              <h4> Ventes journalières </h4>
+              <h4> Ventes </h4>
               <h5>{{$today}}</h5>
             </div>
             <div class="icon">
@@ -109,7 +111,7 @@
           <!-- small box -->
           <div class="shadow-lg p-3 mb-5 bg-body rounded small-box bg-success">
             <div class="inner">
-              <h3>{{ $total_sales }} FCFA FCFA</h3>
+              <h3>{{ $day_sales }} FCFA FCFA</h3>
               <h4>Ventes du mois</h4>
               <h5>{{$current_month}}</h5>
             </div>
@@ -126,7 +128,7 @@
             <div class="inner">
 
               <h3>{{ $vignetted_engin_count }}</h3>
-              <h4>Engins enregistrés</h4>
+              <h4>Engins </h4>
               <h5></h5>
 
             </div>
@@ -143,8 +145,8 @@
             <div class="inner">
               <h3>{{ $user_count }}</h3>
 
-              <h4>Usagers enregistrés</h4>
-              <h4>&nbsp;</h4>
+              <h4>Usagers </h4>
+              
             </div>
             <div class="icon">
               <i class="ion ion-stats-bars"></i>
@@ -225,7 +227,7 @@
                 <div class="card-tools">
                   <ul class="nav nav-pills ml-auto">
                     <li class="nav-item">
-                      <a class="nav-link active" href="#revenue-chart" >Area</a>
+                      <a class="nav-link active" href="#revenue-chart" >REVENUE / MOIS</a>
                     </li>
                   </ul>
                 </div>
@@ -301,14 +303,14 @@
       <!-- End Action Row -->
     @endcan
 
-@can('regisseur-public')
+@can('regisseur')
 <div class="row">
     <div class="col-lg-3 col-6">
       <!-- small box -->
       <div class="shadow-lg p-3 mb-5 bg-body rounded small-box bg-info">
         <div class="inner">
           <h3>{{ $total_sales }} FCFA<h3>
-          <h4> Ventes journalières </h4>
+          <h4> Ventes </h4>
           <h5>{{$today}}</h5>
         </div>
         <div class="icon">
@@ -318,20 +320,7 @@
       </div>
     </div>
     <!-- ./col -->
-    <div class="col-lg-3 col-6">
-      <!-- small box -->
-      <div class="shadow-lg p-3 mb-5 bg-body rounded small-box bg-success">
-        <div class="inner">
-          <h3>{{ $total_sales }} FCFA</h3>
-          <h4>Nombre de vente du msois</h4>
-          <h5>{{$current_month}}</h5>
-        </div>
-        <div class="icon">
-          <i class="ion ion-stats-bars"></i>
-        </div>
-        <a href="#" class="small-box-footer"><i class="fas fa-arrow-circle-right"></i></a>
-      </div>
-    </div>
+
     <!-- ./col -->
     <div class="col-lg-3 col-6">
       <!-- small box -->
@@ -339,7 +328,7 @@
         <div class="inner">
           
           <h3>{{ $vignetted_engin_count }}</h3>
-          <h4>Engins enregistrés</h4>
+          <h4>Engins </h4>
           <h5></h5>
           
         </div>
@@ -356,8 +345,8 @@
         <div class="inner">
           <h3>{{ $user_count }}</h3>
 
-          <h4>Usagers enregistrés</h4>
-          <h4>&nbsp;</h4>
+          <h4>Usagers </h4>
+          
         </div>
         <div class="icon">
           <i class="ion ion-stats-bars"></i>
@@ -418,7 +407,7 @@
       <div class="shadow-lg p-3 mb-5 bg-body rounded small-box bg-info">
         <div class="inner">
           <h3>{{ $total_sales }} FCFA<h3>
-          <h4> Ventes journalières </h4>
+          <h4> Ventes </h4>
           <h5>{{$today}}</h5>
         </div>
         <div class="icon">
@@ -428,20 +417,7 @@
       </div>
     </div>
     <!-- ./col -->
-    <div class="col-lg-3 col-6">
-      <!-- small box -->
-      <div class="shadow-lg p-3 mb-5 bg-body rounded small-box bg-success">
-        <div class="inner">
-          <h3>{{ $total_sales }} FCFA</h3>
-          <h4>Nombre de vente du msois</h4>
-          <h5>{{$current_month}}</h5>
-        </div>
-        <div class="icon">
-          <i class="ion ion-stats-bars"></i>
-        </div>
-        <a href="#" class="small-box-footer"><i class="fas fa-arrow-circle-right"></i></a>
-      </div>
-    </div>
+
     <!-- ./col -->
     <div class="col-lg-3 col-6">
       <!-- small box -->
@@ -449,7 +425,7 @@
         <div class="inner">
           
           <h3>{{ $vignetted_engin_count }}</h3>
-          <h4>Engins enregistrés</h4>
+          <h4>Engins </h4>
           <h5></h5>
           
         </div>
@@ -466,8 +442,8 @@
         <div class="inner">
           <h3>{{ $user_count }}</h3>
 
-          <h4>Usagers enregistrés</h4>
-          <h4>&nbsp;</h4>
+          <h4>Usagers </h4>
+          
         </div>
         <div class="icon">
           <i class="ion ion-stats-bars"></i>
@@ -534,27 +510,107 @@
 
 @can('guichet')
 <div class="row">
+  <div class="col-lg-3 col-6">
+    <!-- small box -->
+    <div class="shadow-lg p-3 mb-5 bg-body rounded small-box bg-info">
+      <div class="inner">
+        <h3>CAISSE<h3>
+        <h4> </h4>
+        <p>{{$today}}</p>
+      </div>
+      <div class="icon">
+        <i class="ionicons ion-ios-cart"></i>
+      </div>
+      <a href="#" class="small-box-footer"><i class="fas fa-arrow-circle-right"></i></a>
+    </div>
+  </div>
+  <!-- ./col -->
+  <div class="col-lg-3 col-6">
+    <!-- small box -->
+    <div class="shadow-lg p-3 mb-5 bg-body rounded small-box bg-secondary">
+      <div class="inner">
+        <h4>Grand <br>Compte</h4>
+      </div>
+      <div class="icon">
+        <i class="ionicons ion-briefcase"></i>
+      </div>
+      <a href="#" class="small-box-footer"><i class="fas fa-arrow-circle-right"></i></a>
+    </div>
+  </div>
+  <!-- ./col -->
+  <div class="col-lg-3 col-6">
+    <!-- small box -->
+    <div class="shadow-lg p-3 mb-5 bg-body rounded small-box bg-warning">
+      <div class="inner">
+        <h4>Enrolements</h4>
+        <h4>Encours</h4>
+      </div>
+      <a href="#" class="small-box-footer"><i class="fas fa-arrow-circle-right"></i></a>
+    </div>
+  </div>
+</div>
+<h3>Par Jours</h3>
+<div class="row">
+  <div class="col-lg-3 col-6">
+    <!-- small box -->
+    <div class="shadow-lg p-3 mb-5 bg-body rounded small-box bg-info">
+      <div class="inner">
+        <h3>{{ $day_sales }} FCFA<h3>
+        <h4> Ventes </h4>
+        <h5>{{$today}}</h5>
+      </div>
+      <div class="icon">
+        <i class="ion ion-stats-bars"></i>
+      </div>
+      <a href="#" class="small-box-footer"><i class="fas fa-arrow-circle-right"></i></a>
+    </div>
+  </div>
+
+
+  <!-- ./col -->
+  <div class="col-lg-3 col-6">
+    <!-- small box -->
+    <div class="shadow-lg p-3 mb-5 bg-body rounded small-box bg-warning">
+      <div class="inner">
+        
+        <h3>{{ $day_agent_engin_count }}</h3>
+        <h4>Engins </h4>
+        <h5></h5>
+        
+      </div>
+      <div class="icon">
+        <i class="ion ion-stats-bars"></i>
+      </div>
+      <a href="#" class="small-box-footer"><i class="fas fa-arrow-circle-right"></i></a>
+    </div>
+  </div>
+  <!-- ./col -->
+  <div class="col-lg-3 col-6">
+    <!-- small box -->
+    <div class="shadow-lg p-3 mb-5 bg-body rounded small-box bg-danger">
+      <div class="inner">
+        <h3>{{ $day_agent_usager_count }}</h3>
+
+        <h4>Usagers </h4>
+        
+      </div>
+      <div class="icon">
+        <i class="ion ion-stats-bars"></i>
+      </div>
+      <a href="#" class="small-box-footer"><i class="fas fa-arrow-circle-right"></i></a>
+    </div>
+  </div>
+  <!-- ./col -->
+</div>
+<h3>Par Mois</h3>
+  <!-- /.row -->
+  <div class="row">
     <div class="col-lg-3 col-6">
       <!-- small box -->
       <div class="shadow-lg p-3 mb-5 bg-body rounded small-box bg-info">
         <div class="inner">
-          <h3>{{ $total_sales }} FCFA<h3>
-          <h4> Ventes journalières </h4>
-          <h5>{{$today}}</h5>
-        </div>
-        <div class="icon">
-          <i class="ion ion-stats-bars"></i>
-        </div>
-        <a href="#" class="small-box-footer"><i class="fas fa-arrow-circle-right"></i></a>
-      </div>
-    </div>
-    <!-- ./col -->
-    <div class="col-lg-3 col-6">
-      <!-- small box -->
-      <div class="shadow-lg p-3 mb-5 bg-body rounded small-box bg-success">
-        <div class="inner">
-          <h3>{{ $total_sales }} FCFA</h3>
-          <h4>Nombre de vente du msois</h4>
+          <h3>{{ $month_sales }} FCFA<h3>
+          <h4> Ventes </h4>
           <h5>{{$current_month}}</h5>
         </div>
         <div class="icon">
@@ -564,13 +620,15 @@
       </div>
     </div>
     <!-- ./col -->
+
+    <!-- ./col -->
     <div class="col-lg-3 col-6">
       <!-- small box -->
       <div class="shadow-lg p-3 mb-5 bg-body rounded small-box bg-warning">
         <div class="inner">
           
-          <h3>{{ $vignetted_engin_count }}</h3>
-          <h4>Engins enregistrés</h4>
+          <h3>{{ $month_agent_engin_count }}</h3>
+          <h4>Engins </h4>
           <h5></h5>
           
         </div>
@@ -585,10 +643,10 @@
       <!-- small box -->
       <div class="shadow-lg p-3 mb-5 bg-body rounded small-box bg-danger">
         <div class="inner">
-          <h3>{{ $user_count }}</h3>
-
-          <h4>Usagers enregistrés</h4>
-          <h4>&nbsp;</h4>
+          <h3>{{ $month_agent_usager_count }}</h3>
+  
+          <h4>Usagers </h4>
+          
         </div>
         <div class="icon">
           <i class="ion ion-stats-bars"></i>
@@ -598,8 +656,60 @@
     </div>
     <!-- ./col -->
   </div>
-  <!-- /.row -->
+    <!-- /.row -->
+    <h3>Par Ans</h3>
+    <div class="row">
+      <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="shadow-lg p-3 mb-5 bg-body rounded small-box bg-info">
+          <div class="inner">
+            <h3>{{ $year_sales }} FCFA<h3>
+            <h4> Ventes </h4>
+            <h5>{{$current_year}}</h5>          </div>
+          <div class="icon">
+            <i class="ion ion-stats-bars"></i>
+          </div>
+          <a href="#" class="small-box-footer"><i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+      </div>
+      <!-- ./col -->
 
+      <!-- ./col -->
+      <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="shadow-lg p-3 mb-5 bg-body rounded small-box bg-warning">
+          <div class="inner">
+            
+            <h3>{{ $year_agent_engin_count }}</h3>
+            <h4>Engins </h4>
+            <h5></h5>
+            
+          </div>
+          <div class="icon">
+            <i class="ion ion-stats-bars"></i>
+          </div>
+          <a href="#" class="small-box-footer"><i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+      </div>
+      <!-- ./col -->
+      <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="shadow-lg p-3 mb-5 bg-body rounded small-box bg-danger">
+          <div class="inner">
+            <h3>{{ $year_agent_usager_count }}</h3>
+    
+            <h4>Usagers </h4>
+            
+          </div>
+          <div class="icon">
+            <i class="ion ion-stats-bars"></i>
+          </div>
+          <a href="#" class="small-box-footer"><i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+      </div>
+      <!-- ./col -->
+    </div>
+      <!-- /.row -->
   <!-- Action Row -->
   <div class="shadow p-3 mb-5 bg-body rounded row">
       <div class="col-md-12">
@@ -612,10 +722,7 @@
           </div>
           <div class="card-body pad table-responsive">
           <table class="table table-bordered text-center">
-              <tbody><tr>
-              <th></th>
-              <th></th>
-              </tr>
+              <tbody>
               <tr>
               <td>
                   <a href="{{ route('enrollStepOne') }}" class="btn btn-block btn-primary btn-lg"><i class="fa fa-book" aria-hidden="true"></i>
@@ -717,27 +824,36 @@ function imprimer(printChart) {
 <!-- //////////////////////////////////////////////////////// -->
 
 <script>
-  var _xdata = {!! $monthCountEngins !!};
+  var _xdata = {!! $monthCountBenefit !!};
   var _ydata = {!! json_encode($months) !!};
 </script>
 
 <script>
 const ctx = document.getElementById('canvas').getContext('2d');
 const myChart = new Chart(ctx, {
-    type: 'bar',
+    type: 'doughnut',
     data: {
         labels: _ydata,
-        datasets: [{
-            label: '# Engins',
+        datasets: [
+          {
+            label: ' Revenue par mois',
             data: _xdata,
             backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
+                'rgba(255, 99, 132, 0.6)',
+                'rgba(25, 255, 66, 0.6)',
+                'rgba(132, 99, 255, 0.6)',
             ],
             borderColor: [
                 'rgba(255, 99, 132, 1)',
+                'rgba(25, 255, 66, 1)',
+                'rgba(132, 99, 255, 1)',
             ],
+
+            borderRadius: 15,
+
             borderWidth: 1
-        }]
+          }
+      ]
     },
     options: {
         scales: {

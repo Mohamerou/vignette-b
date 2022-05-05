@@ -12,6 +12,7 @@ class TransfertEnginNotification extends Notification implements ShouldQueue
     use Queueable;
 
     public $demande;
+
     /**
      * Create a new notification instance.
      *
@@ -19,7 +20,7 @@ class TransfertEnginNotification extends Notification implements ShouldQueue
      */
     public function __construct($demande)
     {
-        $this->demande  = $demande;
+        $this->demande = $demande;
     }
 
     /**
@@ -33,31 +34,20 @@ class TransfertEnginNotification extends Notification implements ShouldQueue
         return ['database'];
     }
 
-    /**
-     * Get the mail representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
-     */
-    public function toMail($notifiable)
-    {
-        return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
-    }
+ 
+
+        
 
     public function toDatabase($notifiable)
     {
         // dd($this->demande);
         return [
             'subject'           => $this->demande['demande'],
-            'oldOwnerId'        => $this->demande['oldOwnerId'],
-            'enginId'           => $this->demande['enginId'],
+            'type'              => $this->demande['type'],
+            'newOwnerPhone'     => $this->demande['newOwnerPhone'],
+            'chassie'           => $this->demande['chassie'],
         ];
     }
-
-
 
     /**
      * Get the array representation of the notification.
