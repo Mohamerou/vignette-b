@@ -31,7 +31,8 @@
         "snapappointments/bootstrap-select": "^1.13",
         "stripe/stripe-php": "^7.78",
         "usmanhalalit/laracsv": "^2.1",
-        "vonage/client": "^2.4"
+        "vonage/client": "^2.4",
+        "ext-imagick": "*"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
