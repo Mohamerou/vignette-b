@@ -78,14 +78,14 @@ class SuperAdminController extends Controller
                 ];
             }
 
-            if ($user->hasRole('superviseur')) {
+            if ($user->hasRole('caissier-en-chef')) {
                 $user_list[] = [
                     'user' => $user,
-                    'role' => 'Superviseur',
+                    'role' => 'Caissier-en-chef',
                 ];
             }
 
-            if ($user->hasRole('regisseur-public')) {
+            if ($user->hasRole('regisseur')) {
                 $user_list[] = [
                     'user' => $user,
                     'role' => 'Regisseur Public',
