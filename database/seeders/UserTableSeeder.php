@@ -64,7 +64,7 @@ class UserTableSeeder extends Seeder
         	'address' 	=> 'Daoudabougou',
             'isverified'         => 1,
             'administration'     => 'bko',
-        	'phone' 	=> '66651762',
+        	'phone' 	=> '66651763',
         	'password' 	=> Hash::make('password_secret##')
         ]);
 
