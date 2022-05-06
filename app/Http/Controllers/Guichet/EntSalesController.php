@@ -22,6 +22,7 @@ use File;
 use RealRashid\SweetAlert\Facades\Alert;
 
 
+
 use App\Models\User;
 use App\Models\Engins;
 use App\Models\Vignettes; 
@@ -45,22 +46,19 @@ class EntSalesController extends Controller
 
     public function pendingSales()
     {
-        $pendingSales  = EnrollHistory::where('status', '1')->orderBy('created_at', 'desc')->get();
-    
+        $pendingSales  = EnrollHistory::where('status', '1')
+                                      ->orderBy('created_at', 'desc')
+                                      ->get()
+                                      ->unique('userId');
 
-        // dd($pendingSales);
-       
-       
   
-        $user_list       = [
-            'userId'    =>'',
-        ];
+        $user_list       = [];
         $engin_list      = [];
         foreach($pendingSales as $pendingSale){
             $user   = User::findOrfail($pendingSale->userId);
             $agent  = User::findOrfail($pendingSale->agentRef);
             $engin  = Engins::findOrfail($pendingSale->enginId);
-            if($user_list['userId'] != $user->id){
+
             $account   = UsagerAccountType::where('user_id',$user->id)->first();
             if(empty($account)){
                 return redirect()->route('get-admin-dash')->with('error', 'Compte introuvable !');
@@ -86,7 +84,7 @@ class EntSalesController extends Controller
             } 
         }
 
-    } }
+    }
         $pendingSales = $user_list;
    
         return view('guichet/entSalesIndex')
@@ -127,8 +125,7 @@ class EntSalesController extends Controller
 
 
         $pendingSales = $user_list;
- 
-        return view('guichet/salesIndex')
+        return view('guichet/entSalesIndex')
                 ->with('pendingSales', $pendingSales);
     }
 
@@ -157,10 +154,13 @@ class EntSalesController extends Controller
             'phone'              =>     $user->phone,
             'address'            =>     $user->address,
         ];
+        // dd($allEngins);
         $engin_lists =[];
         $total_amount = 0;
-        foreach($allEngins as $allEngin){
+        foreach($allEngins as $allEngin)
+        {
         $engin      = Engins::findOrfail($allEngin->enginId);
+
         $cylindre   = $engin->cylindre;
         $chassie            = $engin->chassie;
 
@@ -178,15 +178,20 @@ class EntSalesController extends Controller
 
 
             $engin_lists[]       = [
+            'enginId'            =>     $engin->id,
             'marque'             =>     $engin->marque,
             'modele'             =>     $engin->modele,
             'cylindre'           =>     $engin->cylindre,
             'amount'             =>     $amount,
-            
             'chassie'            =>     $chassie,
+            'documentJustificatif'  =>     $engin->documentJustificatif,
         ];
+
+        
         $total_amount += $amount;
-    }        
+    }     
+    
+    // dd($engin_lists);
         // dd($data,$engin_lists);
         return view('guichet/entreprise/sales')->with('data',$data)
                                                ->with('enginDatas',$engin_lists)
@@ -203,12 +208,18 @@ class EntSalesController extends Controller
         $data = $request->validate([
             'enginId'    => 'required|numeric',
         ]);
-
+        $checkVignette = Vignettes::where('enginId',$data['enginId'])
+                                    ->where('status',1)->first();
+        if(!empty($checkVignette)){
+            return redirect()->route('entPendingSales')->with('error',' Cet engin possede deja une vignette en cour de validité');
+        }
         $history    = EnrollHistory::where('enginId', $enginId)->first();
+       // dd($history);
         $user       = User::findOrfail($history->userId);
         $allEngins   = DB::table('enroll_histories')->where('userId',$history->userId)
-                                                   ->where('status', 1)->get();
+                                                    ->where('status', 1)->get();
         // dd($allEngins);
+      //  dd($allEngins);
 
         $data =[
             'userId'             =>     $history->userId,
@@ -219,22 +230,26 @@ class EntSalesController extends Controller
         ];
         $engin_lists =[];
         $total_amount = 0;
-        foreach($allEngins as $allEngin){
-        $engin      = Engins::findOrfail($allEngin->enginId);
-        $cylindre   = $engin->cylindre;
-        $chassie            = $engin->chassie;
+        foreach ($allEngins as $allEngin) {
+            $engin      = Engins::findOrfail($allEngin->enginId);
+            $cylindre   = $engin->cylindre;
+            $chassie            = $engin->chassie;
 
-        if($cylindre === "0")
-            $amount     = 1500;
+            if ($cylindre === "0") {
+                $amount     = 1500;
+            }
         
-        if($cylindre === "50")
-            $amount     = 3000;
+            if ($cylindre === "50") {
+                $amount     = 3000;
+            }
 
-        if($cylindre === "125")
-            $amount     = 6000;
+            if ($cylindre === "125") {
+                $amount     = 6000;
+            }
         
-        if($cylindre === "+125")
-            $amount     = 12000;
+            if ($cylindre === "+125") {
+                $amount     = 12000;
+            }
 
 
             $engin_lists[]       = [
@@ -242,38 +257,35 @@ class EntSalesController extends Controller
             'modele'             =>     $engin->modele,
             'cylindre'           =>     $engin->cylindre,
             'amount'             =>     $amount,
-            
             'chassie'            =>     $chassie,
         ];
-        $total_amount += $amount;
+            //dd($engin_lists);
+            $total_amount += $amount;
    
 
-        // dd($request->all());
+            // dd($request->all());
 
-        $payment = new Payment();
-        $payment->firstname         = $data['firstname'];
-        $payment->lastname          = $data['lastname'];
-        $payment->phone             = $data['phone'];
-        $payment->address           = $data['address'];
-        $payment->marque            = $engin->marque;
-        $payment->modele            = $engin->modele;
-        $payment->cylindre          = $cylindre;
-        $payment->amount            = $amount;
-        $payment->chassie           = $chassie;
-        $payment->save();
+            $payment = new Payment();
+            $payment->firstname         = $data['firstname'];
+            $payment->lastname          = $data['lastname'];
+            $payment->phone             = $data['phone'];
+            $payment->address           = $data['address'];
+            $payment->marque            = $engin->marque;
+            $payment->modele            = $engin->modele;
+            $payment->cylindre          = $cylindre;
+            $payment->amount            = $amount;
+            $payment->chassie           = $chassie;
+            $payment->save();
 
-
-        ////// ikvUE(User Engin)
-        $engin                      = Engins::where('chassie', $engin_lists['chassie'])->first();
-        $usager                     = User::where('phone', $data['phone'])->first();
+            //dd($payment);
+            ////// ikvUE(User Engin)
+            $engin                      = Engins::where('chassie', $chassie)->first();
+            $usager                     = User::where('phone', $data['phone'])->first();
    
-
-
-
-        if($usager && $engin){
+            if ($usager && $engin) {
                 // Vignette unique_token
-            $unique_token   = md5(rand(1, 15) . microtime());
-            $qr_code        = \QrCode::eye('circle')
+                $unique_token   = md5(rand(1, 15) . microtime());
+                $qr_code        = \QrCode::eye('circle')
                                        ->style('round')
                                        ->margin(3)
                                        ->format('png')
@@ -281,47 +293,47 @@ class EntSalesController extends Controller
                                        ->size(250)
                                        ->generate($unique_token);
 
-            // dd($qr_code);
-            $vignette_qr_storage_path   = 'vignettes/vignette-' . time() . '.png';
+                // dd($qr_code);
+                $vignette_qr_storage_path   = 'vignettes/vignette-' . time() . '.png';
             
-            $vignette_qr_download_path   = 'vignettes/vignette-' . time() . '.png';
+                $vignette_qr_download_path   = 'vignettes/vignette-' . time() . '.png';
 
-            $vignette_qr_access_path    = substr($vignette_qr_storage_path, 8);
+                $vignette_qr_access_path    = substr($vignette_qr_storage_path, 8);
 
-            $vignetteLoaded = \Storage::disk('public')->put($vignette_qr_storage_path, $qr_code); //storage/app/public/img/qr-code/img-1557309130.png
-            // $vignetteLoaded = \Storage::disk('public')->put('vignettes', $qr_code);
+                $vignetteLoaded = \Storage::disk('public')->put($vignette_qr_storage_path, $qr_code); //storage/app/public/img/qr-code/img-1557309130.png
+                // $vignetteLoaded = \Storage::disk('public')->put('vignettes', $qr_code);
             
 
-            $expired_at = new Carbon();
-            $expired_at = $expired_at->addYear();
-            $expired_at = Carbon::parse($expired_at)->format('Y-m-d H:i:s');
+                $expired_at = new Carbon();
+                $expired_at = $expired_at->addYear();
+                $expired_at = Carbon::parse($expired_at)->format('Y-m-d H:i:s');
 
-            $vignette                       = new Vignettes;
-            $vignette->userId               = $usager->id;
-            $vignette->enginId              = $engin->id;
-            $vignette->unique_token         = $unique_token;
-            $vignette->qr                   = $vignette_qr_storage_path;
-            $vignette->qr_download_path     = $vignette_qr_download_path;
-            $vignette->expired_at           = $expired_at;
-            $vignette->save();
+                $vignette                       = new Vignettes;
+                $vignette->userId               = $usager->id;
+                $vignette->enginId              = $engin->id;
+                $vignette->unique_token         = $unique_token;
+                $vignette->qr                   = $vignette_qr_storage_path;
+                $vignette->qr_download_path     = $vignette_qr_download_path;
+                $vignette->expired_at           = $expired_at;
+                $vignette->save();
 
 
-            $updateEngin    = DB::table('engins')
+                $updateEngin    = DB::table('engins')
                               ->where('id', $engin->id)
                               ->update(['vignetteId' => $vignette->id]);
 
-            $enrollHistory  = EnrollHistory::where('enginId', $vignette->enginId)
+                $enrollHistory  = EnrollHistory::where('enginId', $vignette->enginId)
                                            ->first();
             
-            if($vignette && $updateEngin){
+                if ($vignette && $updateEngin) {
 
                 // Sales History backUp
-                $history = new SalesHistory();
-                $history->enrollId      =   $enrollHistory->id;
-                $history->agentRef      =   Auth::user()->id;
-                $history->save();
+                    $history = new SalesHistory();
+                    $history->enrollId      =   $enrollHistory->id;
+                    $history->agentRef      =   Auth::user()->id;
+                    $history->save();
 
-                // $userNotification->markAsRead();
+                    // $userNotification->markAsRead();
 
                 
                 // Notification to User
@@ -342,21 +354,22 @@ class EntSalesController extends Controller
                 //                             'text' => "ikV, La demande de vignette pour votre ".$engin->modele." est validée avec succès. Retrouver votre code QR sur le menu ikaVignetti.   ",
                 //                             ]);
                 //dd($vignette);
-            }  
-                return redirect()->route('csv.list')->with('success', 'Achat effectue avec succes!');
-            } 
-       
-            else
-            {
+                }
+            }else{
                 Session::flash('error','Une erreur est surveu lors de la validation!\n Veillez réessayer'); 
                 Session::flash('alert','alert-info'); 
 
                 return back()->with('error','Une erreur est surveu lors de la validation!\n Veillez réessayer');       
+           
             }
+        }
+                return redirect()->route('csv.list')->with('success', 'Achat effectue avec succes!');
+          
+          
           
         }
 
-    }
+    
 
     public function UserInfo()
     {

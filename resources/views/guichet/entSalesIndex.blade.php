@@ -92,8 +92,7 @@
     </thead>
     <tbody>
 
-
-        @for($i=1; $i < count($pendingSales)-1; $i++)
+        @for($i=0; $i < count($pendingSales); $i++)
             <tr>
                 <td>
                     {{ $pendingSales[$i]['agent'] }}

@@ -34,15 +34,21 @@
               </thead>
               <tbody>
                 @foreach ($enginDatas as $enginData)
-                
-                <tr>
-                  <td>1</td>
-                  <td>{{ $enginData['marque'] }}</td>
-                  <td>{{ $enginData['modele'] }}</td>
-                  <td><span class="tag tag-success">{{ $enginData['chassie'] }}</span></td>
-                  <td>{{ $enginData['cylindre'] }}</td>
-                  <td class="text-danger">{{ $enginData['amount'] }} FCFA</td>
-                </tr>
+                <a class="atf-popup-img atf-single-portfolio" href="{{ asset('storage/'.$enginData['documentJustificatif']) }}">
+                  <tr>
+                    <td>
+                      <img src="{{ asset('storage/'.$enginData['documentJustificatif']) }}" alt="alt text">
+                    </td>
+                    
+                    <td>1</td>
+                    <td>{{ $enginData['marque'] }}</td>
+                    <td>{{ $enginData['modele'] }}</td>
+                    <td><span class="tag tag-success">{{ $enginData['chassie'] }}</span></td>
+                    <td>{{ $enginData['cylindre'] }}</td>
+                    <td class="text-danger">{{ $enginData['amount'] }} FCFA</td>
+                    <td class="text-danger">{{ $enginData['amount'] }} FCFA</td>
+                  </tr>
+                </a>
                 @endforeach
               </tbody>
             <td class="text-danger"><h3>Total : <span >{{$total_amount}} F CFA</span></h3><td>
@@ -89,7 +95,7 @@
               <hr class="my-4">
 
               {{-- <button class="w-100 btn btn-primary btn-lg" type="submit">PAYER CACHE</button> --}}
-              <a href="{{ route('entSalesStepTwo', $data['userId']) }}" class="btn btn-primary"><h4>PAYER CACHE</h4></a>
+              <a href="{{ route('entSalesStepTwo', $enginData['enginId']) }}" class="btn btn-primary"><h4>PAYER CACHE</h4></a>
               <hr class="my-4">
 
             <button class="w-100 btn btn-primary btn-lg" type="button">Payement OM</button>

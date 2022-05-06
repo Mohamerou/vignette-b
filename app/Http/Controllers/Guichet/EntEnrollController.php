@@ -150,13 +150,6 @@ class EntEnrollController extends Controller
         // Agent Refs
         $agentRef = AgentRef::where('agentId', Auth::user()->id)->first();
 
-        // Enroll History backUp
-        $history = new EnrollHistory();
-        $history->agentRef      =   Auth::user()->id;
-        $history->agentName     =   Auth::user()->firstname;
-        $history->agentPhone    =   Auth::user()->phone;
-        $history->userId        =   $User->id;
-        $history->save();
 
         return $this->sendOTP($telephone, $code, $user_pass);
     }
@@ -274,7 +267,7 @@ class EntEnrollController extends Controller
 
        
         
-        if($limit === 4)
+        if($limit === 4000)
             $limit = true;
 
         if($account_type === "usager")
@@ -292,7 +285,7 @@ class EntEnrollController extends Controller
 
                                     
         $engin  = $this->createEngin($data);      
-
+        // dd($engin);
         $documentJustificatifLoadedEtx              = $request->file('documentJustificatif')->getClientOriginalExtension();
         $documentJustificatifLoaded_storage_path    = 'DocumentsEngins/engin-' . time() . '.' .$documentJustificatifLoadedEtx;
         $documentJustificatifLoaded                 = \Storage::disk('public')->put($documentJustificatifLoaded_storage_path, file_get_contents($request->file('documentJustificatif')));
@@ -310,8 +303,14 @@ class EntEnrollController extends Controller
                              ->withInput();
         }
 
-        $history = EnrollHistory::where('userId', $usager->id)->first();
-        $history->enginId   = $engin->id;
+        // Enroll History backUp
+        $history = new EnrollHistory();
+        $history->agentRef      =   Auth::user()->id;
+        $history->agentName     =   Auth::user()->firstname;
+        $history->agentPhone    =   Auth::user()->phone;
+        $history->userId        =   $usager->id;
+        $history->enginId       = $engin->id;
+        $history->status        = 1;
         $history->save();
 
         return $this->sendOTPEngin($usager->phone, $request->marque, $request->modele, $request->chassie, $account_type); 
@@ -380,11 +379,7 @@ class EntEnrollController extends Controller
         //                                             Chassie: ".$chassie."\n",
         //                                 ]);
 
-        $enrollHistory = EnrollHistory::where('userId', $user->id)->first();
-        $engin         = Engins::where('chassie', $chassie)->first();
-        $enrollHistory->enginId = $engin->id;
-        $enrollHistory->status = 1;
-        $enrollHistory->save();
+    
 
         if ($account_type ==="usager") {
             return redirect()->route('enroll.index')->with('success', 'Enrollement partie 2 effectué avec succès!');
@@ -449,7 +444,7 @@ class EntEnrollController extends Controller
             $engin->tarif = 6000;
             $engin->save();
 
-        if ($engin->cylindre === "51")
+        if ($engin->cylindre === "50")
             $engin->tarif = 3000;
             $engin->save();
 

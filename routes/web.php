@@ -177,6 +177,7 @@ Route::get('/resend-code/{phone}', [App\Http\Controllers\VerificationController:
 	Route::get('entSales/reportFilter/{}', [App\Http\Controllers\Guichet\EntSalesController::class, 'salesReportFilter'])->middleware('can:intern')->name('entsalesReportFilter');
 	Route::any('entSales/checkout/notify', [App\Http\Controllers\PaymentController::class, 'notify'])->name('salesCheckoutNotify');
 	Route::get('entSales/checkout/return', [App\Http\Controllers\PaymentController::class, 'return'])->name('salesCheckoutReturn');
+	Route::get('entSales/checkout/modal/{engin_id}', [App\Http\Controllers\PaymentController::class, 'modalshow'])->name('salesModalShow');
 	
 
 // Vignette verification routes
