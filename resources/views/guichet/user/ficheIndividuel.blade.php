@@ -79,7 +79,8 @@
                   <div class="card mb-3 shadow-lg p-3 mb-5 bg-body rounded">
                     <div class="row g-0">
                       <div class="col-6">
-                        <img src="{{ asset('storage/'.$data['idCard']) }}" class="img-fluid rounded-start" alt="...">
+                        {{-- <img src="{{ asset('storage/'.$data['idCard']) }}" class="img-fluid rounded-start" alt="..."> --}}
+                        <img src="{{ 'https://ikavignetti-assets.s3.us-east-2.amazonaws.com/'.$data['idCard'] }}" class="img-fluid rounded-start" alt="...">
                       </div>
                       <div class="col-6">
                         <div class="card-body">

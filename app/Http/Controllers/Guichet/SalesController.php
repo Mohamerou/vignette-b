@@ -204,6 +204,7 @@ class SalesController extends Controller
         // dd($request->all());
 
         $payment = new Payment();
+        $payment->agentId           = Auth::user()->id;
         $payment->firstname         = $data['firstname'];
         $payment->lastname          = $data['lastname'];
         $payment->phone             = $data['phone'];

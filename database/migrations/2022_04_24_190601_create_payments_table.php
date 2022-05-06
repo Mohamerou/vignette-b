@@ -17,6 +17,7 @@ class CreatePaymentsTable extends Migration
             $table->id();
             $table->string('csrf_token')->nullable();
             $table->string('site_id')->nullable();
+            $table->string('agentId')->nullable();
             $table->string('firstname')->nullable();
             $table->string('lastname')->nullable();
             $table->string('phone')->nullable();

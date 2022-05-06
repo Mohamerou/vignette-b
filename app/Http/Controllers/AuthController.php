@@ -17,8 +17,7 @@ use App\Models\Vignettes;
 use App\Models\EnrollHistory;
 use App\Models\UsagerAccountType;
 use App\Models\Prevision;
-//use App\Models\administration;
-//use App\Models\DemandesVignette;
+use App\Models\Payment;
 use Illuminate\Support\Facades\Hash;
 use Session;
 use Carbon\Carbon;
@@ -258,6 +257,17 @@ class AuthController extends Controller
             $vignetted_engin_count  +=1;
             $total_sales    += $engin->tarif;
         }
+
+
+        $agent_yearly_sales = DB::table('payments')
+                                ->select('amount')
+                                ->where('agentId', Auth::user()->id)
+                                ->WhereYear('created_at', Date('Y'))
+                                ->get();
+
+        $data = DB::table("payments")->sum('amount');
+
+        // dd($data);
 
 
         // Dayly sales by aagent 
