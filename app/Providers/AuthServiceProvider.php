@@ -135,6 +135,9 @@ class AuthServiceProvider extends ServiceProvider
             if($user->hasRole('controle-gestion'))
                 return $user->hasRole('controle-gestion');
                 
+            if($user->hasRole('comptable-public'))
+                return $user->hasRole('caissier-en-chef');
+            
             if($user->hasRole('caissier-en-chef'))
                 return $user->hasRole('caissier-en-chef');
     

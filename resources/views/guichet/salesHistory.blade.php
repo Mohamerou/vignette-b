@@ -33,25 +33,27 @@
 <div class="col-sm-6">
     <h1>Historique Vente</h1>
 </div>
-<div class="row">
-    <div>
-        <td>
-            <form method="post" action="{{route('salesHistorypost')}}" class="form-group">
-                @csrf
-                <select name="agent" id="agent">
-                    <option value="all">Tous Les Agents</option>
-                    
-                    @for($i=0; $i < count($allagent); $i++)
-                        <option value="{{$allagent[$i]->id}}">{{$allagent[$i]->lastname}} {{$allagent[$i]->firstname}} {{$allagent[$i]->phone}}</option>
-                    @endfor
-                </select>
-                <input type="date" name="date" id="date" >
-                <input class="btn btn-primary mx-3" type="submit" value="Filtrer" name="history">
-                <input class="btn btn-primary mx-5" type="submit" value="Génerer le rapport" name="report" id="envoi">
-            </form>
-        </td>
+@can('regisseur')
+    <div class="row">
+        <div>
+            <td>
+                <form method="post" action="{{route('salesHistorypost')}}" class="form-group">
+                    @csrf
+                    <select name="agent" id="agent">
+                        <option value="all">Tous Les Agents</option>
+                        
+                        @for($i=0; $i < count($allagent); $i++)
+                            <option value="{{$allagent[$i]->id}}">{{$allagent[$i]->lastname}} {{$allagent[$i]->firstname}} {{$allagent[$i]->phone}}</option>
+                        @endfor
+                    </select>
+                    <input type="date" name="date" id="date" >
+                    <input class="btn btn-primary mx-3" type="submit" value="Filtrer" name="history">
+                    <input class="btn btn-primary mx-5" type="submit" value="Génerer le rapport" name="report" id="envoi">
+                </form>
+            </td>
+        </div>
     </div>
-</div>
+@endcan
 <div class="col-sm-6">
     <div class="col-sm-3">
         <h1>Total Vente:</h1>
@@ -109,6 +111,7 @@
                                 <thead>
                                 <tr>
                                     <th>Agent</th>
+                                    <th>Date</th>
                                     <th>Usager</th>
                                     <th>Contact Usager</th>
                                     <th>Marque</th>
@@ -124,6 +127,7 @@
                                     @for($i=0; $i < count($SalesHistories); $i++)
                                         <tr>
                                             <td>{{ $SalesHistories[$i]['agent'] }}</td>
+                                            <td>{{ $SalesHistories[$i]['date'] }}</td>
                                             <td>{{ $SalesHistories[$i]['usager'] }}</td>
                                             <td>{{ $SalesHistories[$i]['userphone'] }}</td>
                                             <td>{{ $SalesHistories[$i]['marque'] }}</td>

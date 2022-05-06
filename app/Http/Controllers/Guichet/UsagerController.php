@@ -24,8 +24,8 @@ class UsagerController extends Controller
      * @return void
      */
     public function __construct()
-    {        
-        $this->middleware('can:guichet');      
+    {
+        $this->middleware('can:guichet');
     }
 
     /**
@@ -35,7 +35,6 @@ class UsagerController extends Controller
      */
     public function index()
     {
-
         $currentDate = Carbon::now();
         $currentDate = Carbon::parse($currentDate);
         $currentDate = $currentDate->format('d-m-Y');
@@ -43,8 +42,7 @@ class UsagerController extends Controller
         $users = User::get();
         $user_list = [];
         foreach ($users as $user) {
-            if(!($user->hasRole('user'))){
-
+            if (!($user->hasRole('user'))) {
             } else {
                 $user_list[] = $user;
             }
@@ -54,15 +52,12 @@ class UsagerController extends Controller
         return view('guichet.user.index')
         ->with('user_list', $user_list)
         ->with('date', $currentDate);
-
-
     }
 
 
 
     public function entreprise()
     {
-
         $currentDate = Carbon::now();
         $currentDate = Carbon::parse($currentDate);
         $currentDate = $currentDate->format('d-m-Y');
@@ -70,19 +65,21 @@ class UsagerController extends Controller
         $users = User::get();
         $user_list = [];
         foreach ($users as $user) {
-            if(!($user->hasRole('user'))){
-
+            if (!($user->hasRole('user'))) {
             } else {
-                $user_list[] = $user;
+                $account   = UsagerAccountType::where('user_id', $user->id)->first();
+                if (empty($account)) {
+                    return redirect()->route('get-admin-dash')->with('error', 'Compte introuvable !');
+                }
+                if ($account->type==='entreprise') {
+                    $user_list[] = $user;
+                }
             }
         }
-
         // dd($user_list);
-        return view('guichet.enterprise.index')
+        return view('guichet.entSalesIndex')
         ->with('user_list', $user_list)
         ->with('date', $currentDate);
-
-
     }
     /**
      * Show the form for creating a new resource.
@@ -129,7 +126,7 @@ class UsagerController extends Controller
                 'engin_type'            => $engin->modele,
                 'engin_chassie'         => $engin->chassie,
                 'signaler_perdue'       => $engin->signaler_perdue,
-            ];  
+            ];
         }
 
         // dd($user_data);
@@ -175,14 +172,14 @@ class UsagerController extends Controller
             'account_type' 	         => 'required|string|max:10',
         ]);
 
-        $double_check_user_new_phone_duplicate = False;
+        $double_check_user_new_phone_duplicate = false;
         $request_phone_user  = User::where('phone', $request->phone)->first();
 
         
-        if(!empty($request_phone_user))
-        {
-            if ($request_phone_user->id != $id)
-                $double_check_user_new_phone_duplicate = True;
+        if (!empty($request_phone_user)) {
+            if ($request_phone_user->id != $id) {
+                $double_check_user_new_phone_duplicate = true;
+            }
         }
 
         if ($double_check_user_new_phone_duplicate) {
@@ -204,18 +201,16 @@ class UsagerController extends Controller
         $user->save();
 
 
-        if($request->has('idCard'))
-        {
+        if ($request->has('idCard')) {
             request()->validate([
                 'idCard'                 => 'required'
             ]);
 
-            $userIdCardEtx      = $request->file('idCard')->getClientOriginalExtension(); 
+            $userIdCardEtx      = $request->file('idCard')->getClientOriginalExtension();
             $idCardPath         = "idCard/idCard-".time().'.'.$userIdCardEtx;
             $idCardLoaded       = \Storage::disk('public')->put($idCardPath, file_get_contents($request->file('idCard')));
             
-            if($idCardLoaded == False){
-
+            if ($idCardLoaded == false) {
                 return redirect()->route('guichet.user.edit')
                                 ->with('error', 'Vérifier la connexion internet puis réessayer!.')
                                 ->withInput();
@@ -230,9 +225,8 @@ class UsagerController extends Controller
         $account_type->type   = $data['account_type'];
         $account_type->save();
 
-       //  $this->sendOPT($telephone, $code, $user_pass);
-         return redirect()->route('guichet.user.index')->with('success', 'Compte mise a jour avec succes!');
-
+        //  $this->sendOPT($telephone, $code, $user_pass);
+        return redirect()->route('guichet.user.index')->with('success', 'Compte mise a jour avec succes!');
     }
 
     /**
@@ -252,7 +246,7 @@ class UsagerController extends Controller
      
         $user                       = User::find($engin->userId);
         $vignette                   = Vignettes::where('enginId', $engin->id)->first();
-        //$vignette->created_at   = Carbon::now();       
+        //$vignette->created_at   = Carbon::now();
         
         $expired_at = new Carbon();
         $expired_at = $expired_at->addYear();
@@ -261,17 +255,15 @@ class UsagerController extends Controller
         $vignette->expired_at = $expired_at;
         $vignette->save();
 
-        if($vignette)
-        {
+        if ($vignette) {
             return redirect()->route('guichet.user.show', $user)->with('success', 'Vignette renouvellée avec succès!');
         }
 
         return redirect()->route('guichet.user.show', $user)->with('error', "La tentative de renoullement a échouée. \nVeillez réessayer!");
-        
     }
 
     public function fiche_individuel($userId)
-    {     
+    {
         $user                    = User::find($userId);
 
         $fileName                = $user->firstname.'-'.$user->lastname.'-'.$user->phone;
@@ -284,36 +276,35 @@ class UsagerController extends Controller
             'address'           =>$user->address,
         ];
 
-    //   view()->share('data',$data);
-    //   $pdf = PDF::loadView('guichet.rapportVente', ['data' => $data])->setOptions(['defaultFont' => 'sans-serif']);
-      // download PDF file with download method
-    //   return $pdf->download($fileName.'.pdf');
+        //   view()->share('data',$data);
+        //   $pdf = PDF::loadView('guichet.rapportVente', ['data' => $data])->setOptions(['defaultFont' => 'sans-serif']);
+        // download PDF file with download method
+        //   return $pdf->download($fileName.'.pdf');
     
-    $path = storage_path('ficheIndividuels');
+        $path = storage_path('ficheIndividuels');
 
-    // dd($path);
-    if(!File::exists($path)) {
-        File::makeDirectory($path, $mode = 0755, true, true);
+        // dd($path);
+        if (!File::exists($path)) {
+            File::makeDirectory($path, $mode = 0755, true, true);
+        } else {
+        }
 
-    } 
-    else {}
 
+        // $pdf = PDF::loadView('guichet.user.ficheIndividuel',['data' => $data])->setOptions(['defaultFont' => 'sans-serif'])
+        //           ->save(''.$path.'/'.$fileName.'.pdf');
 
-    // $pdf = PDF::loadView('guichet.user.ficheIndividuel',['data' => $data])->setOptions(['defaultFont' => 'sans-serif'])
-    //           ->save(''.$path.'/'.$fileName.'.pdf');
+        // $pdf->getDomPDF()->setHttpContext(
+        //     stream_context_create([
+        //         'ssl' => [
+        //             'allow_self_signed'=> TRUE,
+        //             'verify_peer' => FALSE,
+        //             'verify_peer_name' => FALSE,
+        //         ]
+        //     ])
+        // );
+        //   return $pdf->download($fileName.'.pdf');
 
-    // $pdf->getDomPDF()->setHttpContext(
-    //     stream_context_create([
-    //         'ssl' => [
-    //             'allow_self_signed'=> TRUE,
-    //             'verify_peer' => FALSE,
-    //             'verify_peer_name' => FALSE,
-    //         ]
-    //     ])
-    // );
-    //   return $pdf->download($fileName.'.pdf');
-
-    return view('guichet.user.ficheIndividuel')->with('data', $data);
+        return view('guichet.user.ficheIndividuel')->with('data', $data);
     }
 
 
@@ -327,7 +318,6 @@ class UsagerController extends Controller
 
     public function post_nouvel_engin(Request $request)
     {
-
         request()->validate([
             'user_id' 	             => 'required|numeric',
             'marque'                 => 'required|string',
@@ -349,24 +339,28 @@ class UsagerController extends Controller
         $limit          = Engins::where('userId', $usager->id)->count();
 
         
-        if($limit === 1000)
+        if ($limit === 1000) {
             $limit = true;
+        }
 
-        if($account_type === "usager")
-            if($limit === true)
+        if ($account_type === "usager") {
+            if ($limit === true) {
                 return redirect()->route('guichet.user.engin.nouvel', $usager)
                                  ->with('error', "Nombre maximal d'enregistrement atteint!");
+            }
+        }
 
 
 
         $IfEnginExist    = Engins::where('chassie', $data['chassie'])->first();
-        if ($IfEnginExist)
+        if ($IfEnginExist) {
             return redirect()->route('guichet.user.engin.nouvel', $usager)
                             ->with('error', 'Numero de chassie non disponible!')
                             ->withInput();
+        }
 
                                     
-        $engin  = $this->createEngin($data);      
+        $engin  = $this->createEngin($data);
 
         $documentJustificatifLoadedEtx              = $request->file('documentJustificatif')->getClientOriginalExtension();
         $documentJustificatifLoaded_storage_path    = 'DocumentsEngins/engin-' . time() . '.' .$documentJustificatifLoadedEtx;
@@ -378,15 +372,14 @@ class UsagerController extends Controller
 
         // $idCardLoaded       = $this->storeIdCard($User);
 
-        if($documentJustificatifLoaded == False)
-        {
+        if ($documentJustificatifLoaded == false) {
             $engin->delete();
             return redirect()->route('guichet.user.show', $usager)
                              ->with('error', 'Erreur d\'enregistrement! Vérifier votre connexion internet puis réessayer.')
                              ->withInput();
         }
 
-        return $this->sendOTPEngin($usager->phone, $request->marque, $request->modele, $request->chassie); 
+        return $this->sendOTPEngin($usager->phone, $request->marque, $request->modele, $request->chassie);
     }
 
 
@@ -394,7 +387,6 @@ class UsagerController extends Controller
 
     public function sendOTPEngin($phone, $marque, $modele, $chassie)
     {
-
         $user       = User::where('phone', $phone)->first();
         $engin      = Engins::where('chassie', $chassie)->first();
         $userId     = $user->id;
@@ -438,24 +430,109 @@ class UsagerController extends Controller
         
         $tarif = 0;
 
-        if ($engin->cylindre === "+125")
+        if ($engin->cylindre === "+125") {
             $engin->tarif = 12000;
-            $engin->save();
+        }
+        $engin->save();
 
-        if ($engin->cylindre === "125")
+        if ($engin->cylindre === "125") {
             $engin->tarif = 6000;
-            $engin->save();
+        }
+        $engin->save();
 
-        if ($engin->cylindre === "51")
+        if ($engin->cylindre === "51") {
             $engin->tarif = 3000;
-            $engin->save();
+        }
+        $engin->save();
 
-        if ($engin->cylindre === "0")
+        if ($engin->cylindre === "0") {
             $engin->tarif = 1500;
-            $engin->save();
+        }
+        $engin->save();
 
 
         return $engin;
     }
 
+
+    public function list_engin($user_id)
+    {
+        $user                    = User::find($user_id);
+
+        $engin_list = Engins::where('userId', $user_id)->get();
+        return view('guichet.user.enginsList')->with('user', $user)
+                                    ->with('enginList', $engin_list);
+    }
+
+
+    public function edit_engin($engin_id)
+    {
+        $engin = Engins::find($engin_id);
+
+        return view('guichet.user.editEngin')->with('engin', $engin);
+    }
+
+    public function update_engin(Request $request, int $id)
+    {
+        $this->middleware('can:guichet');
+
+        request()->validate([
+            'user_id' 	             => 'required|numeric',
+            'marque'                 => 'required|string',
+            'modele'                 => 'required|string',
+            'chassie'                => 'required|string',
+            'cylindre' 	             => 'required|string',
+        ]);
+
+
+        $double_check_chassie_duplicate = false;
+        $request_chassie_engin  = Engins::where('chassie', $request->chassie)->first();
+
+    
+        if (!empty($request_chassie_engin)) {
+            if ($request_chassie_engin->id != $id) {
+                $double_check_chassie_duplicate = true;
+            }
+        }
+
+        if ($double_check_chassie_duplicate) {
+            # code...
+            return redirect()->route('guichet.user.index')
+                         ->with('error', 'Cet numero est attribue a un compte!')
+                         ->withInput();
+        }
+
+        //dd($key);
+        $data           = $request->all();
+        $engin           = Engins::findOrfail($id);
+        $engin->marque 	= $data['marque'];
+        $engin->modele    = $data['modele'];
+        $engin->chassie      = $data['chassie'];
+        $engin->cylindre 	    = $data['cylindre'];
+        $engin->save();
+
+
+        if ($request->has('documentJustificatif')) {
+            request()->validate([
+            'documentJustificatif'                 => 'required'
+        ]);
+
+        
+            $documentJustificatifLoadedEtx              = $request->file('documentJustificatif')->getClientOriginalExtension();
+            $documentJustificatifLoaded_storage_path    = 'DocumentsEngins/engin-' . time() . '.' .$documentJustificatifLoadedEtx;
+            $documentJustificatifLoaded                 = \Storage::disk('public')->put($documentJustificatifLoaded_storage_path, file_get_contents($request->file('documentJustificatif')));
+        
+            if ($documentJustificatifLoaded == false) {
+                return redirect()->route('guichet.user.editEngin')
+                            ->with('error', 'Vérifier la connexion internet puis réessayer!.')
+                            ->withInput();
+            }
+
+            $engin->documentJustificatif                = $documentJustificatifLoaded_storage_path;
+            $engin->save();
+
+        }
+        return redirect()->route('guichet.user.index')->with('success', 'Engins mise a jour avec succes!');
+
+    }
 }

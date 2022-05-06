@@ -440,6 +440,9 @@ class SalesController extends Controller
 
     public function salesHistory(Request $request)
     {
+                        
+        $this->middleware('can:regisseur');
+
         $date     = $request->date;
         $agent    = $request->agent;
   
@@ -486,6 +489,7 @@ class SalesController extends Controller
                     'chassie'   => $engin->chassie,
                     'agent'     => $agent_vente->firstname.' - '.$agent_vente->lastname.' - '.$agent_vente->phone,
                     'tarif'     => $engin->tarif,
+                    'date'      => $SalesHistory->updated_at->format('d-m-Y')
                 ];
             } 
         }
@@ -556,6 +560,7 @@ class SalesController extends Controller
                     'chassie'   => $engin->chassie,
                     'agent'     => $agent_vente->firstname.' - '.$agent_vente->phone,
                     'tarif'     => $engin->tarif,
+                    'date'      => $SalesHistory->updated_at->format('d-m-Y')
                 ];
                     }
                 }
@@ -630,6 +635,7 @@ class SalesController extends Controller
                         'chassie'   => $engin->chassie,
                         'agent'     => $agent_vente->firstname.' - '.$agent_vente->phone,
                         'tarif'     => $engin->tarif,
+                        'date'      => $SalesHistory->updated_at->format('d-m-Y')
                     ];
                 } 
             }
@@ -680,7 +686,7 @@ class SalesController extends Controller
     public function salesReport()
     {
                         
-        $this->middleware('can:regisseur-public');
+        $this->middleware('can:regisseur');
         $today      = Carbon::now();
         $today      = $today->format('d-m-Y');
         $fileName   = 'Rapport Vente'.' - '.$today;
@@ -711,6 +717,7 @@ class SalesController extends Controller
                     'chassie'   => $engin->chassie,
                     'agent'     => $agent_vente->firstname.' - '.$agent_vente->lastname.' - '.$agent_vente->phone,
                     'tarif'     => $engin->tarif,
+                    'date'      => $SalesHistory->updated_at->format('d-m-Y')
                 ];
             } 
         }

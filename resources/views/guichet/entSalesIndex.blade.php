@@ -17,16 +17,6 @@
         });
     } );
 </script>
-<script src="{{ asset('html2pdf/dist/html2pdf.bundle.min.js') }}"></script>
-
-<script>
-    function generatePDF() {
-        // Choose the element that our invoice is rendered in.
-        const element = document.getElementById('printPdf');
-        // Choose the element and save the PDF for our user.
-        html2pdf().from(element).save();
-    }
-</script>
 <style>
     #modaldata tbody tr > td:last-of-type{display:none;}
 </style>
@@ -36,15 +26,15 @@
 @section('content')
 
 <div class="content-wrapper">
-<div id="printPdf" >
+
 <section class="content-header">
-    <div class="container-fluid">
-    <div class="row mb-2">
-    <div class="col-sm-6">
-        <h1>Liste des Entreprises</h1>
-    </div>
-    </div>
-    </div>
+<div class="container-fluid">
+<div class="row mb-2">
+<div class="col-sm-6">
+    <h1>Panel de Vente</h1>
+</div>
+</div>
+</div>
 </section>
 
 <section class="content">
@@ -85,48 +75,37 @@
 
 <div class="card px-4">
     <div class="card-header">
-    <h3 class="card-title"></h3>
+    <h3 class="card-title">Panel de Vente</h3>
     </div>
 
     <div class="card-body p-0">
     <table id="example" class="table table-striped table-hover table-bordered">
     <thead>
     <tr>
-    <th>Entreprise</th>
-    <th>CONTACT Entreprise</th>
-    <th>ADRESSE</th>
-    <th>DATE</th>
-    <th>DETAILS</th>
-    <th style="width: 40px">ACTIONS</th>
+    <th>Agent</th>
+    <th>Usager</th>
+    <th>Contact Usager</th>
+    {{-- <th>Infos Engin</th> --}}
+    <th>Status</th>
+    <th style="width: 40px">Actions</th>
     </tr>
     </thead>
     <tbody>
 
-        @for($i=0; $i < count($user_list); $i++)
+        @for($i=0; $i < count($pendingSales); $i++)
             <tr>
-<<<<<<< HEAD:resources/views/guichet/salesHistoryFilter.blade.php
-                <td>{{ $SalesHistories[$i]['agent'] }}</td>
-                <td>{{ $SalesHistories[$i]['usager'] }}</td>
-                <td>{{ $SalesHistories[$i]['userphone'] }}</td>
-                <td style="width: 160px !important;">
-                    {{ $SalesHistories[$i]['marque'] }}
-                </td>
-                <td>{{ $SalesHistories[$i]['modele'] }}</td>
-                <td style="width: 160px !important;">
-                    {{ $SalesHistories[$i]['chassie'] }}
-                </td>
-                <td class="text-danger">{{ $SalesHistories[$i]['tarif'] }}</td>    
                 <td>
-                <button disabled type="button" class="btn btn-success"><h4>&#x2611;</h4></button>
+                    {{ $pendingSales[$i]['agent'] }}
+                    <br>
+                    {{ $pendingSales[$i]['agentphone'] }}
                 </td>
-=======
-                <td>{{ $user_list[$i]['firstname'] }} {{ $user_list[$i]['lastname'] }}</td>
-                <td>{{ $user_list[$i]['phone'] }}</td>
-                <td>{{ $user_list[$i]['address'] }}</td>
-                <td>{{ $date }}</td>
-                <td><a href="{{ route('guichet.user.show', $user_list[$i]) }}" class="btn btn-info">VOIR</a></td>
-                <td><a href="{{ route('enrollStepTwo', $user_list[$i]) }}" class="btn btn-warning">Ajouter Engin</a></td>
->>>>>>> 07c9ed991c6523d44b441abfa72a38a418869af0:resources/views/guichet/enterprise/index.blade.php
+                <td>{{ $pendingSales[$i]['usager'] }}</td>
+                <td>{{ $pendingSales[$i]['userphone'] }}</td>
+                {{-- <td>{{ $pendingSales[$i]['chassie'] }}</td> --}}
+                <td class="text-danger">Operation Caisse</td>    
+                <td class="text-danger">
+                    <a href="{{ route('entSalesStepOne', $pendingSales[$i]['enginId']) }}" class="btn btn-success"><h4>CAISSE</h4></a>
+                </td>
             </tr>
         @endfor
 
@@ -134,8 +113,9 @@
     </tbody>
     </table>
     </div>
+
     </div>
-    <!-- <button class="btn btn-primary" onclick="generatePDF()">Generer un Rapport</button> -->
+
     </div>
 
 </div>
@@ -145,8 +125,6 @@
 
 </div>
 </section>
-</div>
-
 
 </div>
 @endsection 

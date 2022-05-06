@@ -150,13 +150,6 @@ class EntEnrollController extends Controller
         // Agent Refs
         $agentRef = AgentRef::where('agentId', Auth::user()->id)->first();
 
-        // Enroll History backUp
-        $history = new EnrollHistory();
-        $history->agentRef      =   Auth::user()->id;
-        $history->agentName     =   Auth::user()->firstname;
-        $history->agentPhone    =   Auth::user()->phone;
-        $history->userId        =   $User->id;
-        $history->save();
 
         return $this->sendOTP($telephone, $code, $user_pass);
     }
@@ -172,7 +165,11 @@ class EntEnrollController extends Controller
         $user_list       = [];
         foreach($pendingEnrolls as $pendingEnroll){
             $user        = User::find($pendingEnroll->userId);
-
+            $account   = UsagerAccountType::where('user_id',$user->id)->first();
+            if(empty($account)){
+                return redirect()->route('get-admin-dash')->with('error', 'Compte introuvable !');
+            }
+            if($account->type==='entreprise'){
             $currentDate = Carbon::parse($pendingEnroll->created_at);
             $currentDate = $currentDate->format('d-m-Y');
             // dd($pendingEnroll->userId);
@@ -185,12 +182,12 @@ class EntEnrollController extends Controller
                 'date'      => $currentDate,
             ]; 
         }
-
+    }
 
 
         $pendingEnrolls = $user_list;
 
-        return view('guichet/enrollHistory')
+        return view('guichet/entEnrollHistory')
                 ->with('pendingEnrolls', $pendingEnrolls);
 
     }
@@ -270,25 +267,25 @@ class EntEnrollController extends Controller
 
        
         
-        if($limit === 4)
+        if($limit === 4000)
             $limit = true;
 
         if($account_type === "usager")
             if($limit === true)
-                return redirect()->route('enrollStepOne', $usager)
+                return redirect()->route('entEnrollStepOne', $usager)
                                  ->with('error', "Nombre maximal d'enregistrement atteint!");
 
 
 
         $IfEnginExist    = Engins::where('chassie', $data['chassie'])->first();
         if ($IfEnginExist)
-            return redirect()->route('enrollStepTwo', $usager)
+            return redirect()->route('entEnrollStepTwo', $usager)
                             ->with('error', 'Numero de chassie existant !')
                             ->withInput();
 
                                     
         $engin  = $this->createEngin($data);      
-
+        // dd($engin);
         $documentJustificatifLoadedEtx              = $request->file('documentJustificatif')->getClientOriginalExtension();
         $documentJustificatifLoaded_storage_path    = 'DocumentsEngins/engin-' . time() . '.' .$documentJustificatifLoadedEtx;
         $documentJustificatifLoaded                 = \Storage::disk('public')->put($documentJustificatifLoaded_storage_path, file_get_contents($request->file('documentJustificatif')));
@@ -301,13 +298,19 @@ class EntEnrollController extends Controller
         if($documentJustificatifLoaded == False)
         {
             $engin->delete();
-            return redirect()->route('enrollStepTwo', $usager)
+            return redirect()->route('entEnrollStepTwo', $usager)
                              ->with('error', 'Erreur d\'enregistrement! Vérifier votre connexion internet puis réessayer.')
                              ->withInput();
         }
 
-        $history = EnrollHistory::where('userId', $usager->id)->first();
-        $history->enginId   = $engin->id;
+        // Enroll History backUp
+        $history = new EnrollHistory();
+        $history->agentRef      =   Auth::user()->id;
+        $history->agentName     =   Auth::user()->firstname;
+        $history->agentPhone    =   Auth::user()->phone;
+        $history->userId        =   $usager->id;
+        $history->enginId       = $engin->id;
+        $history->status        = 1;
         $history->save();
 
         return $this->sendOTPEngin($usager->phone, $request->marque, $request->modele, $request->chassie, $account_type); 
@@ -351,11 +354,11 @@ class EntEnrollController extends Controller
                                            ->first();
 
         if ($account_type === "usager") {
-            return redirect()->route('enrollStepTwo', $user)->with('success', 'Enrollement partie 1 effectué avec succès!')
+            return redirect()->route('entEnrollStepTwo', $user)->with('success', 'Enrollement partie 1 effectué avec succès!')
             ->with('error', 'Completer l\'enrollement  sur cette page!');
         }else{
-           
-            return redirect()->route('entenrollStepTwo', $user)->with('success', 'Enrollement partie 1 effectué avec succès!')
+          
+            return redirect()->route('entEnrollStepTwo', $user)->with('success', 'Enrollement partie 1 effectué avec succès!')
         ->with('error', 'Vous devez ajouter des engins');
         }
     }
@@ -376,16 +379,12 @@ class EntEnrollController extends Controller
         //                                             Chassie: ".$chassie."\n",
         //                                 ]);
 
-        $enrollHistory = EnrollHistory::where('userId', $user->id)->first();
-        $engin         = Engins::where('chassie', $chassie)->first();
-        $enrollHistory->enginId = $engin->id;
-        $enrollHistory->status = 1;
-        $enrollHistory->save();
+    
 
         if ($account_type ==="usager") {
             return redirect()->route('enroll.index')->with('success', 'Enrollement partie 2 effectué avec succès!');
         }else{
-            return redirect()->route('enrollStepTwo', $user->id)->with('success', 'Enrollement partie 2 effectué avec succès!');
+            return redirect()->route('entEnrollStepTwo', $user->id)->with('success', 'Enrollement partie 2 effectué avec succès!');
 
         }
     }
@@ -445,7 +444,7 @@ class EntEnrollController extends Controller
             $engin->tarif = 6000;
             $engin->save();
 
-        if ($engin->cylindre === "51")
+        if ($engin->cylindre === "50")
             $engin->tarif = 3000;
             $engin->save();
 

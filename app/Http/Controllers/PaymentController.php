@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Engins;
+
 
 class PaymentController extends Controller
 {
@@ -17,6 +19,18 @@ class PaymentController extends Controller
         $this->middleware('can:noneyet');      
     }
     //
+
+    public function salesModalShow(int $enginId)
+    {
+        $engin = Engins::findOrfail($enginId);
+        $data  = [
+            'documentJustificatif' => $engin->documentJustificatif,
+            'chassie' => $engin->chassie,
+        ];
+        dd($data);
+        return view('guichet.enginModal')->with(' data', $data);
+        // return response()->json( 'html'=> $returnHTML);
+    }
 
      public function checkoutShow(Request $request) 
      {

@@ -170,13 +170,17 @@ class EnrollController extends Controller
     {        
         $this->middleware('can:guichet'); 
         $pendingEnrolls = EnrollHistory::where('status', '0')->orderBy('created_at', 'desc')->get();
-
-        // dd($pendingEnrolls);
-
+           
         $user_list       = [];
         foreach($pendingEnrolls as $pendingEnroll){
             $user        = User::find($pendingEnroll->userId);
+            $account   = UsagerAccountType::where('user_id',$user->id)->first();
 
+            if(empty($account)){
+                return redirect()->route('get-admin-dash')->with('error', 'Compte introuvable !');
+            }
+            if($account->type==='usager'){
+    
             $currentDate = Carbon::parse($pendingEnroll->created_at);
             $currentDate = $currentDate->format('d-m-Y');
             // dd($pendingEnroll->userId);
@@ -190,7 +194,7 @@ class EnrollController extends Controller
             ]; 
         }
 
-
+        }
 
         $pendingEnrolls = $user_list;
 

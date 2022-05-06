@@ -261,12 +261,14 @@
                     <p>Rapport des Ventes</p>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="{{ route('salesHistory') }}" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Historiques des Ventes</p>
-                    </a>
-                </li>
+                @can('regisseur')
+                  <li class="nav-item">
+                      <a href="{{ route('salesHistory') }}" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Historiques des Ventes</p>
+                      </a>
+                  </li>
+                @endcan
                 </ul>
             @endcan
             @can('guichet')
@@ -286,15 +288,23 @@
                 <li class="nav-item">
                     <a href="{{ route('enrollList') }}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Enrollements Récents</p>
+                    <p>Enrollements Usager Récents</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('enroll.index') }}" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Historiques Enrollements</p>
-                    </a>
-                </li>
+                  <a href="{{ route('entEnrollList') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Enrollements Entreprise Récents</p>
+                  </a>
+              </li>
+              @can('regisseur')
+                  <li class="nav-item">
+                      <a href="{{ route('enroll.index') }}" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Historiques Enrollements</p>
+                      </a>
+                  </li>
+                @endcan
                 </ul>
                 <ul class="nav nav-treeview">
                 <li class="nav-item">
@@ -309,12 +319,14 @@
                   <p>Vente Entreprise</p>
                   </a>
               </li>
+              @can('regisseur')
                 <li class="nav-item">
                     <a href="{{ route('salesHistory') }}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Historiques Ventes</p>
                     </a>
                 </li>
+                @endcan
                 <li class="nav-item">
                     <a href="{{ route('guichet.user.index') }}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
@@ -384,32 +396,6 @@
           @endcan
           
           @can('comptable-public')
-
-          <li class="nav-item">
-            <!-- <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-copy"></i>
-              <p>
-                Gestion des Guichets
-                <i class="fas fa-angle-left right"></i>
-                
-              </p>
-            </a> -->
-            <ul class="nav nav-treeview">
-              <!-- <li class="nav-item">
-                <a href="{{ route('guichet.create') }}" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Nouveau Guichet</p>
-                </a>
-              </li> -->
-              <!-- <li class="nav-item">
-                <a href="{{ route('guichet.index') }}" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Liste des guichets</p>
-                </a>
-              </li> -->
-            </ul>
-          </li>
-
           <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-copy"></i>

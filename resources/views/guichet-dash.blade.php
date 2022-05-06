@@ -102,7 +102,7 @@
       <div class="inner">
         <h4>Enrôlement Grand compte</h4>
       </div>
-      <a href="{{ route('enrollList') }}" class="small-box-footer"><i class="fas fa-arrow-circle-right"></i></a>
+      <a href="{{ route('entEnrollStepOne') }}" class="small-box-footer"><i class="fas fa-arrow-circle-right"></i></a>
     </div>
   </div>
   {{-- <div class="col-6">
