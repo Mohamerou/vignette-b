@@ -28,7 +28,7 @@
         <nav class="navbar navbar-expand-md navbar-light fixed-top bg-white shadow-sm" style="margin: auto;">
             <div class="container" style="">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    <img style="width:50px; height:50px;" src="{{ asset('/images/logo.png') }}"
+                    <img style="width:50px; height:70px;" src="{{ asset('/images/logo.png') }}"
                         class="navbar-brand-img" alt="Logo ikaVignetti">
                 </a>
                 {{-- <a class="navbar-brand" href="{{ url('/') }}">
@@ -59,7 +59,7 @@
                             @if (Route::has('register'))
                                 <li class="nav-item">
                                     <a class="nav-link"
-                                        href="{{ route('inscription') }}">{{ __('Creer un compte') }}</a>
+                                        href="{{ route('inscription') }}">{{ __('Créer un compte') }}</a>
                                 </li>
                             @endif
                         @else
@@ -92,7 +92,7 @@
                                 </li>
                             @endcan
 
-                            @can('agent_vente')
+                            @can('guichet')
                                 <li class="nav-item dropdown">
                                     <a id="navbarDropdown" class="nav-link dropdown-toggle btn btn-light" href="#" role="button"
                                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
@@ -150,28 +150,13 @@
                 </div>
             </div>
         </nav>
-        @can('user')
-            <div class="nav-scroller bg-white shadow-sm">
-                <nav class="nav nav-underline" aria-label="Secondary navigation">
-                    <a class="nav-link active" aria-current="page" href="{{ route('home') }}">Tableau de bord</a>
-                    <a class="nav-link active" aria-current="page" href="#">|</a>
-                    <a class="nav-link" href="{{ route('engins.index') }}">
-                        Mes vignettes
-                    </a>
-                    <a class="nav-link active" aria-current="page" href="#">|</a>
-                    <a class="nav-link" href="{{ route('initiateTransfert') }}">
-                        Initier le transfere de propriete d'un engin
-                    </a>
-                </nav>
-            </div>
-        @endcan
         <main class="py-4">
             @yield('content')
         </main>
 
         <footer class="mastfoot mt-auto text-center py-10">
             <div class="inner">
-                Copyrights &copy 2021 ikaVignetti | Tous droits réservés
+                Tous droits réservés | Vignette Bamako &copy 2022
             </div>
         </footer>
     </div>

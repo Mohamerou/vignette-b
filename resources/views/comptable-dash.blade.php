@@ -144,7 +144,7 @@
   </div>
   <!-- End Action Row -->
   
-<h3>Statistiques du Jour : {{$today}}</h3>
+<h3>Les Statistiques de vente du Jour : {{$today}}</h3>
 <div class="row justify-content-center">
   <div class="col-6">
     <!-- small box -->
@@ -182,7 +182,7 @@
   
 </div>
 <hr>
-<h3>Statistiques du mois : {{$current_month}}</h3>
+<h3>Les Statistiques de vente du mois : {{$current_month}}</h3>
   <!-- /.row -->
   <div class="row">
     <div class="col-6">
@@ -222,7 +222,7 @@
   </div>
     <!-- /.row -->
 <hr>
-    <h3>Statistique de l'année : {{$current_year}}</h3>
+    <h3>Les Statistiques de vente de l'année : {{$current_year}}</h3>
     <div class="row">
       <div class="col-6">
         <!-- small box -->

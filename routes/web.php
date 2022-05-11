@@ -132,6 +132,7 @@ Route::get('/resend-code/{phone}', [App\Http\Controllers\VerificationController:
 	Route::get('enrolls', [App\Http\Controllers\Guichet\EnrollController::class, 'index'])->middleware('can:intern')->name('enroll.index');
 	Route::get('csv-list', [App\Http\Controllers\Guichet\SalesController::class, 'csv_print_list'])->middleware('can:guichet')->name('csv.list');
 	Route::get('csv/{enginId}', [App\Http\Controllers\Guichet\SalesController::class, 'csv'])->middleware('can:guichet')->name('csv');
+	Route::get('csv-export/{chassie}', [App\Http\Controllers\Guichet\SalesController::class, 'csv_export'])->middleware('can:guichet')->name('csv_export');
 
 	// Enroll routes for entreprise
 	Route::get('entEnrollement-1', [App\Http\Controllers\Guichet\EntEnrollController::class, 'stepOne'])->middleware('can:guichet')->name('entEnrollStepOne');
@@ -158,7 +159,9 @@ Route::get('/resend-code/{phone}', [App\Http\Controllers\VerificationController:
 	Route::get('sales/checkout/{enginId}', [App\Http\Controllers\Guichet\SalesController::class, 'stepOne'])->middleware('can:guichet')->name('salesStepOne');
 	Route::post('sales/checkout/process', [App\Http\Controllers\Guichet\SalesController::class, 'stepTwo'])->middleware('can:guichet')->name('salesStepTwo');
 	Route::get('sales/history', [App\Http\Controllers\Guichet\SalesController::class, 'salesHistory'])->middleware('can:read-report')->name('salesHistory');
+	Route::get('sales/mysaleshistory', [App\Http\Controllers\Guichet\SalesController::class, 'mySalesHistory'])->middleware('can:guichet')->name('mySalesHistory');
 	Route::post('sales/history', [App\Http\Controllers\Guichet\SalesController::class, 'salesHistoryPost'])->middleware('can:read-report')->name('salesHistorypost');
+	Route::post('sales/mysaleshistory', [App\Http\Controllers\Guichet\SalesController::class, 'mySalesHistoryPost'])->middleware('can:guichet')->name('mySalesHistoryPost');
 	Route::get('sales/report', [App\Http\Controllers\Guichet\SalesController::class, 'salesReport'])->middleware('can:regisseur')->name('salesReport');
 	Route::get('sales/reports', [App\Http\Controllers\Guichet\SalesController::class, 'salesReportList'])->middleware('can:read-report')->name('sales.report.index');
 	Route::get('sales/report/{report_name}', [App\Http\Controllers\Guichet\SalesController::class, 'showReport'])->middleware('can:read-report')->name('sales.report.show');

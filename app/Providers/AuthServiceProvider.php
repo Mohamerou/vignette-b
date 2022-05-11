@@ -147,6 +147,17 @@ class AuthServiceProvider extends ServiceProvider
 
         
 
+        Gate::define('read-history', function($user){
+            
+            if($user->hasRole('guichet'))
+                return $user->hasRole('guichet');
+    
+            if($user->hasRole('regisseur'))
+                return $user->hasRole('regisseur');
+        });
+        
+        
+
         Gate::define('all', function($user){
             
             if($user->hasRole('superadmin'))

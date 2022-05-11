@@ -104,6 +104,11 @@
                 <td class="text-danger">
                     <a href="{{ route('csv', $histories[$i]['enginId']) }}" class="btn btn-success"><h4>IMPRIMER</h4></a>
                 </td>
+   
+                <td class="text-danger">
+                    <a href="{{ route('csv_export', $histories[$i]['chassie']) }}" class="btn btn-success"><h4>EXPORTER</h4></a>
+                </td>
+                
             </tr>
         @endfor
 

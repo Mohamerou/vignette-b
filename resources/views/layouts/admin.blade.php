@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ikaVignetti</title>
+  <title>Vignette Bamako</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -165,32 +165,32 @@
     <!-- Brand Logo -->
     @can('regisseur')
     <a href="{{ route('get_regisseur_dash') }}" class="brand-link">
-      <img src="{{ asset('images/logo.png') }}" alt="ikaVignetti LOGO" class="brand-image img-circle elevation-3" style="opacity: .8">
-      <span class="brand-text font-weight-light">ikaVignetti</span>
+      <img src="{{ asset('images/logo.png') }}" alt="Vignette Bamako LOGO" class="brand-image img-circle elevation-3" style="opacity: .8">
+      <span class="brand-text font-weight-light">Vignette Bamako</span>
     </a>
   @endcan
   @can('elu')
     <a href="{{ route('get_elu_dash') }}" class="brand-link">
-      <img src="{{ asset('images/logo.png') }}" alt="ikaVignetti LOGO" class="brand-image img-circle elevation-3" style="opacity: .8">
-      <span class="brand-text font-weight-light">ikaVignetti</span>
+      <img src="{{ asset('images/logo.png') }}" alt="Vignette Bamako LOGO" class="brand-image img-circle elevation-3" style="opacity: .8">
+      <span class="brand-text font-weight-light">Vignette Bamako</span>
     </a>
   @endcan
     @can('comptable-public')
       <a href="{{ route('get_comptable_dash') }}" class="brand-link">
-        <img src="{{ asset('images/logo.png') }}" alt="ikaVignetti LOGO" class="brand-image img-circle elevation-3" style="opacity: .8">
-        <span class="brand-text font-weight-light">ikaVignetti</span>
+        <img src="{{ asset('images/logo.png') }}" alt="Vignette Bamako LOGO" class="brand-image img-circle elevation-3" style="opacity: .8">
+        <span class="brand-text font-weight-light">Vignette Bamako</span>
       </a>
     @endcan
     @can('guichet')
       <a href="{{ route('get_guichet_dash') }}" class="brand-link">
-        <img src="{{ asset('images/logo.png') }}" alt="ikaVignetti LOGO" class="brand-image img-circle elevation-3" style="opacity: .8">
-        <span class="brand-text font-weight-light">ikaVignetti</span>
+        <img src="{{ asset('images/logo.png') }}" alt="Vignette Bamako LOGO" class="brand-image img-circle elevation-3" style="opacity: .8">
+        <span class="brand-text font-weight-light">Vignette Bamako</span>
       </a>
     @endcan
     @can('superadmin')
       <a href="{{ route('get_superadmin_dash') }}" class="brand-link">
-        <img src="{{ asset('images/logo.png') }}" alt="ikaVignetti LOGO" class="brand-image img-circle elevation-3" style="opacity: .8">
-        <span class="brand-text font-weight-light">ikaVignetti</span>
+        <img src="{{ asset('images/logo.png') }}" alt="Vignette Bamako LOGO" class="brand-image img-circle elevation-3" style="opacity: .8">
+        <span class="brand-text font-weight-light">Vignette Bamako</span>
       </a>
     @endcan
 
@@ -258,17 +258,9 @@
                 <li class="nav-item">
                     <a href="{{ route('sales.report.index') }}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Rapport des Ventes</p>
+                    <p>Voir les rapports de Vente</p>
                     </a>
                 </li>
-                @can('regisseur')
-                  <li class="nav-item">
-                      <a href="{{ route('salesHistory') }}" class="nav-link">
-                      <i class="far fa-circle nav-icon"></i>
-                      <p>Historiques des Ventes</p>
-                      </a>
-                  </li>
-                @endcan
                 </ul>
             @endcan
             @can('guichet')
@@ -276,47 +268,27 @@
                 <li class="nav-item">
                     <a href="/enrollement-1" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Enrollement Usager</p>
+                    <p>NOUVEL ENRÔLEMENT USAGER<p>
                     </a>
                 </li>
                 <li class="nav-item">
                   <a href="/entEnrollement-1" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Enrollement Entreprise</p>
+                  <p>NOUVEL ENRÔLEMENT ENTREPRISE</p>
                   </a>
               </li>
-                <li class="nav-item">
-                    <a href="{{ route('enrollList') }}" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Enrollements Usager Récents</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                  <a href="{{ route('entEnrollList') }}" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Enrollements Entreprise Récents</p>
-                  </a>
-              </li>
-              @can('regisseur')
-                  <li class="nav-item">
-                      <a href="{{ route('enroll.index') }}" class="nav-link">
-                      <i class="far fa-circle nav-icon"></i>
-                      <p>Historiques Enrollements</p>
-                      </a>
-                  </li>
-                @endcan
                 </ul>
                 <ul class="nav nav-treeview">
                 <li class="nav-item">
                     <a href="{{ route('pendingSales') }}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Vente Usager</p>
+                    <p>CAISSE USAGER</p>
                     </a>
                 </li>
                 <li class="nav-item">
                   <a href="{{ route('entPendingSales') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Vente Entreprise</p>
+                  <p>CAISSE GRAND COMPTE</p>
                   </a>
               </li>
               @can('regisseur')
@@ -330,7 +302,7 @@
                 <li class="nav-item">
                     <a href="{{ route('guichet.user.index') }}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Liste des usagers</p>
+                    <p>USAGERS / Base de données</p>
                     </a>
                 </li>
                 </ul>
@@ -341,7 +313,7 @@
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-copy"></i>
               <p>
-                Rapports
+                RAPPORTS
                 <i class="fas fa-angle-left right"></i>
                 
               </p>
@@ -356,13 +328,7 @@
               <li class="nav-item">
                 <a href="{{ route('sales.report.index') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Lister les rapports</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{{ route('salesHistory') }}" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Historique des ventes</p>
+                  <p>LISTER TOUS LES RAPPORTS</p>
                 </a>
               </li>
             </ul>
@@ -388,7 +354,7 @@
               <li class="nav-item">
                 <a href="{{ route('superadmin.index') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>MODIFICATION / SUPPRESSION DE COMPTE</p>
+                  <p>MODIFIER / SUSPENDRE UN COMPTE</p>
                 </a>
               </li>
             </ul>
@@ -400,7 +366,7 @@
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-copy"></i>
               <p>
-                Gestion des Agents
+                GESTION DES AGENTS
                 <i class="fas fa-angle-left right"></i>
                 
               </p>
@@ -409,13 +375,13 @@
               <li class="nav-item">
                 <a href="{{ route('agent.create') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Nouveau Agent</p>
+                  <p>AJOUTER UN AGENT</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="{{ route('agent.index') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Liste des Agents</p>
+                  <p>LISTER LES AGENTS</p>
                 </a>
               </li>
             </ul>
@@ -424,7 +390,7 @@
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-copy"></i>
               <p>
-                Historiques
+                HISTORIQUES
                 <i class="fas fa-angle-left right"></i>
                 
               </p>
@@ -433,13 +399,13 @@
               <li class="nav-item">
                 <a href="{{ route('salesHistory') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Historique des Ventes</p>
+                  <p>HISTORIQUE DES VENTES</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="{{ route('enroll.index') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Historique des Enrollements</p>
+                  <p>HISTORIQUE DES ENRÔLEMENTS</p>
                 </a>
               </li>
             </ul>
@@ -474,7 +440,7 @@
 
   <!-- Main Footer -->
   <footer class="main-footer">
-    <strong>&copy; 2022-2023 <a href="/">ikaVignetti</a>.</strong>
+    <strong>&copy; 2022 <a href="/">Vignette Bamako</a>.</strong>
     Tout Droits réservés.
   </footer>
 </div>

@@ -58,7 +58,7 @@
   <div class="container-fluid">
     <div class="row mb-2">
       <div class="col-md-12">
-        <h1 class="m-0">Progression par rapport a la prevision</h1>
+        <h1 class="m-0">Progression par rapport à la prévision</h1>
       </div><!-- /.col -->
       <div class="col-md-8">
         <p class="text-center">
@@ -68,7 +68,7 @@
 
 
         <div class="progress-group">
-          <span class="h5">Total des ventes / Prevision</span>
+          <span class="h5">Total des ventes / Prévision</span>
           <span class="h4 mx-5 text-danger">{{ $pourcentage }} %</span><span class="h4 mx-3 float-right"><b>{{ $total_sales }}</b>/{{ $previsionMontant }}</span>
           <div class="progress">
             <div class="progress-bar bg-danger" style="width: {{ $pourcentage }}%"></div>
@@ -111,7 +111,7 @@
             </tr>
             <tr>
             <td>
-              <a class="btn btn-block btn-primary btn-lg" href="{{ route('salesReport') }}"><i class="fa fa-book" aria-hidden="true"></i>Generer un rapport journalier</a>
+              <a class="btn btn-block btn-primary btn-lg" href="{{ route('salesReport') }}"><i class="fa fa-book" aria-hidden="true"></i>Générer un rapport journalier</a>
 </button>
             </td>
             <td>
@@ -132,7 +132,7 @@
 </div>
 <!-- End Action Row -->
   
-<h3>Statistiques du Jour : {{$today}}</h3>
+<h3>Les Statistiques de vente du Jour : {{$today}}</h3>
 <div class="row justify-content-center">
   <div class="col-6">
     <!-- small box -->
@@ -170,7 +170,7 @@
   
 </div>
 <hr>
-<h3>Statistiques du mois : {{$current_month}}</h3>
+<h3>Les Statistiques de vente du mois : {{$current_month}}</h3>
   <!-- /.row -->
   <div class="row">
     <div class="col-6">
@@ -210,7 +210,7 @@
   </div>
     <!-- /.row -->
 <hr>
-    <h3>Statistique de l'année : {{$current_year}}</h3>
+    <h3>Les Statistiques de vente de l'année : {{$current_year}}</h3>
     <div class="row">
       <div class="col-6">
         <!-- small box -->

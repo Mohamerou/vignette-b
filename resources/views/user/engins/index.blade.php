@@ -31,6 +31,22 @@
 
 	@endif
 </div>
+    
+@can('user')
+<div class="nav-scroller bg-white shadow-sm justify-content-center">
+	<nav class="nav nav-underline" aria-label="Secondary navigation">
+		<a class="nav-link active" aria-current="page" href="{{ route('home') }}">Tableau de bord</a>
+		<a class="nav-link active" aria-current="page" href="#">|</a>
+		<a class="nav-link" href="{{ route('engins.index') }}">
+			Mes vignettes
+		</a>
+		<a class="nav-link active" aria-current="page" href="#">|</a>
+		<a class="nav-link" href="{{ route('initiateTransfert') }}">
+			Initier le transfere de propriete d'un engin
+		</a>
+	</nav>
+</div>
+@endcan
 
 	<section class="py-2 text-center container">
 	    <div class="row py-lg-3">

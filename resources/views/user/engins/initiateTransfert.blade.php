@@ -32,6 +32,23 @@
 	@endif
 </div>
 
+    
+@can('user')
+<div class="nav-scroller bg-white shadow-sm justify-content-center">
+	<nav class="nav nav-underline" aria-label="Secondary navigation">
+		<a class="nav-link active" aria-current="page" href="{{ route('home') }}">Tableau de bord</a>
+		<a class="nav-link active" aria-current="page" href="#">|</a>
+		<a class="nav-link" href="{{ route('engins.index') }}">
+			Mes vignettes
+		</a>
+		<a class="nav-link active" aria-current="page" href="#">|</a>
+		<a class="nav-link" href="{{ route('initiateTransfert') }}">
+			Initier le transfere de propriete d'un engin
+		</a>
+	</nav>
+</div>
+@endcan
+
 	<div class="container col-8 border-top border-primary py-3">
 		<div class="alert alert-info" role="alert">
 		  <h4>Notice:</h4> Vous allez initier une demande de transfert de propriete d'engin !

@@ -9,6 +9,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.1.0",
+        "ext-imagick": "*",
         "barryvdh/laravel-dompdf": "^1.0",
         "betterapp/laravel-db-encrypter": "^1.0",
         "calcinai/php-imagick": "^0.1.2",
@@ -23,16 +24,17 @@
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.2",
         "league/flysystem-aws-s3-v3": "^1.0",
+        "maatwebsite/excel": "^3.1",
         "nexmo/client": "^2.4",
         "nexmo/laravel": "^2.4",
         "orbitale/imagemagick-php": "^3.2",
         "realrashid/sweet-alert": "^5.0",
+        "revolution/laravel-google-sheets": "^6.0",
         "simplesoftwareio/simple-qrcode": "~4",
         "snapappointments/bootstrap-select": "^1.13",
         "stripe/stripe-php": "^7.78",
         "usmanhalalit/laracsv": "^2.1",
-        "vonage/client": "^2.4",
-        "ext-imagick": "*"
+        "vonage/client": "^2.4"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

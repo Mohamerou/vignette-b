@@ -3,10 +3,10 @@
             <div class="row">
                <div class="col-md-8">
                   <div class="footer-text">
-                     <p>© 2021 Bko Technologie. All Rights Reserved.</p>
+                     <p>© 2022 Vignette Bamako. All Rights Reserved.</p>
                   </div>
                </div>
-               <div class="col-md-4">
+               {{-- <div class="col-md-4">
                   <div class="social">
                      <ul class="social-links">
                         <li><a href=""><i class="fa fa-rss"></i></a></li>
@@ -17,7 +17,7 @@
                         <li><a href=""><i class="fa fa-pinterest"></i></a></li>
                      </ul>
                   </div>
-               </div>
+               </div> --}}
             </div>
          </div>
       </div>

@@ -19,7 +19,8 @@ use Redirect;
 use Illuminate\Support\Facades\Session;
 use PDF;
 use File;
-use RealRashid\SweetAlert\Facades\Alert;
+use Sheets;
+// use RealRashid\SweetAlert\Facades\Alert;
 
 use App\Models\Role;
 use App\Models\UsagerAccountType;
@@ -44,7 +45,7 @@ class SalesController extends Controller
      */
     public function __construct()
     {        
-        $this->middleware('can:intern');      
+        $this->middleware('can:intern');   
     }
 
     public function pendingSales()
@@ -437,11 +438,23 @@ class SalesController extends Controller
     }
 
 
+    public function csv_export($chassie)
+    {
+
+        $append = [
+            $chassie,
+        ];
+
+        Sheets::spreadsheet(env('POST_SPREADSHEET_ID'))
+              ->update([$append]);
+    
+    }
+
 
     public function salesHistory(Request $request)
     {
                         
-        $this->middleware('can:regisseur');
+        $this->middleware('can:read-history');
 
         $date     = $request->date;
         $agent    = $request->agent;
@@ -518,23 +531,26 @@ class SalesController extends Controller
         if (isset($request->history)) {
             $date     = $request->date;
             $agent    = $request->agent;
-            $currentYear = Date('Y-m-d');
+            $currentYear = Date('Y');
             if (!empty($agent)) {
                 if ($agent == 'all' && empty($date)) {
                     //   dd($agent);
                 
-                    $SalesHistories = SalesHistory::whereYear('created_at', Date('Y'))->orderBy('updated_at', 'desc')->get();
+                    $SalesHistories = SalesHistory::whereYear('created_at', Date('Y'))
+                                                 ->orderBy('updated_at', 'desc')->get();
+
                 } elseif ($agent == 'all' && !empty($date)) {
                     $SalesHistories = DB::table('sales_histories')
-                                      ->WhereDate('created_at', '=', $date)
+                                        ->WhereDate('created_at', '=', $date)
                                         ->orderBy('created_at', 'desc')->get();
                 } elseif ($agent != 'all' && !empty($date)) {
                     $SalesHistories = DB::table('sales_histories')
-                                      ->WhereDate('created_at', '=', $date)
-                                      ->where('agentRef', $agent)
+                                        ->WhereDate('created_at', '=', $date)
+                                        ->where('agentRef', $agent)
                                         ->orderBy('created_at', 'desc')->get();
                 } elseif ($agent != 'all' && empty($date)) {
-                    $SalesHistories = SalesHistory::where('agentRef', $agent)->orderBy('updated_at', 'desc')->get();
+                    $SalesHistories = SalesHistory::where('agentRef', $agent)
+                                                 ->orderBy('updated_at', 'desc')->get();
                 }
     
                 $user_list       = [];
@@ -560,7 +576,7 @@ class SalesController extends Controller
                     'chassie'   => $engin->chassie,
                     'agent'     => $agent_vente->firstname.' - '.$agent_vente->phone,
                     'tarif'     => $engin->tarif,
-                    'date'      => $SalesHistory->updated_at->format('d-m-Y')
+                    'date'      => $SalesHistory->updated_at
                 ];
                     }
                 }
@@ -635,7 +651,7 @@ class SalesController extends Controller
                         'chassie'   => $engin->chassie,
                         'agent'     => $agent_vente->firstname.' - '.$agent_vente->phone,
                         'tarif'     => $engin->tarif,
-                        'date'      => $SalesHistory->updated_at->format('d-m-Y')
+                        'date'      => $SalesHistory->updated_at
                     ];
                 } 
             }
@@ -717,7 +733,7 @@ class SalesController extends Controller
                     'chassie'   => $engin->chassie,
                     'agent'     => $agent_vente->firstname.' - '.$agent_vente->lastname.' - '.$agent_vente->phone,
                     'tarif'     => $engin->tarif,
-                    'date'      => $SalesHistory->updated_at->format('d-m-Y')
+                    'date'      => $SalesHistory->updated_at
                 ];
             } 
         }
@@ -800,9 +816,9 @@ class SalesController extends Controller
             foreach ($roles as $role) {
                 if (Auth::user()->hasRole('$role->name')) {
 
-                dd($role);
+                // dd($role);
                    $user_role = $role->name;
-                   dd($user_role);
+                //    dd($user_role);
                 }
             }
 
@@ -844,6 +860,124 @@ class SalesController extends Controller
     
     }
 
+
+
+
+
+
+    public function mySalesHistoryPost(Request $request)
+    {
+                        
+        $this->middleware('can:guichet');
+
+        if (isset($request->history)) {
+            $date     = $request->date;
+            $agent    = Auth::user()->id;
+            $currentYear = Date('Y');
+            
+            $SalesHistories = SalesHistory::whereDate('created_at', $date)
+                                          ->orderBy('updated_at', 'desc')
+                                          ->get();                
+                    
+    
+                $user_list       = [];
+                $engin_list      = [];
+                $myTotalSales      = 0;
+
+                foreach ($SalesHistories as $SalesHistory) {
+                    $enrollHistory  = EnrollHistory::find($SalesHistory->enrollId);
+                    $agent_vente    = User::find($SalesHistory->agentRef);
+                    $user           = User::find($enrollHistory->userId);
+                    $engin          = Engins::find($enrollHistory->enginId);
+                    $vignette       = Vignettes::where('enginId', $enrollHistory->enginId)
+                                  ->first();
+
+                    if ($vignette) {
+                        $myTotalSales += $engin->tarif;
+
+                        $user_list[]    = [
+                    'usager'    => $user->firstname." ".$user->lastname,
+                    'userphone' => $user->phone,
+                    'marque'    => $engin->marque,
+                    'modele'    => $engin->modele,
+                    'chassie'   => $engin->chassie,
+                    'agent'     => $agent_vente->firstname.' - '.$agent_vente->phone,
+                    'tarif'     => $engin->tarif,
+                    'date'      => $SalesHistory->updated_at->format('d-m-Y')
+                ];
+                    }
+                }
+
+
+                $SalesHistories = $user_list;
+                $users = User::all();
+                $usersList = [];
+                foreach ($users as $user) {
+                    if ($user->hasRole('guichet')) {
+                        $usersList[] = $user;
+                    }
+                }
+                return view('guichet/monHistoriqueDeVente')
+                ->with('SalesHistories', $SalesHistories)
+                ->with('myTotalSales', $myTotalSales);
+            
+        }
+
+    }
+
+
+
+
+
+
+    public function mySalesHistory(Request $request)
+    {
+                        
+        $this->middleware('can:guichet');
+
+        $SalesHistories = SalesHistory::whereYear('created_at', Date('Y'))
+                                        ->orderBy('updated_at', 'desc')
+                                        ->where('agentRef', Auth::user()->id)
+                                        ->get();
+                                        
+    
+        $user_list       = [];
+        $engin_list      = [];
+        $myTotalSales      = 0;
+
+        foreach($SalesHistories as $SalesHistory){
+            $enrollHistory  = EnrollHistory::find($SalesHistory->enrollId);
+            $agent_vente    = User::find($SalesHistory->agentRef);
+            $user           = User::find($enrollHistory->userId);
+            $engin          = Engins::find($enrollHistory->enginId);
+            $vignette       = Vignettes::where('enginId', $enrollHistory->enginId)
+                                  ->first();
+
+            if (!empty($vignette)) {
+
+                $myTotalSales += $engin->tarif;
+
+                $user_list[]    = [
+                    'usager'    => $user->firstname." ".$user->lastname,
+                    'userphone' => $user->phone,
+                    'marque'    => $engin->marque,
+                    'modele'    => $engin->modele,
+                    'chassie'   => $engin->chassie,
+                    'agent'     => $agent_vente->firstname.' - '.$agent_vente->lastname.' - '.$agent_vente->phone,
+                    'tarif'     => $engin->tarif,
+                    'date'      => $SalesHistory->updated_at->format('d-m-Y')
+                ];
+            } 
+        }
+
+
+        $SalesHistories = $user_list;
+
+        return view('guichet/monHistoriqueDeVente')
+                ->with('SalesHistories', $SalesHistories)
+                ->with('myTotalSales', $myTotalSales);
+               
+    }
 
     
 }

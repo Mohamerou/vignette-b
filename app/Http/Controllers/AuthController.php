@@ -246,6 +246,12 @@ class AuthController extends Controller
         $total_administrateurs  = DB::table('users')->where('administration', 'bko')
                                                     ->count();
         $user_count      = $total_users - $total_administrateurs;
+
+        $total_sales = DB::table("payments")
+                         ->where('agentId', Auth::user()->id)
+                         ->sum('amount');
+
+        // dd($data);
         
 
         //------------------------------------------------------------------//
@@ -255,19 +261,16 @@ class AuthController extends Controller
             $engin          = Engins::find($vignette->enginId);
             $engin_array[]  = $engin;
             $vignetted_engin_count  +=1;
-            $total_sales    += $engin->tarif;
         }
 
 
         $agent_yearly_sales = DB::table('payments')
                                 ->select('amount')
-                                ->where('agentId', Auth::user()->id)
                                 ->WhereYear('created_at', Date('Y'))
+                                ->where('agentId', Auth::user()->id)
                                 ->get();
 
-        $data = DB::table("payments")->sum('amount');
-
-        // dd($data);
+        
 
 
         // Dayly sales by aagent 
