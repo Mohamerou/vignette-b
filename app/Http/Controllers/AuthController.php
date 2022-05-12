@@ -30,7 +30,7 @@ class AuthController extends Controller
     // Load login view
     public function index()
     {
-
+        
         return view('auth.login');
 
     }  

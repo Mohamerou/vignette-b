@@ -87,7 +87,8 @@
     <th>Contact Usager</th>
     <th>Chassie Engin</th>
     <th>Status</th>
-    <th style="width: 40px">Actions</th>
+    <th style="width: 40px">IMP</th>
+    <th style="width: 40px">EXPORTER</th>
     </tr>
     </thead>
     <tbody>

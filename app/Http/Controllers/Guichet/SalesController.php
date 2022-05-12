@@ -1,28 +1,27 @@
 <?php
 
 namespace App\Http\Controllers\Guichet;
-
 use App\Http\Controllers\Controller;
-use App\Models\Agent;
+
+use App\Services\SheetService;
 use Illuminate\Http\Request;
-use Response;
+use Illuminate\Support\Facades\DB as FacadesDB;
+use Illuminate\Support\Facades\Session;
 use App\Notifications\DemandeVignette;
 use App\Notifications\DemandeValider;
-use App\Models\TrackDemandeVignette;
+
 use Nexmo;
+use Response;
 use Notifications;
 use Notification;
 use auth;
 use Carbon\Carbon;
 use DB;
 use Redirect;
-use Illuminate\Support\Facades\Session;
-use PDF;
-use File;
-use Sheets;
 // use RealRashid\SweetAlert\Facades\Alert;
 
 use App\Models\Role;
+use App\Models\Agent;
 use App\Models\UsagerAccountType;
 use App\Models\User;
 use App\Models\Engins;
@@ -31,9 +30,14 @@ use App\Models\EnrollHistory;
 use App\Models\SalesHistory;  
 use App\Models\Payment;
 use App\Models\Report;
+use App\Models\TrackDemandeVignette;
+
+
+use PDF;
+use File;
+use Sheets;
 use SimpleSoftwareIO\QrCode\Generator;
 
-use Illuminate\Support\Facades\DB as FacadesDB;
 
 class SalesController extends Controller
 {
@@ -438,16 +442,18 @@ class SalesController extends Controller
     }
 
 
-    public function csv_export($chassie)
+    public function csv_export(SheetService $sheetService, $chassie)
     {
 
-        $append = [
-            $chassie,
+        $data = [
+            [$chassie],
         ];
 
-        Sheets::spreadsheet(env('POST_SPREADSHEET_ID'))
-              ->update([$append]);
-    
+        $saveData = $sheetService->saveDataToSheet($data);
+        $readData = $sheetService->readGoogleSheet();
+
+        
+        return view('guichet.export_csv')->with('chassie', $chassie);
     }
 
 
